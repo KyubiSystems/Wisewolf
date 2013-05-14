@@ -24,3 +24,53 @@ Config = readConfig('config.json')
 print "Content-type: text/html"
 print
 
+class Feed():
+    """Feed() -- instantiate RSS feed object"""
+    def __init__(self, address):
+        self.id = 0
+        self.address = address
+        self.data = []
+        self.count = 0
+        self.description = 0
+
+    def parse():
+        self.data = feedparser.parse(self.address)
+
+    def count():
+        pass
+
+class Article():
+    """Article -- instantiate article object"""
+    def __init__():
+        self.id = 0
+        self.text = ""
+        self.date = ""
+
+    def getText():
+        pass
+
+    def showText():
+        pass
+
+    def getImages():
+        pass
+
+    def deleteArticle():
+        pass
+
+class Tagset():
+    """Tagset -- instantiate tag set object"""
+    def __init__():
+        self.id = 0
+        self.name = []
+        self.description = []
+
+    def addTag():
+        pass
+
+    def deleteTag():
+        pass
+
+    def showTag():
+        pass
+
