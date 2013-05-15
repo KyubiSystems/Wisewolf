@@ -8,6 +8,14 @@ Opml -- v 0.01
 OPML reader for Wisewolf RSS
 """
 
-import xml.etree
+import xml.etree.ElementTree as ET
 
 filename = "opml-example.xml"
+
+tree = ET.parse(filename)
+
+root = tree.getroot()
+
+for child in root.iter('outline'):
+    print child.tag, child.attrib
+
