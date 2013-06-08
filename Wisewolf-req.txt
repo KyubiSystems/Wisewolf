@@ -1,0 +1,9 @@
+Flask==0.9
+Jinja2==2.7
+MarkupSafe==0.18
+Werkzeug==0.8.3
+feedreader==0.3.1
+lxml==3.2.1
+python-dateutil==2.1
+six==1.3.0
+wsgiref==0.1.2
