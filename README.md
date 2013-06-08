@@ -6,7 +6,7 @@ Wisewolf
 Requirements
 ------------
 
-* Python feedreader
+* See Wisewolf-req.txt pip requirements file for Python prerequisites.
 * ImageMagick _convert_ for thumbnail generation
 
-Wisewolf runs on the _web2py_ Python web framework.
+Wisewolf runs on the _Flask_ Python web framework.
