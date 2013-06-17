@@ -15,18 +15,19 @@ For v0.1 initial alpha:
 
 For v0.2
 
-* Optionally strip embedded/linked images to associated galleries (see Yomiko). Useful for art sites and web comics
+* Optionally strip embedded/linked images to associated local galleries (see Yomiko). Useful for art sites and webcomics
 
 For v0.3
 
+* Social sharing for feed items
 * mobile support (target Mobile Safari on iPad and iPhone). Swipe between articles, feeds.
 
 Requirements
 ------------
 
-* See Wisewolf-req.txt pip requirements file for Python prerequisites.
+* See Wisewolf-req.txt pip requirements file for Python prerequisites. Relies on __Flask__ microframework and __Tornado__ for asynchronous communications.
 * A database. Will be SQLite3 in development, choice of MySQL or PostgreSQL in production
-* ImageMagick _convert_ for thumbnail generation
+* ImageMagick _convert_ for thumbnail generation for image galleries
 
-Wisewolf runs on the _Flask_ Python web framework. and will require WSGI-compliant hosting.
+Wisewolf requires WSGI-compliant hosting.
 

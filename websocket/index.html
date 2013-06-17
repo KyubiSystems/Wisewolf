@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>WebSocketTest</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      ws = new WebSocket("ws://127.0.0.1:5000/websocket");
+      ws.onmessage = function(msg) {
+        $("#discussion").prepend("<p>" + msg.data + "<p>");
+      };
+      ws.onerror = function(evt) {
+        alert("ERROR: "+evt.data);
+      };
+      function send_message() {
+        msg = "<b>" + $("#nick").val() + ": </b>" + $("#message").val();
+        ws.send(msg);
+      }
+    </script>
+  </head>
+  <body>
+    <form>
+      <dl>
+        <dt>Your nick:</dt><dd><input type="text" id="nick" value="nick"></dd>
+        <dt>Message:</dt><dd><textarea id="message"></textarea>
+      </dl>
+      <button onclick="send_message(); return false;">foo</button>
+    </form>
+    <div id="discussion">
+    </div>
+  </body>
+</html>
