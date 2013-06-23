@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 """
-Wisewolf -- v.0.01
+Wisewolf -- v.0.02
 
 (c) 2013 -- KyubiSystems
 
@@ -12,17 +10,16 @@ Use SQLite3 database for initial development and testing
 import feedreader
 import sqllite3
 
-from datetime import datetime
-from file_utils import readConfig
-from string import Template
+from flask import Flask
+app = Flask(__name__)
 
 # read config file
 
-Config = readConfig('config.json')
+app.config.from_object('config')
 
-# Print Content-Type: header + blank line
-print "Content-type: text/html"
-print
+print app.config['DATABASE_URI']
+
+# CLASS DEFINITION ===================================================================
 
 class Feed():
     """Feed() -- instantiate RSS feed object"""
@@ -74,3 +71,4 @@ class Tagset():
     def showTag():
         pass
 
+# END CLASS DEFINITION ===============================================================
