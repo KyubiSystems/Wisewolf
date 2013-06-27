@@ -34,13 +34,15 @@ class Feed(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id')) # Foreign Key field
     last_updated = db.Column(db.DateTime)
     comment = db.Column(db.String(256))
+    strip_images = db.Column(db.Boolean)
     posts = db.relationship('Post', backref='feed', lazy='dynamic')
 
-    def __init__(self, name, url, category, comment, last_updated=None):
+    def __init__(self, name, url, category, comment, strip_images=False, last_updated=None):
         self.name = name
         self.url = url
         self.category = category
         self.comment = comment
+        self.strip_images = strip_images
         if last_updated is None:
             last_updated = datetime.utcnow()
         self.last_updated = last_updated

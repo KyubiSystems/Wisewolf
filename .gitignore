@@ -2,7 +2,7 @@
 *.pyc
 #*
 venv.ww
-db/database.db
+app/db/database.db
 
 
 

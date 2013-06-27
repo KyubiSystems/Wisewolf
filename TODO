@@ -1,0 +1,38 @@
+Add routes to Flask:
+-------------------
+
+main
+
+feed/add
+
+feed/view/all
+feed/view/[id]
+
+feed/edit/[id]
+
+feed/delete/[id]
+
+feed/update/all
+feed/update/[id]
+
+manage
+
+category/add
+category/delete/[id]
+
+settings
+
+opml <--- upload OPML file to local cache, parse
+
+
+Add HTML tag filter against XSS attacks:
+---------------------------------------
+
+http://stackoverflow.com/questions/699468/python-html-sanitizer-scrubber-filter
+
+Load MomentJS time format library from CDN:
+------------------------------------------
+
+http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js
+
+Check Flask pagination.
