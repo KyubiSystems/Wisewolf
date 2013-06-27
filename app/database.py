@@ -41,7 +41,7 @@ class Feed(db.Model):
         self.url = url
         self.category = category
         self.comment = comment
-        if last_updated = None:
+        if last_updated == None:
             last_updated = datetime.utcnow()
         self.last_updated = last_updated
 
@@ -62,7 +62,7 @@ class Post(db.Model):
     def __init__(self, title, content, feed, post_date=None, is_read=False, is_favourite=False):
         self.title = title
         self.content = content
-        if post_date=None:
+        if post_date == None:
             post_date = datetime.utcnow()
         self.post_date = post_date
         self.is_read = is_read
