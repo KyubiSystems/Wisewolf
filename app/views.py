@@ -25,3 +25,7 @@ def settings():
 @app.route('/import')
 def opml_import():
     return render_template("import.html")
+
+@app.route('/gallery')
+def gallery():
+    return render_template("gallery.html")
