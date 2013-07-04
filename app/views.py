@@ -10,6 +10,10 @@ def index():
 def feed():
     return render_template("feed.html")
 
+@app.route('/manage')
+def manage():
+    return render_template("manage.html")
+
 @app.route('/category')
 def category():
     return render_template("category.html")
@@ -18,3 +22,6 @@ def category():
 def settings():
     return render_template("settings.html")
 
+@app.route('/import')
+def opml_import():
+    return render_template("import.html")
