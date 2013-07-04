@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+{% if title %}
+<title>{{title}} - Wisewolf</title>
+{% else %}
+<title>Wisewolf</title>
+{% endif %}
+</head>
+<body>
+<h1>Wisewolf: <a href="/index">Home</a></h1>
+<hr>
+{% block content %}{% endblock %}
+</body>
+</html>
+
