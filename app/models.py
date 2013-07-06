@@ -4,6 +4,8 @@ from database import Base
 # define category DB model class
 
 class Category(Base):
+    __tablename__ = 'category'
+
     id = Column(Integer, primary_key = True)
     name = Column(String(256))
     comment = Column(String(256))
@@ -19,6 +21,8 @@ class Category(Base):
 # define feed DB model class
 
 class Feed(Base):
+    __tablename__ = 'feed'
+    
     id = Column(Integer, primary_key = True)
     name = Column(String(256))
     url = Column(String(512))
@@ -44,6 +48,8 @@ class Feed(Base):
 # define post DB model class
 
 class Post(Base):
+    __tablename__ = 'post'
+
     id = Column(Integer, primary_key = True)
     title = Column(String(256))
     content = Column(Text)
