@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text
 from sqlalchemy import ForeignKey
-from sqlalchemy import relationship, backref
+from sqlalchemy.orm import relationship, backref
 from database import Base
 
 # define category DB model class
