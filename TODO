@@ -30,9 +30,4 @@ Add HTML tag filter against XSS attacks:
 
 http://stackoverflow.com/questions/699468/python-html-sanitizer-scrubber-filter
 
-Load MomentJS time format library from CDN:
-------------------------------------------
-
-http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js
-
 Check Flask pagination.
