@@ -5,15 +5,10 @@
 <link
 href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
 rel="stylesheet">
-<script
-src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <!-- end Twitter Bootstrap CDN -->
 <!-- begin FontAwesome CDN -->
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 <!-- end FontAwesome CDN -->
-<!-- begin MomentJS CDN -->
-<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
-<!-- end MomentJS CDN -->
 {% if title %}
 <title>{{title}} - Wisewolf</title>
 {% else %}
@@ -32,20 +27,66 @@ src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></sc
         <span class="icon-bar"></span>
       </a>
  
-      <!-- Be sure to leave the brand out there if you want it shown -->
+      <!-- brand name: can we put a logo here? -->
       <a class="brand" href="#">Wisewolf</a>
  
-      <!-- Everything you want hidden at 940px or less, place within here -->
-      <div class="nav-collapse collapse">
-        <!-- .nav, .navbar-search, .navbar-form, etc -->
-      </div>
+      <li {{home_active}}><a href="#">Home</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li class="nav-header">Nav header</li>
+            <li><a href="#">Separated link</a></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+       </li>  
+
+      <li {{feeds_active}}><a href="#">Feed</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Manage Feeds</a></li>
+            <li><a href="#">Add Feed</a></li>
+            <li class="divider"></li>
+            <li class="nav-header">Nav header</li>
+            <li><a href="#">Refresh current</a></li>
+            <li><a href="#">Refresh all</a></li>
+          </ul>
+       </li>  
+
+      <li {{categories_active}}><a href="#">Categories</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Manage Categories</a></li>
+            <li><a href="#">Add Category</a></li>
+          </ul>
+       </li>  
  
     </div>
   </div>
 </div>
+<!-- start main body text -->
+<div class="container">
+<div class="row">
+<div class="span12">
 <h1>Wisewolf: <a href="/index">Home</a></h1>
 <hr>
 {% block content %}{% endblock %}
+</div>
+</div>
+</div>
+<!-- end main body text -->
+<script
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<!-- begin MomentJS CDN -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
+<!-- end MomentJS CDN -->
+
 </body>
 </html>
 
