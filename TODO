@@ -36,3 +36,8 @@ Add HTML tag filter against XSS attacks:
 http://stackoverflow.com/questions/699468/python-html-sanitizer-scrubber-filter
 
 Check Flask pagination.
+
+Hotkeys handling for keyboard shortcuts
+---------------------------------------
+
+https://github.com/tzuryby/jquery.hotkeys

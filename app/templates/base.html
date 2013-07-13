@@ -9,6 +9,7 @@ rel="stylesheet">
 <!-- begin FontAwesome CDN -->
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 <!-- end FontAwesome CDN -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 {% if title %}
 <title>{{title}} - Wisewolf</title>
 {% else %}
@@ -38,12 +39,12 @@ rel="stylesheet">
 
       <div class="nav-collapse">
 	<ul class="nav">
-	  <li><a href="/">Home</a></li>
+	  <li><a accesskey="H" href="/">Home</a></li>
 
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Feeds <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="/feed">Manage Feeds</a></li>
+              <li><a accesskey="F" href="/feed">Manage Feeds</a></li>
               <li><a href="/feed/add">Add Feed</a></li>
               <li class="divider"></li>
               <li><a href="/refresh/current">Refresh current</a></li>
@@ -54,7 +55,7 @@ rel="stylesheet">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="/category">Manage Categories</a></li>
+              <li><a accesskey="C" href="/category">Manage Categories</a></li>
               <li><a href="/category/add">Add Category</a></li>
             </ul>
 	  </li>  
@@ -62,17 +63,17 @@ rel="stylesheet">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gallery <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="/gallery">Manage Galleries</a></li>
+              <li><a accesskey="G" href="/gallery">Manage Galleries</a></li>
               <li><a href="/gallery/add">Add Gallery</a></li>
             </ul>
 	  </li>  
 
-          <li><a href="/import">Import</a></li>
+          <li><a accesskey="I" href="/import">Import</a></li>
           <li><a href="/settings">Settings</a></li>
 
 	</ul>
 	<ul class="nav pull-right">
-	  <li><a href="/refresh/all"><i class="icon-repeat icon-large"></i>&nbsp;Refresh</a></li>
+	  <li><a accesskey="R" href="/refresh/all"><i class="icon-repeat icon-large"></i>&nbsp;Refresh</a></li>
 	</ul>
     </div>
   </div>
