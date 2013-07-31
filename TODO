@@ -29,7 +29,6 @@ settings
 
 opml <--- upload OPML file to local cache, parse
 
-
 Add HTML tag filter against XSS attacks:
 ---------------------------------------
 
@@ -41,3 +40,10 @@ Hotkeys handling for keyboard shortcuts
 ---------------------------------------
 
 https://github.com/tzuryby/jquery.hotkeys
+
+Unit Testing
+------------
+
+Create template HTML for autodiscovery
+Create template OPML for parsing
+Create template RSS for parsing?
