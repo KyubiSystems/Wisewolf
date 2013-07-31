@@ -4,7 +4,8 @@ Usage:
 	feed(uri) - returns feed found for a URI
 """
 
-import urllib, urlparse, re, sys, HTMLParser
+import urllib, urlparse, re, sys
+from HTMLParser import HTMLParser
 
 # Declare valid RSS and ATOM feed types for autodetection
 
@@ -16,9 +17,9 @@ FEED_TYPES = ('application/rss+xml',
 
 # Define feed finder class
 
-class FeedFind(HTMLParser.HTMLParser):
+class FeedFind(HTMLParser):
     def __init__(self):
-        HTMLParser.HTMLParser.__init__(self)
+        HTMLParser.__init__(self)
         self.data = [] # list of returned feed URLs
         self.title = [] # list of returned feed titles
 
@@ -27,16 +28,17 @@ class FeedFind(HTMLParser.HTMLParser):
     def handle_starttag(self, tag, attr):
         if tag != 'link' : return
         attributes = dict(attr) # convert name-value tuples to dict
+        if 'type' not in attributes : return
         if attributes['type'] not in FEED_TYPES : return
-        if isFeedLink(attributes['href']):
-            if 'title' in attributes:
-                self.title.append(attributes['title'])
-            else:
-                self.title.append('None')
-                                
-            link = attributes['href']
-            fulluri = makeFullURI(value)
-            self.data.append(fulluri)
+#        if isFeedLink(attributes['href']): <-- check for RSS feed existence instead?
+        if 'title' in attributes:
+            self.title.append(attributes['title'])
+        else:
+            self.title.append('None')
+            
+        link = attributes['href']
+        fulluri = makeFullURI(link)
+        self.data.append(fulluri)
 
 # Convert partial to full URIs
 
@@ -48,8 +50,3 @@ def makeFullURI(uri):
         if uri.startswith('%s://' % x):
             return uri
     return 'http://%s' % uri
-
-# Check for feed link extension
-
-def isFeedLink(link):
-    return link[-4:].lower() in ('.rss', '.rdf', '.xml', 'atom')
