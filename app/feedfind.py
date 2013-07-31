@@ -20,16 +20,23 @@ class FeedFind(HTMLParser.HTMLParser):
     def __init__(self):
         HTMLParser.HTMLParser.__init__(self)
         self.data = [] # list of returned feed URLs
+        self.title = [] # list of returned feed titles
 
 # Search for <LINK> tag in header
 
-    def handle_starttag(self, tag, attributes):
+    def handle_starttag(self, tag, attr):
         if tag != 'link' : return
-        for name, value in attributes:
-            if name == 'type' && value not in FEED_TYPES : return
-            if name == 'href' && isFeedLink(value): 
-                fulluri = makeFullURI(value)
-                self.data.append(fulluri)
+        attributes = dict(attr) # convert name-value tuples to dict
+        if attributes['type'] not in FEED_TYPES : return
+        if isFeedLink(attributes['href']):
+            if 'title' in attributes:
+                self.title.append(attributes['title'])
+            else:
+                self.title.append('None')
+                                
+            link = attributes['href']
+            fulluri = makeFullURI(value)
+            self.data.append(fulluri)
 
 # Convert partial to full URIs
 
@@ -45,4 +52,4 @@ def makeFullURI(uri):
 # Check for feed link extension
 
 def isFeedLink(link):
-    return link[-4:].lower() in ('.rss', '.rdf', '.xml', '.atom')
+    return link[-4:].lower() in ('.rss', '.rdf', '.xml', 'atom')
