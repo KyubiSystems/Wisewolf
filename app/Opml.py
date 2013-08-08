@@ -27,7 +27,7 @@ class OpmlReader():
         self.links = []
         self.filename = ""
 
-    def setOpml(self, filename):
+    def setOpmlFile(self, filename):
         self.filename = filename
 
     def parseOpml(self):
@@ -36,44 +36,16 @@ class OpmlReader():
 
         # Use XPath to parse header files
         
-        self.attribs['title'] = root.find("./head/title")
-        self.attribs['dateCreated'] = root.find("./head/dateCreated")
+        for xpath in ['title', 'dateCreated', 'dateModified', 'ownerName', 'ownerEmail', 'link']:
+            self.attribs[xpath] = root.find('./head/'+xpath)
 
-# ---------------------------------
-
-filename = "opml-example.xml"
-
-tree = ET.parse(filename)
-
-
-
-# Use XPath to parse header items
-
-print title.text
-
-dateCreated =
-print dateCreated.text
-
-dateModified = root.find("./head/dateModified")
-print dateModified.text
-
-ownerName = root.find("./head/ownerName")
-print ownerName.text
-
-ownerEmail = root.find("./head/ownerEmail")
-print ownerEmail.text
-
-opmlLink = root.find("./head/link")
-print opmlLink.text
-
-print '-------------'
-
-# Parse body items
-for child in root.iter('outline'):
-    if 'url' not in child.attrib.keys():
-        print "\nCategory: "+child.attrib['text']
-    else:
-        print "\nLink:\n-----"
-        for (key, value) in child.attrib.iteritems():
-            print key+": "+value
+        # Parse body items
+        for child in root.iter('outline'):
+            if 'url' not in child.attrib.keys():
+                self.categories.append(child.attrib['text'])
+                print "\nCategory: "+child.attrib['text']
+            else:
+                print "\nLink:\n-----"
+                for (key, value) in child.attrib.iteritems():
+                    print key+": "+value
 
