@@ -1,26 +1,57 @@
 #!/usr/bin/env python
 
 """
-Opml -- v 0.01
-
 (c) 2013 -- KyubiSystems
 
 OPML reader for Wisewolf RSS
 """
-
 import xml.etree.ElementTree as ET
+
+class OpmlReader():
+    """
+    Parses standard OPML export files, adds them to database
+    """
+
+    def __repr__(self):
+        return "<OpmlReader object: %s>" % self.attribs['title']
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return "<OpmlReader object: %s>" % self.attribs['title']
+
+    def __init__(self):
+        self.attribs = {}
+        self.categories = []
+        self.links = []
+        self.filename = ""
+
+    def setOpml(self, filename):
+        self.filename = filename
+
+    def parseOpml(self):
+        tree = ET.parse(self.filename)
+        root = tree.getroot()
+
+        # Use XPath to parse header files
+        
+        self.attribs['title'] = root.find("./head/title")
+        self.attribs['dateCreated'] = root.find("./head/dateCreated")
+
+# ---------------------------------
 
 filename = "opml-example.xml"
 
 tree = ET.parse(filename)
 
-root = tree.getroot()
+
 
 # Use XPath to parse header items
-title = root.find("./head/title")
+
 print title.text
 
-dateCreated = root.find("./head/dateCreated")
+dateCreated =
 print dateCreated.text
 
 dateModified = root.find("./head/dateModified")
