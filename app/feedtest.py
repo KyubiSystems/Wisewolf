@@ -14,6 +14,5 @@ f = urllib.urlopen("http://www.slashdot.org")
 html = f.read()
 p.feed(html)
 
-print p.data
-print p.title
+print p.feeds
 p.close()
