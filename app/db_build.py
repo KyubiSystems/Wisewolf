@@ -2,9 +2,10 @@
 
 from peewee import *
 from models import *
+import config
 
 # Define database
-db = SqliteDatabase(DATABASE_URI)
+db = SqliteDatabase(DB_FILE)
 
 # Connect to database
 db.connect()

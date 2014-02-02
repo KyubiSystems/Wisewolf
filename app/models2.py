@@ -3,7 +3,7 @@
 from peewee import *
 
 # define database
-db = SqliteDatabase(DATABASE_URI)
+db = SqliteDatabase(DB_FILE)
 
 # create base model class that application models will extend
 
