@@ -1,8 +1,9 @@
 *~
 *.pyc
 #*
+.idea
 venv.ww
-app/db/database.db
+app/db/Wisewolf.db
 
 
 

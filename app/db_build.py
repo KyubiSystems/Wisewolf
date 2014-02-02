@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
+from config import *
 from peewee import *
 from models import *
-import config
+
 
 # Define database
 db = SqliteDatabase(DB_FILE)
