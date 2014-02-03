@@ -9,13 +9,16 @@ db = SqliteDatabase(DB_FILE)
 
 # create base model class that application models will extend
 
+
 class BaseModel(Model):
     class Meta:
         database = db
 
+
 class Category(BaseModel):
     name = CharField()
     comment = TextField()
+
 
 class Feed(BaseModel):
     name = CharField()
@@ -25,6 +28,7 @@ class Feed(BaseModel):
     comment = TextField()
     strip_images = BooleanField(default=False)
     refresh = IntegerField(default=1800)
+
 
 class Post(BaseModel):
     title = CharField()
