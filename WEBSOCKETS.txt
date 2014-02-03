@@ -1,1 +1,4 @@
 See http://developerblog.redhat.com/2013/04/04/unleashing-power-of-websocket-on-rhel-6/
+
+http://net.tutsplus.com/tutorials/javascript-ajax/start-using-html5-websockets-today/
+
