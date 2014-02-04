@@ -13,18 +13,18 @@ print "Starting Wisewolf server v0.02..."
 if not os.path.exists(DB_FILE):
     print "SQLite database not found, creating...",
     create_db()
-    print " done."
+    print "done."
 
 # Check whether Feeds table is empty
 # Populate from default entries
 
 print "Checking number of feeds: ",
-numberFeeds = fn.Count(Feed.id)
-print numberFeeds+" found"
+numberFeeds = Feed.select().count()
+print "{} found".format(numberFeeds)
 
 if numberFeeds == 0:
     print "Loading default entries...",
     load_defaults()
-    print " done."
+    print "done."
 
 

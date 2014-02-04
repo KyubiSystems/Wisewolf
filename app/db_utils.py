@@ -22,5 +22,7 @@ def create_db():
 
 
 # load default feeds in DB
+# Defaults should be in OPML format?
 def load_defaults():
-    pass
+    print "In defaults loader...",
+

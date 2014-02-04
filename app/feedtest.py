@@ -1,9 +1,12 @@
 #!/usr/bin/python
-
-"""feedtest: Test lightweight feed autodiscovery
+"""
+Wisewolf RSS Reader
+(c) 2014 Kyubi Systems: www.kyubi.co.uk
+---
+feedtest: Test lightweight feed autodiscovery
 
 Usage:
-	TBD. Modify for internal unit testing?
+TBD. Modify for internal unit testing?
 """
 
 import feedfind, urllib
