@@ -28,6 +28,7 @@ class Feed(BaseModel):
     comment = TextField()
     strip_images = BooleanField(default=False)
     refresh = IntegerField(default=1800)
+    expire = IntegerField(default=0)
 
 
 class Post(BaseModel):
