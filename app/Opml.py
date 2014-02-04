@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-
 """
-(c) 2013 -- KyubiSystems
-
 OPML reader for Wisewolf RSS
+(c) 2014 KyubiSystems: www.kyubi.co.uk
 """
 import xml.etree.ElementTree as ET
 

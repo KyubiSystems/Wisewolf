@@ -1,3 +1,8 @@
+"""
+Wisewolf RSS Reader
+(c) 2014 Kyubi Systems: www.kyubi.co.uk
+"""
+
 import os
 
 # set application path

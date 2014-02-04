@@ -6,6 +6,7 @@ Wisewolf RSS Reader
 from models import *
 
 
+# Create SQLite3 tables
 def create_db():
 
     # Define database
@@ -18,3 +19,8 @@ def create_db():
     Category.create_table()
     Feed.create_table()
     Post.create_table()
+
+
+# load default feeds in DB
+def load_defaults():
+    pass

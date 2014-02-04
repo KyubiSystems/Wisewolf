@@ -1,3 +1,8 @@
+"""
+Wisewolf RSS Reader
+(c) 2014 Kyubi Systems: www.kyubi.co.uk
+"""
+
 import os.path
 from flask import Flask, redirect, request, url_for
 from flask.ext.uploads import delete, init, save, upload
