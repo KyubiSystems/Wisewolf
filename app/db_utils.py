@@ -40,9 +40,10 @@ def load_defaults():
 
     # Iterate over default feeds list
     # PSV format name|url|
-    # Should scan and update category table first
     for row in rows:
         (name, url, category) = row.split('|')
+        # Update Category table
+        Category.create(name=category)
         # Update Feeds table
         Feed.create(name=name, url=url, category=category)
 
