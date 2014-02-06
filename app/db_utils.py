@@ -39,13 +39,17 @@ def load_defaults():
     db.connect()
 
     # Iterate over default feeds list
-    # PSV format name|url|
+    # PSV format name|url|category
     for row in rows:
         (name, url, category) = row.split('|')
         # Update Category table
-        Category.create(name=category)
+        c = Category()
+        c.name = category
+        c.save()
+        # Get Category insert id
+        cid = c.id
         # Update Feeds table
-        Feed.create(name=name, url=url, category=category)
+        Feed.create(name=name, url=url, category=cid)
 
     print "done"
 
