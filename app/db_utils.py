@@ -25,7 +25,6 @@ def create_db():
 # Start with defaults file in PSV
 # Consider moving to OPML later?
 def load_defaults():
-    print "Starting defaults loader...",
 
     # Open defaults file
     with open(DEFAULTS_FILE, 'r') as f:
@@ -50,6 +49,5 @@ def load_defaults():
         # Update Feeds table
         Feed.create(name=name, url=url, category=cid, comment='test feed comment')
 
-    print "done"
 
 
