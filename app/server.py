@@ -14,6 +14,16 @@ import multiprocessing
 
 def worker(wid):
     """Thread worker function"""
+    print "Worker: ", wid
+
+    # Define database
+    db = SqliteDatabase(DB_FILE)
+
+    # Connect to database
+    db.connect()
+
+    wfeed = Feed.get(Feed.id == wid)
+    print "URL: ", wfeed.url
 
     # Check RSS URL up, skip to next refresh if not
     # Can implement exponential backoff later
@@ -36,7 +46,8 @@ def worker(wid):
     # Wait for next refresh
     # Refresh = 0 means exit now
 
-    print "Worker: ", wid
+    db.close()
+
     return
 
 if __name__ == '__main__':
