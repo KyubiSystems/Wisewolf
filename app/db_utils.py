@@ -42,14 +42,13 @@ def load_defaults():
     # PSV format name|url|category
     for row in rows:
         (name, url, category) = row.split('|')
+        category = category.strip()
         # Update Category table
-        c = Category()
-        c.name = category
-        c.save()
+        c = Category.create(name=category, comment='test category comment')
         # Get Category insert id
         cid = c.id
         # Update Feeds table
-        Feed.create(name=name, url=url, category=cid)
+        Feed.create(name=name, url=url, category=cid, comment='test feed comment')
 
     print "done"
 

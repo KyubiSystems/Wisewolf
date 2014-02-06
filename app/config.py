@@ -15,7 +15,7 @@ DEBUG = True
 DB_FILE = APP_PATH + '/db/Wisewolf.db'
 
 # Set default feeds for server
-DEFAULTS_FILE = APP_PATH + '/defaults.py'
+DEFAULTS_FILE = APP_PATH + '/DEFAULT_RSS'
 
 # Set path for downloaded image cache
 CACHE_PATH = APP_PATH + '/cache/'
