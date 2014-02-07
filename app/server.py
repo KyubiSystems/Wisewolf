@@ -8,7 +8,9 @@ from models import *
 from db_utils import create_db, load_defaults
 import multiprocessing
 import datetime
-import requests
+import httplib
+import feedparser
+from urlparse import urlparse
 
 # Server startup options
 # --quiet: no printed output
@@ -16,16 +18,16 @@ import requests
 
 
 def site_is_up(url):
-    state = False
-    r = requests.head(url)
-    if r.status_code == 200:
-        state = True
-    return state
+    p = urlparse(url)
+    conn = httplib.HTTPConnection(p.netloc)
+    conn.request('HEAD', p.path)
+    resp = conn.getresponse()
+    return resp.status < 400
 
 
 def worker(wid):
     """Thread worker function"""
-    print "Starting reader process  ", wid
+    print "Starting reader process ", wid
 
     # Define database
     db = SqliteDatabase(DB_FILE)
@@ -41,9 +43,13 @@ def worker(wid):
     # 2^n multiple on refresh time, up to limit, then disable?
 
     if site_is_up(wfeed.url):
-        print "Yes, site is up!"
+        print "Yes, site is up! ", wid
 
-    # Grab RSS posts using feedparser
+        # Grab RSS posts using feedparser
+        print "starting feedparser"
+        d = feedparser.parse(wfeed.url)
+        print "feedparser complete"
+        print d['feed']['title']
 
     # Filter for new posts since last check
 
