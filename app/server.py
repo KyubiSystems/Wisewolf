@@ -7,14 +7,25 @@ Wisewolf RSS Reader
 from models import *
 from db_utils import create_db, load_defaults
 import multiprocessing
+import datetime
+import requests
 
 # Server startup options
 # --quiet: no printed output
 # --nows: no websocket output, just update DB
 
+
+def site_is_up(url):
+    state = False
+    r = requests.head(url)
+    if r.status_code == 200:
+        state = True
+    return state
+
+
 def worker(wid):
     """Thread worker function"""
-    print "Worker: ", wid
+    print "Starting reader process  ", wid
 
     # Define database
     db = SqliteDatabase(DB_FILE)
@@ -27,10 +38,17 @@ def worker(wid):
 
     # Check RSS URL up, skip to next refresh if not
     # Can implement exponential backoff later
+    # 2^n multiple on refresh time, up to limit, then disable?
 
-    # Grab RSS posts using feedreader
+    if site_is_up(wfeed.url):
+        print "Yes, site is up!"
+
+    # Grab RSS posts using feedparser
 
     # Filter for new posts since last check
+
+    # Check for posts IN DA FUTURE!!
+    now = datetime.datetime.now()
 
     # Filter text for dangerous content (eg. XSRF?)
 
