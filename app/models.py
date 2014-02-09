@@ -29,10 +29,13 @@ class Feed(BaseModel):
     url = CharField(max_length=512)
     category = ForeignKeyField(Category, related_name='feeds')
     last_updated = DateTimeField(default=datetime.datetime.now())
+    last_modified = CharField(max_length=64)
+    etag = CharField(max_length=64)
     comment = TextField()
     strip_images = BooleanField(default=False)
     refresh = IntegerField(default=1800)
     expire = IntegerField(default=0)
+    errors = IntegerField(default=0)
 
 
 class Post(BaseModel):

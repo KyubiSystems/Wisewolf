@@ -16,43 +16,45 @@ from urlparse import urlparse
 # --nows: no websocket output, just update DB
 
 
-def site_is_up(url):
-    p = urlparse(url)
-    conn = httplib.HTTPConnection(p.netloc)
-    conn.request('HEAD', p.path)
-    resp = conn.getresponse()
-    return resp.status < 400
-
-
 def rss_worker(wid):
     """RSS gevent worker function"""
     print "Starting reader process ", wid
 
+    # Set Feedparser User-Agent string defined in config
+    feedparser.USER_AGENT = USER_AGENT
+
     # Define database
     db = SqliteDatabase(DB_FILE)
 
-    # Connect to database
+    # Connect to database, get URL
     db.connect()
-
     wfeed = Feed.get(Feed.id == wid)
-    print "URL: ", wfeed.url
 
-    # Check RSS URL up, skip to next refresh if not
-    # Can implement exponential backoff later
-    # 2^n multiple on refresh time, up to limit, then disable?
+    # Attempt RSS retrieval, check HTTP status
+    d = feedparser.parse(wfeed.url)
 
-    if site_is_up(wfeed.url):
-        print "Yes, site is up! ", wid
+    if d.status < 400:
+        # Site appears to be up
+        print "Site "+wfeed.url+" is up, status: "+str(d.status)
 
-        # Grab RSS posts using feedparser
-        d = feedparser.parse(wfeed.url)
+        # Get ETag and Last-Modified values to reduce excessive polling
+        print "Etag "+d.etag
+        print "Modified "+d.modified
         if d.entries:
-            print 'Found entry:', d.entries[0]
+            print "Found entry:", d.entries[0]
 
-    # Filter for new posts since last check
+        # Catch redirect if Status 301, update RSS address in database
 
-    # Check for posts IN DA FUTURE!!
-    now = datetime.datetime.now()
+    else:
+        # Site appears to be down
+        print "Site "+wfeed.url+" is down, status: "+str(d.status)
+
+        # Implement exponential in case feed is down
+        # Mark feed inactive if Status 410
+        # 2^n multiple on refresh time, up to limit, then disable?
+
+        # If server doesn't implement Last-Modified,
+        # filter for new posts since last check
 
     # Filter text for dangerous content (eg. XSRF?)
 
@@ -63,6 +65,8 @@ def rss_worker(wid):
     # Release write lock on DB
 
     # Spawn websocket message with new posts for web client
+    # One WS per feed or one per post?
+
     # Define error codes for feed not responding etc.
 
     # Wait for next refresh

@@ -19,3 +19,9 @@ DEFAULTS_FILE = APP_PATH + '/DEFAULT_RSS'
 
 # Set path for downloaded image cache
 CACHE_PATH = APP_PATH + '/cache/'
+
+# Set path for downloaded favicons
+ICONS_PATH = CACHE_PATH + 'icons/'
+
+# Set User-Agent string for Wisewolf reader
+USER_AGENT = 'WisewolfRSS/0.0.2a +http://www.wisewolf.co.uk/'

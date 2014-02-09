@@ -4,6 +4,8 @@ Wisewolf RSS Reader
 (c) 2014 Kyubi Systems: www.kyubi.co.uk
 """
 from models import *
+from urlparse import urlparse
+import urllib2
 
 
 # Create SQLite3 tables
@@ -47,7 +49,33 @@ def load_defaults():
         # Get Category insert id
         cid = c.id
         # Update Feeds table
-        Feed.create(name=name, url=url, category=cid, comment='test feed comment')
+        f = Feed.create(name=name, url=url, category=cid, comment='test feed comment')
+        # Get Feed insert id
+        fid = f.id
+        # Get favicon for this Feed
+        get_favicon(fid)
+
+
+# Get favicon file for server
+# and write to cache directory
+def get_favicon(id):
+
+    feed = Feed.get(Feed.id == id)
+    url = feed.url
+    u = urlparse(url)
+    favicon_url = u.netloc + '/favicon.ico'
+    f = urllib2.urlopen(favicon_url)
+    favicon_data = f.read()
+    favicon_file = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id))
+
+    with open(favicon_file, 'wb') as fav:
+        fav.write(favicon_data)
+    fav.close()
+
+
+
+
+
 
 
 
