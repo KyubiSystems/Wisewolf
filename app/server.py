@@ -6,10 +6,7 @@ Wisewolf RSS Reader
 
 from models import *
 from db_utils import create_db, load_defaults
-import datetime
-import httplib
 import feedparser
-from urlparse import urlparse
 
 # Server startup options
 # --quiet: no printed output
