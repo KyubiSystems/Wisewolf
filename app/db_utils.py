@@ -63,8 +63,13 @@ def get_favicon(id):
     feed = Feed.get(Feed.id == id)
     url = feed.url
     u = urlparse(url)
-    favicon_url = u.netloc + '/favicon.ico'
-    f = urllib2.urlopen(favicon_url)
+    favicon_url = 'http://' + u.netloc + '/favicon.ico'
+    try:
+        f = urllib2.urlopen(favicon_url)
+    except urllib2.HTTPError:
+        return
+
+    print "{0} status: {1}".format(str(id), str(f.getcode()))
     favicon_data = f.read()
     favicon_file = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id))
 

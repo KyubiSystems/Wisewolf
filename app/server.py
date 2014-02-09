@@ -38,8 +38,16 @@ def rss_worker(wid):
         print "Site "+wfeed.url+" is up, status: "+str(d.status)
 
         # Get ETag and Last-Modified values to reduce excessive polling
-        print "Etag "+d.etag
-        print "Modified "+d.modified
+        try:
+            print "Etag "+d.etag
+        except AttributeError:
+            pass
+
+        try:
+            print "Modified "+d.modified
+        except AttributeError:
+            pass
+
         if d.entries:
             print "Found entry:", d.entries[0]
 
