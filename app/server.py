@@ -6,7 +6,6 @@ Wisewolf RSS Reader
 
 from models import *
 from db_utils import create_db, load_defaults
-import multiprocessing
 import datetime
 import httplib
 import feedparser
@@ -17,44 +16,45 @@ from urlparse import urlparse
 # --nows: no websocket output, just update DB
 
 
-def site_is_up(url):
-    p = urlparse(url)
-    conn = httplib.HTTPConnection(p.netloc)
-    conn.request('HEAD', p.path)
-    resp = conn.getresponse()
-    return resp.status < 400
-
-
-def worker(wid):
-    """Thread worker function"""
+def rss_worker(wid):
+    """RSS gevent worker function"""
     print "Starting reader process ", wid
+
+    # Set Feedparser User-Agent string defined in config
+    feedparser.USER_AGENT = USER_AGENT
 
     # Define database
     db = SqliteDatabase(DB_FILE)
 
-    # Connect to database
+    # Connect to database, get URL
     db.connect()
-
     wfeed = Feed.get(Feed.id == wid)
-    print "URL: ", wfeed.url
 
-    # Check RSS URL up, skip to next refresh if not
-    # Can implement exponential backoff later
-    # 2^n multiple on refresh time, up to limit, then disable?
+    # Attempt RSS retrieval, check HTTP status
+    d = feedparser.parse(wfeed.url)
 
-    if site_is_up(wfeed.url):
-        print "Yes, site is up! ", wid
+    if d.status < 400:
+        # Site appears to be up
+        print "Site "+wfeed.url+" is up, status: "+str(d.status)
 
-        # Grab RSS posts using feedparser
-        print "starting feedparser"
-        d = feedparser.parse(wfeed.url)
-        print "feedparser complete"
-        print d['feed']['title']
+        # Get ETag and Last-Modified values to reduce excessive polling
+        print "Etag "+d.etag
+        print "Modified "+d.modified
+        if d.entries:
+            print "Found entry:", d.entries[0]
 
-    # Filter for new posts since last check
+        # Catch redirect if Status 301, update RSS address in database
 
-    # Check for posts IN DA FUTURE!!
-    now = datetime.datetime.now()
+    else:
+        # Site appears to be down
+        print "Site "+wfeed.url+" is down, status: "+str(d.status)
+
+        # Implement exponential in case feed is down
+        # Mark feed inactive if Status 410
+        # 2^n multiple on refresh time, up to limit, then disable?
+
+        # If server doesn't implement Last-Modified,
+        # filter for new posts since last check
 
     # Filter text for dangerous content (eg. XSRF?)
 
@@ -65,6 +65,8 @@ def worker(wid):
     # Release write lock on DB
 
     # Spawn websocket message with new posts for web client
+    # One WS per feed or one per post?
+
     # Define error codes for feed not responding etc.
 
     # Wait for next refresh
@@ -74,9 +76,30 @@ def worker(wid):
 
     return
 
-if __name__ == '__main__':
 
-    print "Starting Wisewolf server v0.02..."
+# RSS gevent parallel server process
+def rss_parallel():
+    import gevent.monkey
+    gevent.monkey.patch_all()
+    from gevent.pool import Pool
+
+    # Set limit of 10 simultaneous requests
+    pool = Pool(10)
+
+    # Get list of Feed ids from database
+    feed_query = Feed.select()
+    feed_ids = [f.id for f in feed_query]
+
+    # Add Feed id to Gevent worker pool
+    for feed_id in feed_ids:
+        pool.spawn(rss_worker, feed_id)
+    pool.join()
+
+
+# Startup message, DB creation check, load default feeds
+def startup():
+
+    print "Starting Wisewolf server v0.02a..."
 
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
@@ -84,29 +107,28 @@ if __name__ == '__main__':
         create_db()
         print "done."
 
-    # Check whether Feeds table is empty
-    # Populate from default entries
-
+    # Checking number of feeds
     print "Checking number of feeds: ",
-    numberFeeds = Feed.select().count()
-    print "{} found".format(numberFeeds)
+    number_feeds = Feed.select().count()
+    print "{} found".format(number_feeds)
 
-    if numberFeeds == 0:
+    # Load defaults in database if blank
+    if number_feeds == 0:
         print "Loading default entries...",
         load_defaults()
         print "done."
-        numberFeeds = Feed.select().count()
 
-    # Start multiprocess RSS requests in background, one per feed
-    # Select all Feeds, get Feed ids, start worker process by id
+    return
 
-    feed_q = Feed.select()
-    idFeeds = [f.id for f in feed_q]
-    jobs = []
-    for i in idFeeds:
-        p = multiprocessing.Process(target=worker, args=(i,))
-        jobs.append(p)
-        p.start()
+
+if __name__ == '__main__':
+
+    # print startup message, create DB if necessary
+    startup()
+
+    # Run RSS request processes in parallel
+    rss_parallel()
+
 
 
 
