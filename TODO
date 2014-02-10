@@ -32,8 +32,6 @@ opml <--- upload OPML file to local cache, parse
 Server
 ------
 
-Create generic ‘RSS symbol’ favicon
-
 Get article parse structure, paths to image enclosures
 Add posts to Posts table, images to Image table
 

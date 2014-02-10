@@ -4,7 +4,7 @@
 .idea/
 venv.ww
 app/db/Wisewolf.db
-app/cache/icons/*.ico
+app/cache/icons/favicon*.ico
 
 
 
