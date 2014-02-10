@@ -36,6 +36,7 @@ class Feed(BaseModel):
     refresh = IntegerField(default=1800)
     expire = IntegerField(default=0)
     errors = IntegerField(default=0)
+    inactive = BooleanField(default=False)
 
 
 class Post(BaseModel):

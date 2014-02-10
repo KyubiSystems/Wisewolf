@@ -69,7 +69,7 @@ def get_favicon(id):
     except urllib2.HTTPError:
         return
 
-    print "{0} status: {1}".format(str(id), str(f.getcode()))
+    print "Favicon {0} status: {1}".format(str(id), str(f.getcode()))
     favicon_data = f.read()
     favicon_file = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id))
 
