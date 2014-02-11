@@ -9,7 +9,8 @@ Usage:
 TBD. Modify for internal unit testing?
 """
 
-import feedfind, urllib
+import feedfind
+import urllib
 
 p = feedfind.FeedFind()
 

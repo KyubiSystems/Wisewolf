@@ -35,19 +35,6 @@ Server
 Get article parse structure, paths to image enclosures
 Add posts to Posts table, images to Image table
 
-Update feed info on 301 Moved, get d.status
-http://pythonhosted.org/feedparser/http-redirect.html
-
-Note 404 status, increment error counter (to max, then set inactive)
- 
-Note 410 status, set inactive flag
-
-HTTP Conditional GET
-E-Tag, Last-Modified (add columns to Feed table)
-set prefiltered=True flag
-http://pythonhosted.org/feedparser/http-etag.html
-http://fishbowl.pastiche.org/2002/10/21/http_conditional_get_for_rss_hackers/
-
 How to do timer loop? Push, pop from timer stack?
 http://stackoverflow.com/questions/13206798/somethig-like-cron-timer-in-gevent
 
