@@ -7,10 +7,7 @@ Wisewolf RSS Reader
 from models import *
 from db_utils import create_db, load_defaults
 import feedparser
-
-# Server startup options
-# --quiet: no printed output
-# --nows: no websocket output, just update DB
+import argparse
 
 
 def rss_worker(wid):
@@ -159,6 +156,15 @@ def startup():
 
 
 if __name__ == '__main__':
+
+    # Server startup options
+    # --quiet: no printed output
+    # --nows: no websocket output, just update DB
+
+    parser = argparse.ArgumentParser(description="Wisewolf RSS server process")
+    parser.add_argument("--quiet", "Suppress terminal output")
+    parser.add_argument("--nows", "No websocket messaging, just update DB")
+    args = parser.parse_args()
 
     # print startup message, create DB if necessary
     startup()
