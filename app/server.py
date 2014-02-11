@@ -37,8 +37,7 @@ def rss_worker(wid):
 
         # Catch 301 Moved Permanently, update feed address
         if d.status == 301:
-            feed_address = d.href
-            Feed.update(url=feed_address).where(Feed.id == wid)
+            Feed.update(url=d.href).where(Feed.id == wid)
 
         # Conditional HTTP:
         # Get ETag where found to reduce excessive polling
