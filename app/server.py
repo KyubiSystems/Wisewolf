@@ -7,10 +7,7 @@ Wisewolf RSS Reader
 from models import *
 from db_utils import create_db, load_defaults
 import feedparser
-
-# Server startup options
-# --quiet: no printed output
-# --nows: no websocket output, just update DB
+import argparse
 
 
 def rss_worker(wid):
@@ -27,8 +24,14 @@ def rss_worker(wid):
     db.connect()
     wfeed = Feed.get(Feed.id == wid)
 
-    # Attempt RSS retrieval, check HTTP status
-    d = feedparser.parse(wfeed.url)
+    # Check ETag, Modified: Attempt Conditional HTTP retrieval
+    # to reduce excessive polling
+    if wfeed.etag:
+        d = feedparser.parse(wfeed.url, etag=wfeed.etag)
+    elif wfeed.modified:
+        d = feedparser.parse(wfeed.url, modified=wfeed.modified)
+    else:
+        d = feedparser.parse(wfeed.url)
 
     if d.status < 400:
         # Site appears to be up
@@ -40,29 +43,50 @@ def rss_worker(wid):
             Feed.update(url=d.href).where(Feed.id == wid)
 
         # Conditional HTTP:
-        # Get ETag where found to reduce excessive polling
-        try:
-            print "Etag "+d.etag
+        # Check for ETag in result and write to DB
+        if d.etag:
+            print "ETag "+d.etag
             Feed.update(etag=d.etag).where(Feed.id == wid)
             prefiltered=True
-        except AttributeError:
-            pass
 
         # Conditional HTTP
-        # Get Last-Modified where found to reduce excessive polling
-        try:
+        # Check for Last-Modified in result and write to DB
+        if d.modified:
             print "Modified "+d.modified
             Feed.update(modified=d.modified).where(Feed.id == wid)
             prefiltered=True
-        except AttributeError:
-            pass
 
-        if not prefiltered:
-            # Do some feed date filtering here
-            pass
+        # Check for feed modification date, write to DB
 
+        # If entries exist, process them
         if d.entries:
-            print "Found entry:", d.entries[0]
+
+            # If we haven't already date filtered, do it now
+            if not prefiltered:
+                pass
+
+            # Iterate over posts found
+            # Need to check difference between RSS and ATOM
+            for post in d.entries:
+                print post.title
+                print post.link
+                print post.published
+                print post.content
+                print '------------'
+
+            # Filter text for dangerous content (eg. XSRF?)
+            # Feedparser already does this to some extent
+
+            # Wait for write lock on DB
+
+            # Add to database
+
+            # Release write lock on DB
+
+            # Spawn websocket message with new posts for web client
+            # One WS message per feed or one per post?
+
+            # Define error codes for feed not responding etc.
 
     else:
         # Site appears to be down
@@ -78,22 +102,6 @@ def rss_worker(wid):
 
         # Implement exponential in case feed is down
         # 2^n multiple on refresh time, up to limit, then disable?
-
-        # If server doesn't implement Last-Modified,
-        # filter for new posts since last check
-
-    # Filter text for dangerous content (eg. XSRF?)
-
-    # Wait for write lock on DB
-
-    # Add to database
-
-    # Release write lock on DB
-
-    # Spawn websocket message with new posts for web client
-    # One WS per feed or one per post?
-
-    # Define error codes for feed not responding etc.
 
     # Wait for next refresh
     # Refresh = 0 means exit now
@@ -112,8 +120,8 @@ def rss_parallel():
     # Set limit of 10 simultaneous requests
     pool = Pool(10)
 
-    # Get list of Feed ids from database
-    feed_query = Feed.select()
+    # Get list of active Feed ids from database
+    feed_query = Feed.select().where(Feed.inactive is False)
     feed_ids = [f.id for f in feed_query]
 
     # Add Feed id to Gevent worker pool
@@ -148,6 +156,15 @@ def startup():
 
 
 if __name__ == '__main__':
+
+    # Server startup options
+    # --quiet: no printed output
+    # --nows: no websocket output, just update DB
+
+    parser = argparse.ArgumentParser(description="Wisewolf RSS server process")
+    parser.add_argument("--quiet", "Suppress terminal output")
+    parser.add_argument("--nows", "No websocket messaging, just update DB")
+    args = parser.parse_args()
 
     # print startup message, create DB if necessary
     startup()
