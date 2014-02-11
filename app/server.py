@@ -33,29 +33,51 @@ def rss_worker(wid):
     if d.status < 400:
         # Site appears to be up
         print "Site "+wfeed.url+" is up, status: "+str(d.status)
+        prefiltered=False
 
-        # Get ETag and Last-Modified values to reduce excessive polling
+        # Catch 301 Moved Permanently, update feed address
+        if d.status == 301:
+            feed_address = d.href
+            Feed.update(url=feed_address).where(Feed.id == wid)
+
+        # Conditional HTTP:
+        # Get ETag where found to reduce excessive polling
         try:
             print "Etag "+d.etag
+            Feed.update(etag=d.etag).where(Feed.id == wid)
+            prefiltered=True
         except AttributeError:
             pass
 
+        # Conditional HTTP
+        # Get Last-Modified where found to reduce excessive polling
         try:
             print "Modified "+d.modified
+            Feed.update(modified=d.modified).where(Feed.id == wid)
+            prefiltered=True
         except AttributeError:
+            pass
+
+        if not prefiltered:
+            # Do some feed date filtering here
             pass
 
         if d.entries:
             print "Found entry:", d.entries[0]
 
-        # Catch redirect if Status 301, update RSS address in database
-
     else:
         # Site appears to be down
         print "Site "+wfeed.url+" is down, status: "+str(d.status)
 
+        # Increment error counter
+        Feed.update(errors=Feed.errors + 1).where(Feed.id == wid)
+
+        # Status 410 Gone Permanently, mark feed inactive
+        if d.status == 410:
+            Feed.update(inactive=True).where(Feed.id == wid)
+            return
+
         # Implement exponential in case feed is down
-        # Mark feed inactive if Status 410
         # 2^n multiple on refresh time, up to limit, then disable?
 
         # If server doesn't implement Last-Modified,
