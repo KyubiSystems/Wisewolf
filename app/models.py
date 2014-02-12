@@ -46,7 +46,7 @@ class Post(BaseModel):
     description = TextField()
     content = TextField()
     feed = ForeignKeyField(Feed, related_name='posts')
-    post_date = DateTimeField(default=datetime.datetime.now())
+    published = DateTimeField(default=datetime.datetime.now())
     is_read = BooleanField(default=False)
     is_favourite = BooleanField(default=False)
 

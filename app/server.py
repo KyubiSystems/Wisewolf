@@ -77,17 +77,23 @@ def rss_worker(wid):
                 pass
 
             # Iterate over posts found
-            # Need to check difference between RSS and ATOM
+            # Build and add Post object to DB
             for post in d.entries:
-                print post.get('title', 'No title')
-                print post.get('description', 'No description')
-                print post.get('published', datetime.datetime.now())  # should use feed updated date?
-                print post.get('content', 'No content')
-                print post.get('link', 'No link')
-                print '------------'
+                p = Post()
+                p.title = post.get('title', 'No title')
+                p.description = post.get('description', 'No description')
+                p.published = post.get('published', datetime.datetime.now())  # should use feed updated date?
+                p.content = post.get('content', 'No content')
+                p.link = post.get('link', 'No link')
+                p.feed = wid
+                p.save()
 
             # Filter text for dangerous content (eg. XSRF?)
             # Feedparser already does this to some extent
+
+            # If strip_images set
+            # Get image links from content and add to DB
+            # Tagged by feed and post ID
 
             # Wait for write lock on DB
 
