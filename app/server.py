@@ -26,10 +26,10 @@ def rss_worker(wid):
 
     # Check ETag, Modified: Attempt Conditional HTTP retrieval
     # to reduce excessive polling
-    if wfeed.etag:
+    if hasattr(wfeed, 'etag'):
         d = feedparser.parse(wfeed.url, etag=wfeed.etag)
-    elif wfeed.modified:
-        d = feedparser.parse(wfeed.url, modified=wfeed.modified)
+    elif hasattr(wfeed, 'last_modified'):
+        d = feedparser.parse(wfeed.url, modified=wfeed.last_modified)
     else:
         d = feedparser.parse(wfeed.url)
 
@@ -44,16 +44,16 @@ def rss_worker(wid):
 
         # Conditional HTTP:
         # Check for ETag in result and write to DB
-        if d.etag:
+        if hasattr(d, 'etag'):
             print "ETag "+d.etag
             Feed.update(etag=d.etag).where(Feed.id == wid)
             prefiltered=True
 
         # Conditional HTTP
         # Check for Last-Modified in result and write to DB
-        if d.modified:
+        if hasattr(d, 'modified'):
             print "Modified "+d.modified
-            Feed.update(modified=d.modified).where(Feed.id == wid)
+            Feed.update(last_modified=d.modified).where(Feed.id == wid)
             prefiltered=True
 
         # Check for feed modification date, write to DB
@@ -71,7 +71,8 @@ def rss_worker(wid):
                 print post.title
                 print post.link
                 print post.published
-                print post.content
+                if hasattr(post, 'content'):
+                    print post.content
                 print '------------'
 
             # Filter text for dangerous content (eg. XSRF?)
@@ -121,7 +122,7 @@ def rss_parallel():
     pool = Pool(10)
 
     # Get list of active Feed ids from database
-    feed_query = Feed.select().where(Feed.inactive is False)
+    feed_query = Feed.select().where(Feed.inactive == 0)
     feed_ids = [f.id for f in feed_query]
 
     # Add Feed id to Gevent worker pool
@@ -148,9 +149,9 @@ def startup():
 
     # Load defaults in database if blank
     if number_feeds == 0:
-        print "Loading default entries...",
+        print "Loading default entries..."
         load_defaults()
-        print "done."
+        print "Loading default entries done."
 
     return
 
@@ -162,8 +163,8 @@ if __name__ == '__main__':
     # --nows: no websocket output, just update DB
 
     parser = argparse.ArgumentParser(description="Wisewolf RSS server process")
-    parser.add_argument("--quiet", "Suppress terminal output")
-    parser.add_argument("--nows", "No websocket messaging, just update DB")
+    parser.add_argument("--quiet", help="Suppress terminal output")
+    parser.add_argument("--nows", help="No websocket messaging, just update DB")
     args = parser.parse_args()
 
     # print startup message, create DB if necessary
