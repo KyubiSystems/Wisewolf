@@ -24,4 +24,4 @@ CACHE_PATH = APP_PATH + '/cache/'
 ICONS_PATH = CACHE_PATH + 'icons/'
 
 # Set User-Agent string for Wisewolf reader
-USER_AGENT = 'WisewolfRSS/0.0.2a +http://www.wisewolf.co.uk/'
+USER_AGENT = 'WisewolfRSS/0.0.2b +http://www.wisewolf.co.uk/'

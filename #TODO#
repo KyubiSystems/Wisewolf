@@ -1,0 +1,59 @@
+Dummy data
+----------
+
+Add dummy.py with test data structures to develop views
+
+Add routes to Flask:
+-------------------
+
+main
+
+feed/add
+
+feed/view/all
+feed/view/[id]
+
+feed/edit/[id]
+
+feed/delete/[id]
+
+feed/update/all
+feed/update/[id]
+
+manage
+
+category/add
+category/delete/[id]
+
+settings
+
+opml <--- upload OPML file to local cache, parse
+
+Server
+------
+
+Get article parse structure, paths to image enclosures
+Add posts to Posts table, images to Image table
+
+How to do timer loop? Push, pop from timer stack?
+http://stackoverflow.com/questions/13206798/somethig-like-cron-timer-in-gevent
+
+Add HTML tag filter against XSS attacks:
+---------------------------------------
+
+http://stackoverflow.com/questions/699468/python-html-sanitizer-scrubber-filter
+http://lxml.de/lxmlhtml.html#cleaning-up-html
+
+Check Flask pagination.
+
+Hotkeys handling for keyboard shortcuts
+---------------------------------------
+
+https://github.com/tzuryby/jquery.hotkeys
+
+Unit Testing
+------------
+
+Create template HTML for autodiscovery
+Create template OPML for parsing
+Create template RSS for parsing?

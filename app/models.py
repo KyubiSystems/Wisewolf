@@ -28,6 +28,7 @@ class Feed(BaseModel):
     name = CharField()
     url = CharField(max_length=512)
     category = ForeignKeyField(Category, related_name='feeds')
+    version = CharField(max_length=10)
     last_updated = DateTimeField(default=datetime.datetime.now())
     last_modified = CharField(max_length=64, default='')
     etag = CharField(max_length=64, default='')
@@ -42,6 +43,7 @@ class Feed(BaseModel):
 class Post(BaseModel):
     title = CharField()
     link = CharField(max_length=512)
+    description = TextField()
     content = TextField()
     feed = ForeignKeyField(Feed, related_name='posts')
     post_date = DateTimeField(default=datetime.datetime.now())

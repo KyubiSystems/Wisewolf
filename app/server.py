@@ -36,7 +36,13 @@ def rss_worker(wid):
     if d.status < 400:
         # Site appears to be up
         print "Site "+wfeed.url+" is up, status: "+str(d.status)
+        # Reset error counter
+        Feed.update(errors=0).where(Feed.id == wid)
+
         prefiltered=False
+
+        # Get RSS/ATOM version number
+        print "Version: "+d.version
 
         # Catch 301 Moved Permanently, update feed address
         if d.status == 301:
@@ -57,6 +63,11 @@ def rss_worker(wid):
             prefiltered=True
 
         # Check for feed modification date, write to DB
+        if hasattr(d, 'published'):
+            print "Published: "+d.published
+
+        if hasattr(d, 'updated'):
+            print "Updated: "+d.updated
 
         # If entries exist, process them
         if d.entries:
@@ -68,11 +79,11 @@ def rss_worker(wid):
             # Iterate over posts found
             # Need to check difference between RSS and ATOM
             for post in d.entries:
-                print post.title
-                print post.link
-                print post.published
-                if hasattr(post, 'content'):
-                    print post.content
+                print post.get('title', 'No title')
+                print post.get('description', 'No description')
+                print post.get('published', datetime.datetime.now())  # should use feed updated date?
+                print post.get('content', 'No content')
+                print post.get('link', 'No link')
                 print '------------'
 
             # Filter text for dangerous content (eg. XSRF?)
@@ -88,6 +99,8 @@ def rss_worker(wid):
             # One WS message per feed or one per post?
 
             # Define error codes for feed not responding etc.
+
+            print "================"
 
     else:
         # Site appears to be down

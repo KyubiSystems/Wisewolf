@@ -25,7 +25,7 @@ For v0.3
 Requirements
 ------------
 
-* See Wisewolf-req.txt pip requirements file for Python prerequisites. Relies on __Flask__ microframework and __Tornado__ for asynchronous communications.
+* See Wisewolf-req.txt pip requirements file for Python prerequisites. Relies on __Flask__ microframework and __Gevent/Greenlet__ for asynchronous communications.
 * A database. Will be SQLite3 by default, look at supporting other DBMS (MySQL, Postgres).
 * Pillow (Python Imaging Library fork) with libjpeg support for thumbnail generation.
 
