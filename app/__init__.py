@@ -1,8 +1,10 @@
+"""
+Wisewolf RSS Reader
+(c) 2014 Kyubi Systems: www.kyubi.co.uk
+"""
+
 from flask import Flask
 from flask import g
-from flask import request
-from flask import session
-from flask import url_for, render_template, abort
 
 # Import configuration
 from config import *

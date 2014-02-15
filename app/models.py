@@ -24,6 +24,12 @@ class Category(BaseModel):
     comment = TextField()
 
 
+# Return number of unread posts in Category cid
+def count_category_unread(cid):
+    category_unread = Post.select().join(Feed).where((Post.is_read == 0) & (Feed.category == cid)).count()
+    return category_unread
+
+
 class Feed(BaseModel):
     name = CharField()
     url = CharField(max_length=512)
@@ -38,6 +44,12 @@ class Feed(BaseModel):
     expire = IntegerField(default=0)
     errors = IntegerField(default=0)
     inactive = BooleanField(default=False)
+
+
+# Return number of unread posts in Feed fid
+def count_feed_unread(fid):
+    feed_unread = Post.select().where((Post.is_read == 0) & (Post.feed == fid)).count()
+    return feed_unread
 
 
 class Post(BaseModel):

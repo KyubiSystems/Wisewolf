@@ -4,13 +4,15 @@ Wisewolf RSS Reader
 """
 
 from flask import Flask, render_template
+from models import *
 
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("index.html")
+    n = count_category_unread(3)
+    return render_template("index.html", number=n)
 
 @app.route('/feed')
 def feed():
