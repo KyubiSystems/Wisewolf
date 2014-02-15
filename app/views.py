@@ -11,20 +11,58 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    n = count_category_unread(3)
-    return render_template("index.html", number=n)
+    # Load feeds from DB to display
+    # List of categories
+    # List of feeds by category
+    # List of posts in order of publication date
+
+    # Declare empty array of feeds
+    feeds = []
+
+    # Get categories, number of posts by category
+    categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
+
+    # Loop over categories
+    for c in categories:
+        # Get feeds by category
+        feeds[c.id] = Feed.select().where(Feed.category == c.id).annotate(Post)
+
+    # Get posts in decreasing date order
+    posts = Post.select().order_by(Post.published.desc())
+
+    # Render main page template
+    return render_template("index.html", categories=categories, feeds=feeds, posts=posts)
 
 @app.route('/feed')
-def feed():
-    return render_template("feed.html")
+@app.route('/feed/<id>')
+def feed(id=None):
+    # Get feed number <id>
+    feed = Feed.select().where(Feed.id == id)
+
+    # Get posts in decreasing date order
+    posts = Post.select().where(Post.id == id).order_by(Post.published.desc())
+
+    # Render feed page template
+    return render_template("feed.html", feed=feed, posts=posts)
+
+@app.route('/category')
+@app.route('/category/<id>')
+def category(id=None):
+    # Get category number <id>
+    categories = Category.select().where(Category.id == id)
+
+    # Get feeds in category
+    feeds = Feed.select().where(Feed.category == id).annotate(Post)
+
+    # Get posts in category in decreasing date order
+    posts = Post.select().join(Feed).where(Feed.category == id).order_by(Post.published.desc())
+
+    # Render category page template
+    return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
 
 @app.route('/manage')
 def manage():
     return render_template("manage.html")
-
-@app.route('/category')
-def category():
-    return render_template("category.html")
 
 @app.route('/settings')
 def settings():
@@ -37,10 +75,6 @@ def opml_import():
 @app.route('/gallery')
 def gallery():
     return render_template("gallery.html")
-
-@app.route('/hello')
-def hello_world():
-    return 'Hello world!'
 
 # Error handling
 
