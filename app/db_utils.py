@@ -21,6 +21,7 @@ def create_db():
     Category.create_table()
     Feed.create_table()
     Post.create_table()
+    Image.create_table()
 
 
 # load default feeds in DB

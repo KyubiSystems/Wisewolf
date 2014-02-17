@@ -20,7 +20,7 @@ class BaseModel(Model):
 
 
 class Category(BaseModel):
-    name = CharField()
+    name = CharField(unique=True)
     comment = TextField()
 
 
