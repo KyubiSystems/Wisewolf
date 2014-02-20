@@ -25,7 +25,8 @@ def index():
     # Loop over categories
     for c in categories:
         # Get feeds by category
-        feeds[c.id] = Feed.select().where(Feed.category == c.id).annotate(Post)
+        f = Feed.select().where(Feed.category == c.id).annotate(Post)
+        feeds.append(f)
 
     # Get posts in decreasing date order
     posts = Post.select().order_by(Post.published.desc())

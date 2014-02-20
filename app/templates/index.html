@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Hi! This is a test of template block content for Wisewolf</h1>
-Unread in category 3: <b>{{ category_name }} ({{ number }})</b>
+<h1><i>Wisewolf</i> RSS Aggregator</h1>
+<div class="row">
+    <div class="span4">
+        <table>
+        <tr><th>Categories:</th></tr>
+        {% for c in categories %}
+        <tr><td>
+            <a href="category/{{c.id}}">{{c.name}}</a>
+        </td></tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div class="span8">
+        <table>
+        <tr><th>Posts:</th></tr>
+        {% for p in posts %}
+        <tr><td>
+            <a href="post/{{p.id}}">{{p.title}}</a>
+        </td></tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
 {% endblock %}
