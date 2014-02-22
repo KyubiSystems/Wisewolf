@@ -16,8 +16,8 @@ def index():
     # List of feeds by category
     # List of posts in order of publication date
 
-    # Declare empty array of feeds
-    feeds = []
+    # Declare empty dict of feeds (emulate sparse list)
+    feeds = {}
 
     # Get categories, number of posts by category
     categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
@@ -26,7 +26,7 @@ def index():
     for c in categories:
         # Get feeds by category
         f = Feed.select().where(Feed.category == c.id).annotate(Post)
-        feeds.append(f)
+        feeds[c.id] = f
 
     # Get posts in decreasing date order
     posts = Post.select().order_by(Post.published.desc())

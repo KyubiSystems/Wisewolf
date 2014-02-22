@@ -9,6 +9,11 @@
         <tr><td>
             <a href="category/{{c.id}}">{{c.name}}</a>
         </td></tr>
+            {% for f in feeds[c.id] %}
+            <tr><td>
+                <a href="feed/{{f.id}}">{{f.name}} ({{f.count}})</a>
+            </td></tr>
+            {% endfor %}
         {% endfor %}
         </table>
     </div>
