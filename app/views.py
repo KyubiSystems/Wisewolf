@@ -38,7 +38,7 @@ def index():
 @app.route('/feed/<id>')
 def feed(id=None):
     # Get feed number <id>
-    feed = Feed.select().where(Feed.id == id)
+    feed = Feed.get(Feed.id == id)
 
     # Get posts in decreasing date order
     posts = Post.select().where(Post.id == id).order_by(Post.published.desc())
@@ -50,7 +50,7 @@ def feed(id=None):
 @app.route('/category/<id>')
 def category(id=None):
     # Get category number <id>
-    categories = Category.select().where(Category.id == id)
+    categories = Category.get(Category.id == id)
 
     # Get feeds in category
     feeds = Feed.select().where(Feed.category == id).annotate(Post)

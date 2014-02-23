@@ -7,12 +7,17 @@
         <tr><th>Categories:</th></tr>
         {% for c in categories %}
         <tr><td>
-            <a href="category/{{c.id}}">{{c.name}}</a>
+            <a href="category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
+        </td>
+        <td>
+            <a href="category/{{c.id}}/settings"><i class="fa fa-cog"></i></a>
         </td></tr>
             {% for f in feeds[c.id] %}
             <tr><td>
-                <a href="feed/{{f.id}}">{{f.name}} ({{f.count}})</a>
-            </td></tr>
+                -&nbsp;<a href="feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
+            </td>
+            <td></td>
+            </tr>
             {% endfor %}
         {% endfor %}
         </table>
@@ -22,7 +27,13 @@
         <tr><th>Posts:</th></tr>
         {% for p in posts %}
         <tr><td>
-            <a href="post/{{p.id}}">{{p.title}}</a>
+            {{p.published}}&nbsp;<a href="post/{{p.id}}">{{p.title}}</a>
+        </td></tr>
+        <tr><td>
+            <i>{{p.description}}</i>
+            {% if p.content != "No content" %}
+            <br/>{{p.content}}
+            {% endif %}
         </td></tr>
         {% endfor %}
         </table>
