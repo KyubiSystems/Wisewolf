@@ -9,7 +9,7 @@ from peewee import *
 import datetime
 
 # define database
-db = SqliteDatabase(DB_FILE)
+db = SqliteDatabase(DB_FILE, threadlocals=True)
 
 # create base model class that application models will extend
 
@@ -38,6 +38,7 @@ class Feed(BaseModel):
     expire = IntegerField(default=0)
     errors = IntegerField(default=0)
     inactive = BooleanField(default=False)
+    favicon = CharField(max_length=64)
 
 
 class Post(BaseModel):

@@ -12,7 +12,7 @@ import urllib2
 def create_db():
 
     # Define database
-    db = SqliteDatabase(DB_FILE)
+    db = SqliteDatabase(DB_FILE, threadlocals=True)
 
     # Connect to database
     db.connect()
@@ -35,7 +35,7 @@ def load_defaults():
     f.close()
 
     # Define database
-    db = SqliteDatabase(DB_FILE)
+    db = SqliteDatabase(DB_FILE, threadlocals=True)
 
     # Connect to database
     db.connect()
@@ -46,15 +46,20 @@ def load_defaults():
         (name, url, category) = row.split('|')
         category = category.strip()
         # Update Category table
-        c = Category.create(name=category, comment='test category comment')
+        c = Category.create(name=category, comment='default category')
         # Get Category insert id
         cid = c.id
         # Update Feeds table
-        f = Feed.create(name=name, version='', url=url, category=cid, comment='test feed comment')
+        f = Feed.create(name=name, version='', url=url, category=cid, comment='default feed')
         # Get Feed insert id
         fid = f.id
         # Get favicon for this Feed
-        get_favicon(fid)
+        # returns path to local favicon file, or None
+        # write to current feed record
+        favicon = get_favicon(fid)
+        if favicon:
+            f.favicon = favicon
+            f.save()
 
 
 # Get favicon file for server
@@ -68,7 +73,7 @@ def get_favicon(id):
     try:
         f = urllib2.urlopen(favicon_url)
     except urllib2.HTTPError:
-        return
+        return None
 
     print "Favicon {0} status: {1}".format(str(id), str(f.getcode()))
     favicon_data = f.read()
@@ -77,6 +82,8 @@ def get_favicon(id):
     with open(favicon_file, 'wb') as fav:
         fav.write(favicon_data)
     fav.close()
+
+    return favicon_file
 
 
 

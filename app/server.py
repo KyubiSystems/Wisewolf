@@ -18,7 +18,7 @@ def rss_worker(wid):
     feedparser.USER_AGENT = USER_AGENT
 
     # Define database
-    db = SqliteDatabase(DB_FILE)
+    db = SqliteDatabase(DB_FILE, threadlocals=True)
 
     # Connect to database, get URL
     db.connect()
