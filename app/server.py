@@ -9,10 +9,15 @@ from db_utils import create_db, load_defaults
 import feedparser
 import argparse
 
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    filename='wisewolf.log', # log to this file
+                    format='%(asctime)s %(message)s') # include timestamp
 
 def rss_worker(wid):
     """RSS gevent worker function"""
-    print "Starting reader process ", wid
+    logging.info("Starting reader process %s", wid)
 
     # Set Feedparser User-Agent string defined in config
     feedparser.USER_AGENT = USER_AGENT
@@ -35,14 +40,15 @@ def rss_worker(wid):
 
     if d.status < 400:
         # Site appears to be up
-        print "Site "+wfeed.url+" is up, status: "+str(d.status)
+        logging.info("Site %s is up, status: %s", wfeed.url, str(d.status))
+
         # Reset error counter
         Feed.update(errors=0).where(Feed.id == wid)
 
         prefiltered=False
 
         # Get RSS/ATOM version number
-        print "Version: "+d.version
+        logging.info("Feed version: %s", d.version)
 
         # Catch 301 Moved Permanently, update feed address
         if d.status == 301:
@@ -51,23 +57,23 @@ def rss_worker(wid):
         # Conditional HTTP:
         # Check for ETag in result and write to DB
         if hasattr(d, 'etag'):
-            print "ETag "+d.etag
+            logging.info("Etag %s", d.etag)
             Feed.update(etag=d.etag).where(Feed.id == wid)
             prefiltered=True
 
         # Conditional HTTP
         # Check for Last-Modified in result and write to DB
         if hasattr(d, 'modified'):
-            print "Modified "+d.modified
+            logging.info("Modified %s", d.modified)
             Feed.update(last_modified=d.modified).where(Feed.id == wid)
             prefiltered=True
 
         # Check for feed modification date, write to DB
         if hasattr(d, 'published'):
-            print "Published: "+d.published
+            logging.info("Published: %s", d.published)
 
         if hasattr(d, 'updated'):
-            print "Updated: "+d.updated
+            logging.info("Updated: %s", d.updated)
 
         # If entries exist, process them
         if d.entries:
@@ -110,7 +116,7 @@ def rss_worker(wid):
 
     else:
         # Site appears to be down
-        print "Site "+wfeed.url+" is down, status: "+str(d.status)
+        logging.warning("Site %s is down, status: %s", wfeed.url, str(d.status))
 
         # Increment error counter
         Feed.update(errors=Feed.errors + 1).where(Feed.id == wid)
@@ -153,24 +159,24 @@ def rss_parallel():
 # Startup message, DB creation check, load default feeds
 def startup():
 
-    print "Starting Wisewolf server v0.02a..."
+    logging.info("Starting Wisewolf server v0.02a...")
 
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
-        print "SQLite database not found, creating...",
+        logging.info("SQLite database not found, creating...")
         create_db()
-        print "done."
+        logging.info("done.")
 
     # Checking number of feeds
-    print "Checking number of feeds: ",
+    logging.info("Checking number of feeds: ")
     number_feeds = Feed.select().count()
-    print "{} found".format(number_feeds)
+    logging.info("%d found", number_feeds)
 
     # Load defaults in database if blank
     if number_feeds == 0:
-        print "Loading default entries..."
+        logging.info("Loading default entries...")
         load_defaults()
-        print "Loading default entries done."
+        logging.info("Loading default entries done.")
 
     return
 

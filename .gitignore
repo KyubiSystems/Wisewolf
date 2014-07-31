@@ -5,6 +5,6 @@
 venv.ww
 app/db/Wisewolf.db
 app/cache/icons/favicon*.ico
-
+app/wisewolf.log
 
 
