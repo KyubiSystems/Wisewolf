@@ -50,7 +50,7 @@ def load_defaults():
         # Get Category insert id
         cid = c.id
         # Update Feeds table
-        f = Feed.create(name=name, version='', url=url, category=cid, comment='default feed')
+        f = Feed.create(name=name, version='', url=url, category=cid, favicon='', comment='default feed')
         # Get Feed insert id
         fid = f.id
         # Get favicon for this Feed
