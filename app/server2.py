@@ -61,6 +61,9 @@ def rss_worker(f):
     """RSS gevent worker function"""
     logging.info("Starting reader process for feed %s", f.id)
 
+    # Connect to database
+    db.connect()
+
     # Check ETag, Modified: Attempt Conditional HTTP retrieval
     # to reduce excessive polling
     if hasattr(f, 'etag'):
@@ -91,26 +94,70 @@ def rss_worker(f):
         # Conditional HTTP:
         # Check for Etag in result and write to DB
         if hasattr(d, 'etag'):
-            logging.info("Etag %s", d.etag)
+            logging.info("Etag: %s", d.etag)
             Feed.update(etag=d.etag).where(Feed.id=f.id)
             prefiltered=True
 
+        # Conditional HTTP
+        # Check for Last-Modified in result and write to DB
+        if hasattr(d, 'modified'):
+            logging.info("Modified %s", d.modified)
+            Feed.update(last_modified=d.modified).where(Feed.id == f.id)
+            prefiltered=True
 
+        # Check for feed modification date, write to DB
+        if hasattr(d, 'published'):
+            logging.info("Published: %s", d.published)
 
+        if hasattr(d, 'updated'):
+            logging.info("Updated: %s", d.updated)
 
-# filter for new items since last check (timedelta)
+        # If post entries exist, process them
+        if d.entries:
 
-# wait for write lock on DB
+            # If we haven't already date filtered, do it now
+            # filter for new items since last check (timedelta)
+            if not prefiltered:
+                pass
 
-# write Posts items to DB
+            # Iterate over posts found
+            # Build and add Post object to DB
+            # DB write lock needed?
+            for post in d.entries:
+                p = Post()
+                p.title = post.get('title', 'No title')
+                p.description = post.get('description', 'No description')
+                p.published = post.get('published', datetime.datetime.now()) # should use feed updated date?
+                p.content = post.get('content', 'No content')
+                p.link = post.get('link', 'No link')
+                p.feed = f.id
+                p.save() # Save Post data to DB
 
-# update Feed last checked
+            # Filter text for dangerous content (e.g. XSRF?)
+            # Feedparser already does this to some extent
 
-# release write lock
+            # update Feed last checked date
 
-# return new items Y/N code
+            # Spawn websocket message with new posts for web client
 
-# ------
+    else: 
+        # Site appears to be down
+        logging.warning("Site %s is DOWN, status: %d", f.url, d.status)
+
+        # Increment error counter
+        Feed.update(errors = Feed.errors + 1).where(Feed.id == f.id)
+        
+        # Status 410 Gone Permanently, mark feed inactive
+        if d.status == 410:
+            Feed.update(inactive==True).where(Feed.id == f.id)
+
+        # Spawn websocket message reporting error to web client
+
+    # Disconnect from database
+    db.close()
+
+    return
+
 
 # --------------------------------------------------
 # Startup message, DB creation check, load default feeds
