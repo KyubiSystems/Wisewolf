@@ -9,11 +9,16 @@ from db_utils import create_db, load_defaults
 import feedparser
 import argparse
 
-import logging
+# Set up gevent multithreading
+import gevent.monkey
+gevent.monkey.patch_all()
+from gevent.pool import Pool
 
+# Set up server logging
+import logging
 logging.basicConfig(level=logging.INFO,
                     filename='wisewolf.log', # log to this file
-                    format='%(asctime)s %(message)s') # include timestamp
+                    format='%(asctime)s %(levelname)s: %(message)s') # include timestamp, level
 
 def rss_worker(wid):
     """RSS gevent worker function"""
@@ -112,8 +117,6 @@ def rss_worker(wid):
 
             # Define error codes for feed not responding etc.
 
-            print "================"
-
     else:
         # Site appears to be down
         logging.warning("Site %s is down, status: %s", wfeed.url, str(d.status))
@@ -139,9 +142,6 @@ def rss_worker(wid):
 
 # RSS gevent parallel server process
 def rss_parallel():
-    import gevent.monkey
-    gevent.monkey.patch_all()
-    from gevent.pool import Pool
 
     # Set limit of 10 simultaneous requests
     pool = Pool(10)
