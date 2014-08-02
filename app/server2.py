@@ -10,6 +10,7 @@ import feedparser
 import argparse
 
 # Set up gevent multithreading
+import gevent
 import gevent.monkey
 gevent.monkey.patch_all()
 from gevent.pool import Pool
@@ -23,37 +24,47 @@ loging.basicConfig(level=logging.INFO,
 # Set Feedparser User-Agent string defined in config
 feedparser.USER_AGENT = USER_AGENT
 
+# Set default reload interval to 15 minutes
+INTERVAL = 900
+
 # Define database
 db = SqliteDatabase(DB_FILE, threadlocals=True)
 
 # --------------------------------------------------
 # RSS gevent parallel server process
 def rss_server():
-
-    c = Count() # initialise loop interval counter at 1
     
     # Set limit of 10 simultaneous RSS requests
     pool = Pool(10)
 
-    # check feed intervals in DB
-    # get feeds which match current tick
-
     # Get list of active Feed ids from database
     feed_query = Feed.select().where(Feed.inactive == 0)
 
-    # loop over feeds found, spawn rss_worker(id, url)
-    # pass row object to worker directly?
+    # loop over feeds found, spawn rss_worker(feed)
 
     for f in feed_query:
         pool.spawn(rss_worker, f)
     pool.join()
 
-    # send websocket message with updated Feed IDs
+def rss_server_loop():
 
-    # increment Tick
-    c.increment()
+    c = Count() # initialise loop interval counter at 1
 
-    # wait $REFRESH minutes
+    while True:
+        # check feed intervals in DB
+        # get feeds which match current tick
+        counter = c.get()
+
+        logging.info("Interval tick %d", counter)
+
+        # Call RSS server to spawn another query set
+        rss_server()
+
+        # wait INTERVAL seconds
+        gevent.sleep(INTERVAL)
+
+        # increment tick
+        c.increment()
 
 # --------------------------------------------------
 # spawn Worker(feed)
@@ -186,6 +197,7 @@ def startup():
 
 # --------------------------------------------------
 # interval counter class
+# rolls over at 96
 
 class Count:
     def __init__(self):
@@ -212,4 +224,4 @@ if __name__ == '__main__':
     startup()
 
     # Start main RSS server loop
-    rss_server()
+    gevent.Greenlet.spawn(rss_server_loop)
