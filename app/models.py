@@ -34,9 +34,9 @@ class Feed(BaseModel):
     etag = CharField(max_length=64, default='')
     comment = TextField()
     strip_images = BooleanField(default=False)
-    refresh = IntegerField(default=1800)
-    expire = IntegerField(default=0)
-    errors = IntegerField(default=0)
+    refresh = IntegerField(default=1) # Frequency of feed refresh, in units of INTERVAL
+    expire = IntegerField(default=0)  # Time to expire posts, 0 = never
+    errors = IntegerField(default=0)  # Number of errors seen in feed loading
     inactive = BooleanField(default=False)
     favicon = CharField(max_length=64)
 

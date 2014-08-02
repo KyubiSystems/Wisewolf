@@ -10,6 +10,7 @@ import feedparser
 import argparse
 
 # Set up gevent multithreading
+import gevent
 import gevent.monkey
 gevent.monkey.patch_all()
 from gevent.pool import Pool
@@ -17,60 +18,110 @@ from gevent.pool import Pool
 # Set up server logging
 import logging
 logging.basicConfig(level=logging.INFO,
-                    filename='wisewolf.log', # log to this file
-                    format='%(asctime)s %(levelname)s: %(message)s') # include timestamp, level
+                   filename='wisewolf.log', # log to this file
+                   format='%(asctime)s %(levelname)s: %(message)s') # include timestamp, level
 
-def rss_worker(wid):
-    """RSS gevent worker function"""
-    logging.info("Starting reader process %s", wid)
+# Set Feedparser User-Agent string defined in config
+feedparser.USER_AGENT = USER_AGENT
 
-    # Set Feedparser User-Agent string defined in config
-    feedparser.USER_AGENT = USER_AGENT
+# Set default reload interval to 15 minutes
+INTERVAL = 900
 
-    # Define database
-    db = SqliteDatabase(DB_FILE, threadlocals=True)
+# Define database
+db = SqliteDatabase(DB_FILE, threadlocals=True)
 
-    # Connect to database, get URL
+# --------------------------------------------------
+# RSS gevent parallel server process
+def rss_server():
+
+    # Connect to database
     db.connect()
-    wfeed = Feed.get(Feed.id == wid)
+    
+    # Set limit of 10 simultaneous RSS requests
+    pool = Pool(10)
+
+    # Get list of active Feed ids from database
+    feed_query = Feed.select().where(Feed.inactive == 0)
+
+    # loop over feeds found, spawn rss_worker(feed)
+
+    for f in feed_query:
+        pool.spawn(rss_worker, f)
+    pool.join()
+
+    # Disconnect from database
+    db.close()
+
+def rss_server_loop():
+
+    c = Count() # initialise loop interval counter at 0
+
+    logging.info("In rss_server_loop(), starting...")
+
+    while True:
+        # check feed intervals in DB
+        # get feeds which match current tick
+        counter = c.get()
+
+        logging.info("Interval tick %d", counter)
+
+        # Call RSS server to spawn another query set
+        # will pass current tick as parameter
+        rss_server()
+
+        # wait INTERVAL seconds
+        gevent.sleep(INTERVAL)
+
+        # increment tick
+        c.increment()
+
+# --------------------------------------------------
+# spawn Worker(feed)
+def rss_worker(f):
+    """RSS gevent worker function"""
+    logging.info("Starting reader process for feed %s", f.id)
+
+    id = f.id
 
     # Check ETag, Modified: Attempt Conditional HTTP retrieval
     # to reduce excessive polling
-    if hasattr(wfeed, 'etag'):
-        d = feedparser.parse(wfeed.url, etag=wfeed.etag)
-    elif hasattr(wfeed, 'last_modified'):
-        d = feedparser.parse(wfeed.url, modified=wfeed.last_modified)
+    if hasattr(f, 'etag'):
+        d = feedparser.parse(f.url, etag=f.etag)
+    elif hasattr(f, 'last_modified'):
+        d = feedparser.parse(f.url, modified=f.last_modified)
     else:
-        d = feedparser.parse(wfeed.url)
+        d = feedparser.parse(f.url)
 
+    # Check returned HTTP status code
     if d.status < 400:
-        # Site appears to be up
-        logging.info("Site %s is up, status: %s", wfeed.url, str(d.status))
+        # Site appears to be UP
+        logging.info("Site %s is UP, status %s", f.url, str(d.status))
 
         # Reset error counter
-        Feed.update(errors=0).where(Feed.id == wid)
+        if f.errors > 0:
+            Feed.update(errors=0).where(Feed.id == id)
 
         prefiltered=False
 
         # Get RSS/ATOM version number
         logging.info("Feed version: %s", d.version)
 
-        # Catch 301 Moved Permanently, update feed address
+        # Catch status 301 Moved Permanently, update feed address
         if d.status == 301:
-            Feed.update(url=d.href).where(Feed.id == wid)
+            Feed.update(url=d.href).where(Feed.id == id)
 
         # Conditional HTTP:
-        # Check for ETag in result and write to DB
+        # Check for Etag in result and write to DB
         if hasattr(d, 'etag'):
-            logging.info("Etag %s", d.etag)
-            Feed.update(etag=d.etag).where(Feed.id == wid)
+            logging.info("Etag: %s", d.etag)
+            Feed.update(etag=d.etag).where(Feed.id == id)
             prefiltered=True
 
         # Conditional HTTP
         # Check for Last-Modified in result and write to DB
         if hasattr(d, 'modified'):
             logging.info("Modified %s", d.modified)
-            Feed.update(last_modified=d.modified).where(Feed.id == wid)
+            Feed.update(last_modified=d.modified).where(Feed.id == id)
             prefiltered=True
 
         # Check for feed modification date, write to DB
@@ -80,86 +131,55 @@ def rss_worker(wid):
         if hasattr(d, 'updated'):
             logging.info("Updated: %s", d.updated)
 
-        # If entries exist, process them
+        # If post entries exist, process them
         if d.entries:
 
             # If we haven't already date filtered, do it now
+            # filter for new items since last check (timedelta)
             if not prefiltered:
                 pass
 
             # Iterate over posts found
             # Build and add Post object to DB
+            # DB write lock needed?
             for post in d.entries:
                 p = Post()
                 p.title = post.get('title', 'No title')
                 p.description = post.get('description', 'No description')
-                p.published = post.get('published', datetime.datetime.now())  # should use feed updated date?
+                p.published = post.get('published', datetime.datetime.now()) # should use feed updated date?
                 p.content = post.get('content', 'No content')
                 p.link = post.get('link', 'No link')
-                p.feed = wid
-                p.save()
+                p.feed = id
+                p.save() # Save Post data to DB
 
-            # Filter text for dangerous content (eg. XSRF?)
+            # Filter text for dangerous content (e.g. XSRF?)
             # Feedparser already does this to some extent
 
-            # If strip_images set
-            # Get image links from content and add to DB
-            # Tagged by feed and post ID
-
-            # Wait for write lock on DB
-
-            # Add to database
-
-            # Release write lock on DB
+            # update Feed last checked date
 
             # Spawn websocket message with new posts for web client
-            # One WS message per feed or one per post?
 
-            # Define error codes for feed not responding etc.
-
-    else:
+    else: 
         # Site appears to be down
-        logging.warning("Site %s is down, status: %s", wfeed.url, str(d.status))
+        logging.warning("Site %s is DOWN, status: %d", f.url, d.status)
 
         # Increment error counter
-        Feed.update(errors=Feed.errors + 1).where(Feed.id == wid)
-
+        Feed.update(errors = Feed.errors + 1).where(Feed.id == id)
+        
         # Status 410 Gone Permanently, mark feed inactive
         if d.status == 410:
-            Feed.update(inactive=True).where(Feed.id == wid)
-            return
+            Feed.update(inactive==True).where(Feed.id == id)
 
-        # Implement exponential in case feed is down
-        # 2^n multiple on refresh time, up to limit, then disable?
-
-    # Wait for next refresh
-    # Refresh = 0 means exit now
-
-    db.close()
+        # Spawn websocket message reporting error to web client
 
     return
 
 
-# RSS gevent parallel server process
-def rss_parallel():
-
-    # Set limit of 10 simultaneous requests
-    pool = Pool(10)
-
-    # Get list of active Feed ids from database
-    feed_query = Feed.select().where(Feed.inactive == 0)
-    feed_ids = [f.id for f in feed_query]
-
-    # Add Feed id to Gevent worker pool
-    for feed_id in feed_ids:
-        pool.spawn(rss_worker, feed_id)
-    pool.join()
-
-
+# --------------------------------------------------
 # Startup message, DB creation check, load default feeds
 def startup():
 
-    logging.info("Starting Wisewolf server v0.02a...")
+    logging.info("Starting Wisewolf server version v0.03...")
 
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
@@ -176,31 +196,37 @@ def startup():
     if number_feeds == 0:
         logging.info("Loading default entries...")
         load_defaults()
-        logging.info("Loading default entries done.")
+        logging.info("Loading default entries done")
 
     return
 
+# --------------------------------------------------
+# interval counter class
+# rolls over at 96
+
+class Count:
+    def __init__(self):
+        self.counter = 0
+    def get(self):
+        return self.counter
+    def increment(self):
+        self.counter += 1
+        if self.counter > 95:
+            self.counter = 1
+
+# --------------------------------------------------
 
 if __name__ == '__main__':
 
     # Server startup options
-    # --quiet: no printed output
     # --nows: no websocket output, just update DB
 
     parser = argparse.ArgumentParser(description="Wisewolf RSS server process")
-    parser.add_argument("--quiet", help="Suppress terminal output")
-    parser.add_argument("--nows", help="No websocket messaging, just update DB")
+    parser.add_argument("--nows", help="No websocket output, just update DB")
     args = parser.parse_args()
 
     # print startup message, create DB if necessary
     startup()
 
-    # Run RSS request processes in parallel
-    rss_parallel()
-
-
-
-
-
-
-
+    # Start main RSS server loop
+    gevent.joinall([gevent.spawn(rss_server_loop)])
