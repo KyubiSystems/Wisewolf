@@ -32,7 +32,7 @@ db = SqliteDatabase(DB_FILE, threadlocals=True)
 
 # --------------------------------------------------
 # RSS gevent parallel server process
-def rss_server():
+def rss_server(tick):
 
     # Connect to database
     db.connect()
@@ -42,6 +42,9 @@ def rss_server():
 
     # Get list of active Feed ids from database
     feed_query = Feed.select().where(Feed.inactive == 0)
+
+    # Filter feed_query result list to feeds valid for current tick
+    feed_query = [f for f in feed_query if (tick/f.refresh) == int(tick/f.refresh)]
 
     # loop over feeds found, spawn rss_worker(feed)
 
@@ -59,15 +62,14 @@ def rss_server_loop():
     logging.info("In rss_server_loop(), starting...")
 
     while True:
-        # check feed intervals in DB
-        # get feeds which match current tick
-        counter = c.get()
+        # Get tick counter value
+        tick = c.get()
 
-        logging.info("Interval tick %d", counter)
+        logging.info("Interval tick %d", tick)
 
         # Call RSS server to spawn another query set
         # will pass current tick as parameter
-        rss_server()
+        rss_server(tick)
 
         # wait INTERVAL seconds
         gevent.sleep(INTERVAL)
@@ -212,7 +214,7 @@ class Count:
     def increment(self):
         self.counter += 1
         if self.counter > 95:
-            self.counter = 1
+            self.counter = 0
 
 # --------------------------------------------------
 

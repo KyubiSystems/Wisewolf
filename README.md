@@ -12,15 +12,24 @@ For v0.1 initial alpha:
 
 * Feed aggregation
 * OPML import
+* Asynchronous client updates
+* Refresh feeds automatically (update frequency selectable per feed) or manually.
 
 For v0.2
 
 * Optionally strip embedded/linked images to associated local galleries (see Yomiko). Useful for art sites and webcomics
+* Hotkey support
 
 For v0.3
 
+* Tag, favourite feed items
 * Social sharing for feed items
 * mobile support (target Mobile Safari on iPad and iPhone). Swipe between articles, feeds.
+
+Possible subsequent additions
+
+* PubSubHubBub support
+* Text indexing, fulltext searching
 
 Requirements
 ------------
