@@ -17,8 +17,14 @@ DB_FILE = APP_PATH + '/db/Wisewolf.db'
 # Set default feeds for server
 DEFAULTS_FILE = APP_PATH + '/DEFAULT_RSS'
 
+# Set static path for Flask app
+STATIC_PATH = APP_PATH + '/static/'
+
 # Set path for downloaded image cache
-CACHE_PATH = APP_PATH + '/cache/'
+CACHE_PATH = STATIC_PATH + 'cache/'
+
+# Set path for downloaded images
+IMAGE_PATH = CACHE_PATH + 'images/'
 
 # Set path for downloaded favicons
 ICONS_PATH = CACHE_PATH + 'icons/'
