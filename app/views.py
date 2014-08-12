@@ -61,6 +61,12 @@ def category(id=None):
     # Render category page template
     return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
 
+# Websocket testing
+
+@app.route('/wstest')
+def wstest():
+    return render_template("wstest.html")
+
 @app.route('/manage')
 def manage():
     return render_template("manage.html")
