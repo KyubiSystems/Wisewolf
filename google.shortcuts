@@ -1,0 +1,44 @@
+Keyboard shortcuts
+
+Keyboard shortcuts save you time by helping you quickly explore your reading list without moving your hand back and forth between your keyboard and mouse. Here are the keyboard shortcuts for Google Reader:
+Navigation      
+j/k item down/up    selects the next/previous item in the list
+space/shift-space   page down/up    moves the page down/up
+n/p scan down/up    in list view, selects the next item without opening it
+shift-n/p   navigation down/up  selects the next/previous subscription or folder in the navigation
+shift-x navigation expand/collapse  expands or collapses a folder selected in the navigation
+o   open/close item in list view, expands or collapses the selected item
+enter   open/close item in list view, expands or collapses the selected item
+shift-o navigation open subscription    opens the subscription or folder currently selected in the navigation
+-   zoom out    decreases the font size of the current item
+=   zoom in increases the font size of the current item
+Acting on Items     
+s   toggle star stars or un-stars the selected item
+l   toggle like likes or un-likes the selected item
+shift-s toggle share    shares or un-shares the selected item
+shift-d share with note shares the selected item with a note
+v   view original   opens the original source for this article in a new window
+t   tag an item opens the tagging field for the selected item
+m   mark as read/unread switches the read status of the selected item
+shift-a mark all as read    marks all items in the current view as read
+e   email item  opens the email form to send an item to a friend
+Jumping     
+g then h    go to home  goes to the Google Reader homepage
+g then a    go to all items goes to the "All items" view
+g then s    go to starred items goes to the "Starred items" view
+g then shift-s  go to shared items  goes to the "Your shared items" view
+g then u    go to subscription  allows you to navigate to a subscription by entering the subscription name
+g then t    go to tag   allows you to navigate to a tag by entering the tag name
+g then f    go to friend    allows you to navigate to a friend's shared items by entering the friend's name
+g then shift-f  go to all friends' shared items shows all of your friends' shared items
+g then shift-t  go to trends    goes to the "Trends" view
+g then d    go to feed discovery    shows the recommendations page, or the browse page if there are no recommendations
+Application     
+r   refresh refreshes the unread counts in the navigation
+f   toggle full screen mode displays reading list in full screen mode
+u   toggle subscription list display    hides or shows the list of subscriptions
+1   expanded view   displays the subscription as expanded items
+2   list view   displays the subscription as a list of headlines
+/   search  moves your cursor to the search box
+a   add a subscription  opens the "Add a subscription" box in the sidebar
+?   keyboard shortcuts help displays a quick guide to all of Reader's shortcuts
