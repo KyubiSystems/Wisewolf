@@ -67,6 +67,10 @@ def category(id=None):
 def wstest():
     return render_template("wstest.html")
 
+@app.route('/wstest2')
+def wstest2():
+    return render_template("wstest2.html")
+
 @app.route('/manage')
 def manage():
     return render_template("manage.html")

@@ -19,8 +19,8 @@ function WebSocketTest()
     // parse JSON and modify displayed table
     ws.onmessage = function (evt)
     {
-      var received_msg = evt.data;
-      alert("Message is received...");
+      var obj = JSON.parse(evt.data);
+      alert("Message is received: "+obj.time+"==="+obj.text);
     };
     ws.onclose = function()
     {
