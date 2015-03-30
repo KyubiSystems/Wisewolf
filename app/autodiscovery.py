@@ -2,7 +2,7 @@
 Wisewolf RSS Reader
 (c) 2015 Kyubi Systems: www.kyubi.co.uk
 ---
-autodiscovery: Find the RSS/ATOM feed for a given web page
+autodiscovery: Find the RSS/ATOM feed(s) for a given web page
 
 Usage:
 feed(uri) - returns feed found for a URI

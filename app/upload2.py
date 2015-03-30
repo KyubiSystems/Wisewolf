@@ -18,9 +18,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH']= 1024 * 1024 # Max 1MB upload, RequestEntityTooLarge
 
-# Load mime types lookup table
-m = magic.open(magic.MAGIC_MIME)
-m.load()
 
 # Check for allowed file extensions
 def allowed_file(filename):
@@ -29,7 +26,7 @@ def allowed_file(filename):
 # Define upload route
 # TODO: Add mime type check for file prior to save
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
@@ -37,17 +34,17 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file', 
-                                    filename = filename))
+                                    filename=filename))
 # Define upload form
 # TODO: Enable drag-and-drop
 
-        return '''
+    return '''
 <!doctype html>
 <title>Upload new File</title>
 <h1>Upload new File</h1>
-<form action="" method=post enctypee=multipart/form-data>
-<p><input type=file name=file>
-<input type=submit value="Upload">
+<form action="" method="post" enctype="multipart/form-data">
+<p><input type="file" name="file">
+<input type="submit" value="Upload">
 </form>
 '''
 
@@ -56,3 +53,6 @@ def upload_file():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
+
+if __name__ == '__main__':
+    app.run(debug=True)
