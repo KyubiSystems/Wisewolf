@@ -1,0 +1,52 @@
+"""
+Wisewolf RSS Reader
+(c) 2015 Kyubi Systems: www.kyubi.co.uk
+"""
+
+# File upload handler
+# Using standard Flask builtin
+
+import os
+import magic
+from flask import Flask, request, redirect, url_for
+from werkzeug import secure_filename
+
+UPLOAD_FOLDER = os.path.realpath('.') + '/static/uploads'
+ALLOWED_EXTENSIONS = set(['xml', 'opml'])
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Load mime types lookup table
+m = magic.open(magic.MAGIC_MIME)
+m.load()
+
+# Check for allowed file extensions
+def allowed_file(filename):
+    return '.' in filename and os.path.splitext(filename)[1] in ALLOWED_EXTENSIONS
+
+# Define upload route
+# TODO: Add mime type check for file prior to save
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file', 
+                                    filename = filename))
+# Define upload form
+# TODO: Enable drag-and-drop
+
+        return '''
+<!doctype html>
+<title>Upload new File</title>
+<h1>Upload new File</h1>
+<form action="" method=post enctypee=multipart/form-data>
+<p><input type=file name=file>
+<input type=submit value="Upload">
+</form>
+'''
+
