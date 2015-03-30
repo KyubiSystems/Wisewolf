@@ -8,7 +8,7 @@ Wisewolf RSS Reader
 
 import os
 import magic
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 
 UPLOAD_FOLDER = os.path.realpath('.') + '/static/uploads'
@@ -16,6 +16,7 @@ ALLOWED_EXTENSIONS = set(['xml', 'opml'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH']= 1024 * 1024 # Max 1MB upload, RequestEntityTooLarge
 
 # Load mime types lookup table
 m = magic.open(magic.MAGIC_MIME)
@@ -50,3 +51,8 @@ def upload_file():
 </form>
 '''
 
+# Test routine, return uploaded file
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
