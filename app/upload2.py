@@ -12,7 +12,7 @@ from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 
 UPLOAD_FOLDER = os.path.realpath('.') + '/static/uploads'
-ALLOWED_EXTENSIONS = set(['xml', 'opml'])
+ALLOWED_EXTENSIONS = set(['.xml', '.opml'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -35,6 +35,9 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file', 
                                     filename=filename))
+
+        return "<h1>Oops, something went wrong here...</h1>file extension is " +  os.path.splitext(file.filename)[1]
+
 # Define upload form
 # TODO: Enable drag-and-drop
 
