@@ -1,8 +1,8 @@
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2015 Kyubi Systems: www.kyubi.co.uk
 ---
-FeedFind: Find the RSS/ATOM feed for a given web page
+autodiscovery: Find the RSS/ATOM feed for a given web page
 
 Usage:
 feed(uri) - returns feed found for a URI
@@ -21,9 +21,9 @@ FEED_TYPES = ('application/rss+xml',
               'application/x.atom+xml',
               'application/x-atom+xml')
 
-# Define feed finder class
+# Define feed discovery class
 
-class FeedFind(HTMLParser):
+class Discover(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.feeds = [] # list of returned feed (title,URL) tuples

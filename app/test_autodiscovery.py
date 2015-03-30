@@ -9,10 +9,10 @@ Usage:
 TBD. Modify for internal unit testing?
 """
 
-import feedfind
+import autodiscovery
 import urllib
 
-p = feedfind.FeedFind()
+p = autodiscovery.Discover()
 
 f = urllib.urlopen("http://www.slashdot.org")
 html = f.read()
