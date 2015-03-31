@@ -29,6 +29,18 @@ class OpmlReader:
         tree = ET.parse(self.filename)
         root = tree.getroot()
 
+        # Get OPML version number
+#        version = tree.find('./opml').attrib['version']
+        v = root.attrib['version']
+        print "OPML version " + v
+        if v == "1.0":
+            url = "url"
+        elif v == "1.1":
+            url = "xmlUrl"
+        else: 
+            print "Unrecognised OPML version:", v
+            raise
+
         # Use XPath to parse header files
         
         for xpath in ['title', 'dateCreated', 'dateModified', 'ownerName', 'ownerEmail', 'link']:
@@ -36,7 +48,7 @@ class OpmlReader:
 
         # Parse body items
         for child in root.iter('outline'):
-            if 'url' not in child.attrib.keys():
+            if url not in child.attrib.keys():
                 self.categories.append(child.attrib['text'])
                 print "\nCategory: "+child.attrib['text']
             else:
