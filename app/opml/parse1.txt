@@ -1,0 +1,48 @@
+
+Category: Technology News
+
+Link:
+-----
+url: http://news4humans.com/feeds/mobile.xml
+text: Mobile News
+type: link
+dateCreated: Thu, 12 Sep 2003 23:35:52 GMT
+
+Link:
+-----
+url: http://news4humans.com/feeds/syndication.xml
+text: Syndication News
+type: link
+dateCreated: Thu, 12 Sep 2003 23:35:52 GMT
+
+Category: World News
+
+Link:
+-----
+url: http://news4humans.com/feeds/politics.xml
+text: Politics
+type: link
+dateCreated: Thu, 12 Sep 2003 23:35:52 GMT
+
+Link:
+-----
+url: http://news4humans.com/feeds/sports.xml
+text: Sports
+type: link
+dateCreated: Thu, 12 Sep 2003 23:35:52 GMT
+
+Category: Various
+
+Link:
+-----
+url: http://news4humans.com/feeds/weather.xml
+text: Weather
+type: link
+dateCreated: Thu, 12 Sep 2003 23:35:52 GMT
+
+Link:
+-----
+url: http://news4humans.com/feeds/ent.xml
+text: Entertainment
+type: link
+dateCreated: Thu, 12 Sep 2003 23:35:52 GMT

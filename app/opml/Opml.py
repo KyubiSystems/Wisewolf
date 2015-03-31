@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
 OPML reader for Wisewolf RSS
-(c) 2014 KyubiSystems: www.kyubi.co.uk
+(c) 2015 KyubiSystems: www.kyubi.co.uk
 """
 import xml.etree.ElementTree as ET
 
-class OpmlReader():
+class OpmlReader:
     """
     Parses standard OPML export files, adds them to database
     """
@@ -19,14 +19,11 @@ class OpmlReader():
     def __unicode__(self):
         return "<OpmlReader object: %s>" % self.attribs['title']
 
-    def __init__(self):
+    def __init__(self, filename):
+        self.filename = filename
         self.attribs = {}
         self.categories = []
         self.links = []
-        self.filename = ""
-
-    def setOpmlFile(self, filename):
-        self.filename = filename
 
     def parseOpml(self):
         tree = ET.parse(self.filename)

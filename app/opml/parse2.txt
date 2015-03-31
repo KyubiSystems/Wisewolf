@@ -1,0 +1,104 @@
+
+Category: Main Folder
+
+Category: bsd.linuxbasix.com/feeds/regexorcist_ogg.xml
+
+Category: distrowatch.com/news/oggcast.xml
+
+Category: distrowatch.com/news/podcast.xml
+
+Category: feeds.feedburner.com/HackRadioLive?format=xml
+
+Category: fossgeek.com/feeds/rss-mp3-full.xml
+
+Category: fossgeek.com/feeds/rss-ogg-full.xml
+
+Category: goinglinux.com/mp3podcast.xml
+
+Category: goinglinux.com/oggpodcast.xml
+
+Category: gopher.info-underground.net:70/iu/rss-iu.xml
+
+Category: handheldheroes.net/rss.xml
+
+Category: handheldheroes.net/rssOGG.xml
+
+Category: hwhq.com/rss.xml
+
+Category: leoville.tv/podcasts/floss.xml
+
+Category: linuxcranks.info/ogg.xml
+
+Category: linuxcrazy.com/podcasts/Poderator.xml
+
+Category: linuxcrazy.com/podcasts/ogg.xml
+
+Category: linuxgeekdom.com/rssmp3.xml
+
+Category: linuxgeekdom.com/rssogg.xml
+
+Category: linuxvoid.technographer.net/soundfeed.xml
+
+Category: lottalinuxlinks.com/podcast/call-in.xml
+
+Category: lottalinuxlinks.com/podcast/ogg.xml
+
+Category: lottalinuxlinks.com/podcast/uclugogg.xml
+
+Category: mikecosma.podomatic.com/rss2.xml
+
+Category: podcast.linuxgames.com/feeds.xml
+
+Category: podcasts.jonmasters.org/kernel/kernel.xml
+
+Category: qskcast.info/netcasts/ogg/rss.xml
+
+Category: rss.ittoolbox.com/rss/security-investigator-podcast.xml
+
+Category: setbit.org/lt-ogg.xml
+
+Category: talkgeektome.us/flac.xml
+
+Category: talkgeektome.us/mp3.xml
+
+Category: talkgeektome.us/ogg.xml
+
+Category: thebadapples.info/ogg.xml
+
+Category: thelinuxbox.org/podcast.xml
+
+Category: thelip.net/lipmp3.xml
+
+Category: thelip.net/lipogg.xml
+
+Category: titradio.info/tit.xml
+
+Category: ubuntuos.com/podcast/ubuntuos-mp3.xml
+
+Category: ubuntuos.com/podcast/ubuntuos-ogg.xml
+
+Category: www.eff.org/rss/podcast/mp3.xml
+
+Category: www.eff.org/rss/podcast/ogg.xml
+
+Category: www.gutsygeeks.com/audio/podcast.xml.php
+
+Category: www.hwhq.com/rssOGG.xml
+
+Category: www.infonomicon.org/info.xml
+
+Category: www.linuxworld.com/podcasts/linux/index.xml
+
+Category: www.opennewsshow.org/mp3.xml
+
+Category: www.opennewsshow.org/ogg.xml
+
+Category: www.slugak.net/rss.xml
+
+Category: www.somethingkindatechy.org/pcg/feed.xml
+
+Category: www.thebadapples.info/fedorareloaded/ogg.xml
+
+Category: www.thesourceshow.org/xvid.xml
+
+Category: www2.madphilosopher.ca/bsdtalk_ogg.xml
