@@ -4,6 +4,7 @@ OPML reader for Wisewolf RSS
 (c) 2015 KyubiSystems: www.kyubi.co.uk
 """
 import xml.etree.ElementTree as ET
+import urllib
 
 class OpmlReader:
     """
@@ -19,11 +20,12 @@ class OpmlReader:
     def __unicode__(self):
         return "<OpmlReader object: %s>" % self.attribs['title']
 
-    def __init__(self, filename):
+    def __init__(self, filename, check=True):
         self.filename = filename
         self.attribs = {}
         self.categories = []
         self.links = []
+        self.check = check
 
     def parseOpml(self):
         tree = ET.parse(self.filename)
@@ -55,4 +57,17 @@ class OpmlReader:
                 print "\nLink:\n-----"
                 for (key, value) in child.attrib.iteritems():
                     print key+": "+value
+
+                # Check if feed url exists, get HTTP response code              
+                if self.check == True:
+                    try:
+                        a = urllib.urlopen(child.attrib[url])
+                    except IOError:
+                        print "ERROR: Host unreachable"
+                    else:
+                        print "Response: " + str(a.getcode())
+
+
+
+
 

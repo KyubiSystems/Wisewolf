@@ -8,6 +8,7 @@ xmlUrl: http://bsd.linuxbasix.com/feeds/regexorcist_ogg.xml
 text: bsd.linuxbasix.com/feeds/regexorcist_ogg.xml
 type: rss
 title: bsd.linuxbasix.com/feeds/regexorcist_ogg.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -15,6 +16,7 @@ xmlUrl: http://distrowatch.com/news/oggcast.xml
 text: distrowatch.com/news/oggcast.xml
 type: rss
 title: distrowatch.com/news/oggcast.xml
+Response: 200
 
 Link:
 -----
@@ -22,6 +24,7 @@ xmlUrl: http://distrowatch.com/news/podcast.xml
 text: distrowatch.com/news/podcast.xml
 type: rss
 title: distrowatch.com/news/podcast.xml
+Response: 200
 
 Link:
 -----
@@ -29,6 +32,7 @@ xmlUrl: http://feeds.feedburner.com/HackRadioLive?format=xml
 text: feeds.feedburner.com/HackRadioLive?format=xml
 type: rss
 title: feeds.feedburner.com/HackRadioLive?format=xml
+Response: 200
 
 Link:
 -----
@@ -36,6 +40,7 @@ xmlUrl: http://fossgeek.com/feeds/rss-mp3-full.xml
 text: fossgeek.com/feeds/rss-mp3-full.xml
 type: rss
 title: fossgeek.com/feeds/rss-mp3-full.xml
+Response: 404
 
 Link:
 -----
@@ -43,6 +48,7 @@ xmlUrl: http://fossgeek.com/feeds/rss-ogg-full.xml
 text: fossgeek.com/feeds/rss-ogg-full.xml
 type: rss
 title: fossgeek.com/feeds/rss-ogg-full.xml
+Response: 404
 
 Link:
 -----
@@ -50,6 +56,7 @@ xmlUrl: http://goinglinux.com/mp3podcast.xml
 text: goinglinux.com/mp3podcast.xml
 type: rss
 title: goinglinux.com/mp3podcast.xml
+Response: 200
 
 Link:
 -----
@@ -57,6 +64,7 @@ xmlUrl: http://goinglinux.com/oggpodcast.xml
 text: goinglinux.com/oggpodcast.xml
 type: rss
 title: goinglinux.com/oggpodcast.xml
+Response: 200
 
 Link:
 -----
@@ -64,6 +72,7 @@ xmlUrl: http://gopher.info-underground.net:70/iu/rss-iu.xml
 text: gopher.info-underground.net:70/iu/rss-iu.xml
 type: rss
 title: gopher.info-underground.net:70/iu/rss-iu.xml
+Response: 200
 
 Link:
 -----
@@ -71,6 +80,7 @@ xmlUrl: http://handheldheroes.net/rss.xml
 text: handheldheroes.net/rss.xml
 type: rss
 title: handheldheroes.net/rss.xml
+Response: 404
 
 Link:
 -----
@@ -78,6 +88,7 @@ xmlUrl: http://handheldheroes.net/rssOGG.xml
 text: handheldheroes.net/rssOGG.xml
 type: rss
 title: handheldheroes.net/rssOGG.xml
+Response: 404
 
 Link:
 -----
@@ -85,6 +96,7 @@ xmlUrl: http://hwhq.com/rss.xml
 text: hwhq.com/rss.xml
 type: rss
 title: hwhq.com/rss.xml
+Response: 200
 
 Link:
 -----
@@ -92,6 +104,7 @@ xmlUrl: http://leoville.tv/podcasts/floss.xml
 text: leoville.tv/podcasts/floss.xml
 type: rss
 title: leoville.tv/podcasts/floss.xml
+Response: 200
 
 Link:
 -----
@@ -99,6 +112,7 @@ xmlUrl: http://linuxcranks.info/ogg.xml
 text: linuxcranks.info/ogg.xml
 type: rss
 title: linuxcranks.info/ogg.xml
+Response: 403
 
 Link:
 -----
@@ -106,6 +120,7 @@ xmlUrl: http://linuxcrazy.com/podcasts/Poderator.xml
 text: linuxcrazy.com/podcasts/Poderator.xml
 type: rss
 title: linuxcrazy.com/podcasts/Poderator.xml
+Response: 200
 
 Link:
 -----
@@ -113,6 +128,7 @@ xmlUrl: http://linuxcrazy.com/podcasts/ogg.xml
 text: linuxcrazy.com/podcasts/ogg.xml
 type: rss
 title: linuxcrazy.com/podcasts/ogg.xml
+Response: 200
 
 Link:
 -----
@@ -120,6 +136,7 @@ xmlUrl: http://linuxgeekdom.com/rssmp3.xml
 text: linuxgeekdom.com/rssmp3.xml
 type: rss
 title: linuxgeekdom.com/rssmp3.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -127,6 +144,7 @@ xmlUrl: http://linuxgeekdom.com/rssogg.xml
 text: linuxgeekdom.com/rssogg.xml
 type: rss
 title: linuxgeekdom.com/rssogg.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -134,6 +152,7 @@ xmlUrl: http://linuxvoid.technographer.net/soundfeed.xml
 text: linuxvoid.technographer.net/soundfeed.xml
 type: rss
 title: linuxvoid.technographer.net/soundfeed.xml
+Response: 200
 
 Link:
 -----
@@ -141,6 +160,7 @@ xmlUrl: http://lottalinuxlinks.com/podcast/call-in.xml
 text: lottalinuxlinks.com/podcast/call-in.xml
 type: rss
 title: lottalinuxlinks.com/podcast/call-in.xml
+Response: 404
 
 Link:
 -----
@@ -148,6 +168,7 @@ xmlUrl: http://lottalinuxlinks.com/podcast/ogg.xml
 text: lottalinuxlinks.com/podcast/ogg.xml
 type: rss
 title: lottalinuxlinks.com/podcast/ogg.xml
+Response: 404
 
 Link:
 -----
@@ -155,6 +176,7 @@ xmlUrl: http://lottalinuxlinks.com/podcast/uclugogg.xml
 text: lottalinuxlinks.com/podcast/uclugogg.xml
 type: rss
 title: lottalinuxlinks.com/podcast/uclugogg.xml
+Response: 404
 
 Link:
 -----
@@ -162,6 +184,7 @@ xmlUrl: http://mikecosma.podomatic.com/rss2.xml
 text: mikecosma.podomatic.com/rss2.xml
 type: rss
 title: mikecosma.podomatic.com/rss2.xml
+Response: 404
 
 Link:
 -----
@@ -169,6 +192,7 @@ xmlUrl: http://podcast.linuxgames.com/feeds.xml
 text: podcast.linuxgames.com/feeds.xml
 type: rss
 title: podcast.linuxgames.com/feeds.xml
+Response: 200
 
 Link:
 -----
@@ -176,6 +200,7 @@ xmlUrl: http://podcasts.jonmasters.org/kernel/kernel.xml
 text: podcasts.jonmasters.org/kernel/kernel.xml
 type: rss
 title: podcasts.jonmasters.org/kernel/kernel.xml
+Response: 404
 
 Link:
 -----
@@ -183,6 +208,7 @@ xmlUrl: http://qskcast.info/netcasts/ogg/rss.xml
 text: qskcast.info/netcasts/ogg/rss.xml
 type: rss
 title: qskcast.info/netcasts/ogg/rss.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -190,6 +216,7 @@ xmlUrl: http://rss.ittoolbox.com/rss/security-investigator-podcast.xml
 text: rss.ittoolbox.com/rss/security-investigator-podcast.xml
 type: rss
 title: rss.ittoolbox.com/rss/security-investigator-podcast.xml
+Response: 404
 
 Link:
 -----
@@ -197,6 +224,7 @@ xmlUrl: http://setbit.org/lt-ogg.xml
 text: setbit.org/lt-ogg.xml
 type: rss
 title: setbit.org/lt-ogg.xml
+Response: 403
 
 Link:
 -----
@@ -204,6 +232,7 @@ xmlUrl: http://talkgeektome.us/flac.xml
 text: talkgeektome.us/flac.xml
 type: rss
 title: talkgeektome.us/flac.xml
+Response: 200
 
 Link:
 -----
@@ -211,6 +240,7 @@ xmlUrl: http://talkgeektome.us/mp3.xml
 text: talkgeektome.us/mp3.xml
 type: rss
 title: talkgeektome.us/mp3.xml
+Response: 200
 
 Link:
 -----
@@ -218,6 +248,7 @@ xmlUrl: http://talkgeektome.us/ogg.xml
 text: talkgeektome.us/ogg.xml
 type: rss
 title: talkgeektome.us/ogg.xml
+Response: 200
 
 Link:
 -----
@@ -225,6 +256,7 @@ xmlUrl: http://thebadapples.info/ogg.xml
 text: thebadapples.info/ogg.xml
 type: rss
 title: thebadapples.info/ogg.xml
+Response: 200
 
 Link:
 -----
@@ -232,6 +264,7 @@ xmlUrl: http://thelinuxbox.org/podcast.xml
 text: thelinuxbox.org/podcast.xml
 type: rss
 title: thelinuxbox.org/podcast.xml
+Response: 404
 
 Link:
 -----
@@ -239,6 +272,7 @@ xmlUrl: http://thelip.net/lipmp3.xml
 text: thelip.net/lipmp3.xml
 type: rss
 title: thelip.net/lipmp3.xml
+Response: 200
 
 Link:
 -----
@@ -246,6 +280,7 @@ xmlUrl: http://thelip.net/lipogg.xml
 text: thelip.net/lipogg.xml
 type: rss
 title: thelip.net/lipogg.xml
+Response: 200
 
 Link:
 -----
@@ -253,6 +288,7 @@ xmlUrl: http://titradio.info/tit.xml
 text: titradio.info/tit.xml
 type: rss
 title: titradio.info/tit.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -260,6 +296,7 @@ xmlUrl: http://ubuntuos.com/podcast/ubuntuos-mp3.xml
 text: ubuntuos.com/podcast/ubuntuos-mp3.xml
 type: rss
 title: ubuntuos.com/podcast/ubuntuos-mp3.xml
+Response: 200
 
 Link:
 -----
@@ -267,6 +304,7 @@ xmlUrl: http://ubuntuos.com/podcast/ubuntuos-ogg.xml
 text: ubuntuos.com/podcast/ubuntuos-ogg.xml
 type: rss
 title: ubuntuos.com/podcast/ubuntuos-ogg.xml
+Response: 200
 
 Link:
 -----
@@ -274,6 +312,7 @@ xmlUrl: http://www.eff.org/rss/podcast/mp3.xml
 text: www.eff.org/rss/podcast/mp3.xml
 type: rss
 title: www.eff.org/rss/podcast/mp3.xml
+Response: 200
 
 Link:
 -----
@@ -281,6 +320,7 @@ xmlUrl: http://www.eff.org/rss/podcast/ogg.xml
 text: www.eff.org/rss/podcast/ogg.xml
 type: rss
 title: www.eff.org/rss/podcast/ogg.xml
+Response: 200
 
 Link:
 -----
@@ -288,6 +328,7 @@ xmlUrl: http://www.gutsygeeks.com/audio/podcast.xml.php
 text: www.gutsygeeks.com/audio/podcast.xml.php
 type: rss
 title: www.gutsygeeks.com/audio/podcast.xml.php
+Response: 200
 
 Link:
 -----
@@ -295,6 +336,7 @@ xmlUrl: http://www.hwhq.com/rssOGG.xml
 text: www.hwhq.com/rssOGG.xml
 type: rss
 title: www.hwhq.com/rssOGG.xml
+Response: 200
 
 Link:
 -----
@@ -302,6 +344,7 @@ xmlUrl: http://www.infonomicon.org/info.xml
 text: www.infonomicon.org/info.xml
 type: rss
 title: www.infonomicon.org/info.xml
+Response: 200
 
 Link:
 -----
@@ -309,6 +352,7 @@ xmlUrl: http://www.linuxworld.com/podcasts/linux/index.xml
 text: www.linuxworld.com/podcasts/linux/index.xml
 type: rss
 title: www.linuxworld.com/podcasts/linux/index.xml
+Response: 200
 
 Link:
 -----
@@ -316,6 +360,7 @@ xmlUrl: http://www.opennewsshow.org/mp3.xml
 text: www.opennewsshow.org/mp3.xml
 type: rss
 title: www.opennewsshow.org/mp3.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -323,6 +368,7 @@ xmlUrl: http://www.opennewsshow.org/ogg.xml
 text: www.opennewsshow.org/ogg.xml
 type: rss
 title: www.opennewsshow.org/ogg.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -330,6 +376,7 @@ xmlUrl: http://www.slugak.net/rss.xml
 text: www.slugak.net/rss.xml
 type: rss
 title: www.slugak.net/rss.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -337,6 +384,7 @@ xmlUrl: http://www.somethingkindatechy.org/pcg/feed.xml
 text: www.somethingkindatechy.org/pcg/feed.xml
 type: rss
 title: www.somethingkindatechy.org/pcg/feed.xml
+ERROR: Host unreachable
 
 Link:
 -----
@@ -344,6 +392,7 @@ xmlUrl: http://www.thebadapples.info/fedorareloaded/ogg.xml
 text: www.thebadapples.info/fedorareloaded/ogg.xml
 type: rss
 title: www.thebadapples.info/fedorareloaded/ogg.xml
+Response: 200
 
 Link:
 -----
@@ -351,6 +400,7 @@ xmlUrl: http://www.thesourceshow.org/xvid.xml
 text: www.thesourceshow.org/xvid.xml
 type: rss
 title: www.thesourceshow.org/xvid.xml
+Response: 404
 
 Link:
 -----
@@ -358,3 +408,4 @@ xmlUrl: http://www2.madphilosopher.ca/bsdtalk_ogg.xml
 text: www2.madphilosopher.ca/bsdtalk_ogg.xml
 type: rss
 title: www2.madphilosopher.ca/bsdtalk_ogg.xml
+Response: 200
