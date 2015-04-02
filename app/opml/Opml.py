@@ -5,6 +5,7 @@ OPML reader for Wisewolf RSS
 """
 import xml.etree.ElementTree as ET
 import urllib
+import logging as log
 
 class OpmlReader:
     """
@@ -20,12 +21,16 @@ class OpmlReader:
     def __unicode__(self):
         return "<OpmlReader object: %s>" % self.attribs['title']
 
-    def __init__(self, filename, check=True):
+    def __init__(self, filename, check=True, verbose=True):
         self.filename = filename
         self.attribs = {}
         self.categories = []
-        self.links = []
+        self.feeds = {}
         self.check = check
+        if verbose:
+            log.basicConfig(format="%(levelname)s: %(message)s", level=log.DEBUG)
+        else:
+            log.basicConfig(format="%(levelname)s: %(message)s")
 
     def parseOpml(self):
         tree = ET.parse(self.filename)
@@ -34,13 +39,13 @@ class OpmlReader:
         # Get OPML version number
 #        version = tree.find('./opml').attrib['version']
         v = root.attrib['version']
-        print "OPML version " + v
+        log.info("OPML version " + v)
         if v == "1.0":
             url = "url"
         elif v == "1.1":
             url = "xmlUrl"
         else: 
-            print "Unrecognised OPML version:", v
+            log.error("Unrecognised OPML version:", v)
             raise
 
         # Use XPath to parse header files
@@ -51,21 +56,33 @@ class OpmlReader:
         # Parse body items
         for child in root.iter('outline'):
             if url not in child.attrib.keys():
-                self.categories.append(child.attrib['text'])
-                print "\nCategory: "+child.attrib['text']
+                category = child.attrib['text']
+                self.categories.append(category)
+                log.info("New category found: "+category)
+
             else:
-                print "\nLink:\n-----"
+                log.info("New feed found")
+                feed = {}
                 for (key, value) in child.attrib.iteritems():
-                    print key+": "+value
+                    log.info(key+": "+value)
+                    feed[key] = value
+                    feed['category'] = self.categories[-1]
 
                 # Check if feed url exists, get HTTP response code              
-                if self.check == True:
+                if self.check:
                     try:
-                        a = urllib.urlopen(child.attrib[url])
+                        a = urllib.urlopen(feed[url])
                     except IOError:
-                        print "ERROR: Host unreachable"
+                        log.warn("Host unreachable, skipped: " + feed[url])
                     else:
-                        print "Response: " + str(a.getcode())
+                        status = str(a.getcode())
+                        log.info("Response: " + status)
+                        feed['status'] = status
+                        self.feeds.append(feed)
+
+                else:
+                    feed['status'] = None
+                    self.feeds.append(feed)
 
 
 

@@ -9,3 +9,7 @@ from opml import Opml
 o = Opml.OpmlReader('./opml/opml-example.xml')
 
 o.parseOpml()
+
+# Show retrieved data structures
+print o.categories
+print o.feeds
