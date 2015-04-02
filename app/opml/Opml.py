@@ -27,6 +27,7 @@ class OpmlReader:
         self.categories = []
         self.feeds = []
         self.check = check
+        self.version = None # OPML version number
         if verbose:
             log.basicConfig(format="%(levelname)s: %(message)s", level=log.DEBUG)
         else:
@@ -37,8 +38,8 @@ class OpmlReader:
         root = tree.getroot()
 
         # Get OPML version number
-#        version = tree.find('./opml').attrib['version']
         v = root.attrib['version']
+        self.version = v
         log.info("OPML version " + v)
         if v == "1.0":
             url = "url"

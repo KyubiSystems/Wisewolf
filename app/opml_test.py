@@ -11,5 +11,6 @@ o = Opml.OpmlReader('./opml/testing.xml')
 o.parseOpml()
 
 # Show retrieved data structures
+print o.version
 print o.categories
 print o.feeds
