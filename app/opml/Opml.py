@@ -25,7 +25,7 @@ class OpmlReader:
         self.filename = filename
         self.attribs = {}
         self.categories = []
-        self.feeds = {}
+        self.feeds = []
         self.check = check
         if verbose:
             log.basicConfig(format="%(levelname)s: %(message)s", level=log.DEBUG)

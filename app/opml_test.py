@@ -5,8 +5,8 @@ Testing OPML import
 """
 from opml import Opml
 
-#o = Opml.OpmlReader('./opml/testing.xml')
-o = Opml.OpmlReader('./opml/opml-example.xml')
+o = Opml.OpmlReader('./opml/testing.xml')
+#o = Opml.OpmlReader('./opml/opml-example.xml')
 
 o.parseOpml()
 
