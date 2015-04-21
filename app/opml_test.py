@@ -18,11 +18,11 @@ print o.feeds
 
 # Save categories to DB
 for c in o.categories:
-    cat = Category.create(name = c.name)
+    cat = Category.create(name = c)
     cat.save()
 
 # Save feeds to DB
 for f in o.feeds:
     # Check OPML version here?
-    feed = Feed.create(name = f.name, category = f.category, version = f.type, comment = f.text, url = f.xmlUrl)
+    feed = Feed.create(name = f.title, category = f.category, version = f.type, comment = f.text, url = f.xmlUrl)
     feed.save()
