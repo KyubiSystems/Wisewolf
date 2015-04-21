@@ -16,13 +16,20 @@ print o.version
 print o.categories
 print o.feeds
 
-# Save categories to DB
+# Save categories to DB, skip invalid or duplicate feeds
 for c in o.categories:
     cat = Category.create(name = c)
-    cat.save()
+    try:
+        cat.save()
+    except IntegrityError:
+        pass
 
-# Save feeds to DB
+# Save feeds to DB, skip invalid or duplicate feeds
 for f in o.feeds:
-    # Check OPML version here?
+    # TODO: Check OPML version here, branch on o.version when creating feed
+    # Find more OPML examples!
     feed = Feed.create(name = f.title, category = f.category, version = f.type, comment = f.text, url = f.xmlUrl)
-    feed.save()
+    try:
+        feed.save()
+    except IntegrityError:
+        pass
