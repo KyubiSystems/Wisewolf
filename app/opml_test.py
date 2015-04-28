@@ -14,17 +14,21 @@ o.parseOpml()
 # Show retrieved data structures
 print o.version
 
-# Save categories to DB
+# Save categories to DB, skip invalid or duplicate feeds
 for c in o.categories:
     cat = Category.create(name = c)
-    cat.save()
+    try:
+        cat.save()
+    except IntegrityError:
+        pass
 
-# Save feeds to DB
+# Iterate over feeds found
 for f in o.feeds:
 
     print '------------'
     print f
 
+    # Get corresponding Category id
     cat_id = Category.get(Category.name == f['category']).id    
 
     if o.version == "1.0":
@@ -36,5 +40,8 @@ for f in o.feeds:
     else:
         continue
 
-    # Add feed to DB
-    feed.save()
+    # Add feed to DB, skip invalid or duplicate feeds
+    try:
+        feed.save()
+    except IntegrityError:
+        pass
