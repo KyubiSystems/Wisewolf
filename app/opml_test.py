@@ -13,8 +13,6 @@ o.parseOpml()
 
 # Show retrieved data structures
 print o.version
-print o.categories
-print o.feeds
 
 # Save categories to DB
 for c in o.categories:
@@ -23,6 +21,20 @@ for c in o.categories:
 
 # Save feeds to DB
 for f in o.feeds:
-    # Check OPML version here?
-    feed = Feed.create(name = f.title, category = f.category, version = f.type, comment = f.text, url = f.xmlUrl)
+
+    print '------------'
+    print f
+
+    cat_id = Category.get(Category.name == f['category']).id    
+
+    if o.version == "1.0":
+        # Add feed from OPML version 1.0
+        feed = Feed.create(name = f['text'], category = cat_id, version = f['type'], url = f['url'])
+    elif o.version == "1.1":
+        # Add feed from OPML version 1.1
+        feed = Feed.create(name = f['title'], category = cat_id, version = f['type'], comment = f['text'], url = f['xmlUrl'])
+    else:
+        continue
+
+    # Add feed to DB
     feed.save()
