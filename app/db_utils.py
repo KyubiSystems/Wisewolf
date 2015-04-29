@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
 from models import *
 from urlparse import urlparse
 import urllib2
 
+import logging
+log = logging.getLogger('wisewolf.log')
 
 # Create SQLite3 tables
 def create_db():
@@ -75,15 +77,19 @@ def get_favicon(id):
     except urllib2.HTTPError:
         return None
 
-    print "Favicon {0} status: {1}".format(str(id), str(f.getcode()))
+    log.info("Favicon {0} status: {1}".format(str(id), str(f.getcode()))) 
     favicon_data = f.read()
-    favicon_file = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id))
+    favicon_path = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id)) # Full filepath to favicon
+    favicon_file = 'favicon_{1}.ico'.format(str(id)) # favicon filename
 
-    with open(favicon_file, 'wb') as fav:
+    with open(favicon_path, 'wb') as fav:
         fav.write(favicon_data)
     fav.close()
 
+    # Return filename of favicon
     return favicon_file
+
+# TODO: Delete favicon from cache when corresponding feed deleted from DB.
 
 
 
