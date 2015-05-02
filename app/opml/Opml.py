@@ -27,7 +27,7 @@ class OpmlReader:
         self.categories = []
         self.feeds = []
         self.check = check
-        self.version = None # OPML version number
+        self.version = None  # OPML version number
         if verbose:
             log.basicConfig(format="%(levelname)s: %(message)s", level=log.DEBUG)
         else:
@@ -43,7 +43,7 @@ class OpmlReader:
         log.info("OPML version " + v)
         if v == "1.0":
             url = "url"
-        elif v == "1.1":
+        elif v == "1.1" or v == "2.0":
             url = "xmlUrl"
         else: 
             log.error("Unrecognised OPML version:", v)
