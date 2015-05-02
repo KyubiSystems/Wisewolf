@@ -47,6 +47,7 @@ class Feed(BaseModel):
     last_modified = CharField(max_length=64, default='')
     etag = CharField(max_length=64, default='')
     comment = TextField()
+    description = TextField()
     strip_images = BooleanField(default=False)
     refresh = IntegerField(default=1) # Frequency of feed refresh, in units of INTERVAL
     expire = IntegerField(default=0)  # Time to expire posts, 0 = never
