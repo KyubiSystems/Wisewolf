@@ -1,3 +1,4 @@
+BeautifulSoup==3.2.1
 Flask==0.10.1
 Flask-Login==0.2.9
 Jinja2==2.7.3
@@ -5,7 +6,7 @@ MarkupSafe==0.23
 Pillow==2.8.1
 Werkzeug==0.9.6
 arrow==0.5.4
-feedparser==5.2.0post1
+feedparser==5.2.0
 gevent==1.0
 gevent-websocket==0.9.2
 greenlet==0.4.2
