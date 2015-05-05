@@ -10,14 +10,16 @@ import urllib2
 import logging
 log = logging.getLogger('wisewolf.log')
 
-import BeautifulSoup as BS
+from bs4 import BeautifulSoup as BS
+import os
 
 # Get favicon file for server and write to cache directory
 # TODO: Delete favicon from cache when corresponding feed deleted from DB.
 
-def getFavicon(id):
 
-    feed = Feed.get(Feed.id == id)
+def getFavicon(feed_id):
+
+    feed = Feed.get(Feed.id == feed_id)
     url = feed.url
     u = urlparse(url)
     favicon_url = 'http://' + u.netloc + '/favicon.ico'
@@ -28,7 +30,7 @@ def getFavicon(id):
 
     log.info("Favicon {0} status: {1}".format(str(id), str(f.getcode()))) 
     favicon_data = f.read()
-    favicon_path = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id)) # Full filepath to favicon
+    favicon_path = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id))  # Full file path to favicon
     favicon_file = 'favicon_{1}.ico'.format(str(id)) # favicon filename
 
     with open(favicon_path, 'wb') as fav:
@@ -40,30 +42,52 @@ def getFavicon(id):
 
 # Get images from post HTML fragment and write to cache directory
 
-def getImages(id):
 
-    post = Post.get(Post.id == id)
+def getImages(post_id):
+
+    # Image HTTP content types
+    extensions = {'image/gif': 'gif', 'image/jpeg': 'jpg', 'image/pjpeg': 'jpg', 'image/png': 'png'}
+
+    post = Post.get(Post.id == post_id)
     html = post.content
+    feed = post.feed_id
 
     soup = BS(html)
+
+    img_num = 0
+
+    # Attempt to get images in HTML fragment
     for tag in soup.find_all('img'):
         image_url = tag['src']
         try:
             f = urllib2.urlopen(image_url)
             http = f.info()
-            content_type = http.type  # Get HTTP Content-Type
+            content_type = http.type  # Get HTTP Content-Type to determine file extension
         except urllib2.HTTPError:
             continue
 
         log.info("Found image {0}, writing to cache", image_url)
 
+        # Read image data
         image_data = f.read()
 
-        # TODO: Construct image cache path and filename
-        # Use HTTP content-type to decide extension
-        # CACHE_PATH/[feed_id]/[post_id]_[image_number].[ext]
         # Create feed directory as required
+        image_path = '{0}{1}'.format(IMAGE_PATH, str(feed))
+        if not os.path.exists(image_path):
+            os.makedirs(image_path)
 
-        with open(image_path, 'wb') as img:
+        # Use HTTP content-type to decide extension
+        # IMAGE_PATH/[feed_id]/[post_id]_[image_number].[ext]
+
+        image_file = '{0}{1}/img_{2}_{3}.{4}'.format(IMAGE_PATH, str(feed), str(img_num), extensions[content_type])
+
+        with open(image_file, 'wb') as img:
             img.write(image_data)
         img.close()
+
+        # TODO: Add to Image database table
+        # TODO: Create corresponding thumbnail
+
+        # increment image counter
+        img_num += 1
+
