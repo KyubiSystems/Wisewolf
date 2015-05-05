@@ -66,6 +66,10 @@ def getImages(post_id):
         except urllib2.HTTPError:
             continue
 
+        # If unrecognised content-type, skip this URL
+        if content_type not in extensions:
+            continue
+
         # Check to see if URL already exists in Image table
         url_num = Image.select().where(Image.url == image_url).count()
 
