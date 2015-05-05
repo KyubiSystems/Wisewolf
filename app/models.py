@@ -94,6 +94,7 @@ class Post(BaseModel):
 class Image(BaseModel):
     feed = ForeignKeyField(Feed, related_name='images')
     post = ForeignKeyField(Post, related_name='images')
+    url = CharField(max_length=512)
     path = CharField()
     thumb = CharField(max_length=512)
 # Peewee timestamps

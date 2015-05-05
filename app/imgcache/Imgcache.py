@@ -66,28 +66,36 @@ def getImages(post_id):
         except urllib2.HTTPError:
             continue
 
-        log.info("Found image {0}, writing to cache", image_url)
+        # Check to see if URL already exists in Image table
+        url_num = Image.select().where(Image.url == image_url).count()
 
-        # Read image data
-        image_data = f.read()
+        # If not found, add to cache
+        if url_num == 0:
 
-        # Create feed directory as required
-        image_path = '{0}{1}'.format(IMAGE_PATH, str(feed))
-        if not os.path.exists(image_path):
-            os.makedirs(image_path)
+            log.info("Found image {0}, writing to cache", image_url)
 
-        # Use HTTP content-type to decide extension
-        # IMAGE_PATH/[feed_id]/[post_id]_[image_number].[ext]
+            # Read image data from url
+            image_data = f.read()
 
-        image_file = '{0}{1}/img_{2}_{3}.{4}'.format(IMAGE_PATH, str(feed), str(img_num), extensions[content_type])
+            # Create feed directory as required
+            image_path = '{0}{1}'.format(IMAGE_PATH, str(feed))
+            if not os.path.exists(image_path):
+                os.makedirs(image_path)
 
-        with open(image_file, 'wb') as img:
-            img.write(image_data)
-        img.close()
+            # Use HTTP content-type to decide extension
+            # IMAGE_PATH/[feed_id]/[post_id]_[image_number].[ext]
 
-        # TODO: Add to Image database table
-        # TODO: Create corresponding thumbnail
+            image_file = '{0}{1}/img_{2}_{3}.{4}'.format(IMAGE_PATH, str(feed), str(img_num), extensions[content_type])
 
-        # increment image counter
-        img_num += 1
+            with open(image_file, 'wb') as img:
+                img.write(image_data)
+            img.close()
+
+            # Add to Image database table
+            Image.create(post_id=post_id, feed_id=feed, url=image_url, path=image_file)
+
+            # TODO: Create corresponding thumbnail using Pillow, add to cache
+
+            # increment image counter
+            img_num += 1
 
