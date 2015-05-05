@@ -53,7 +53,7 @@ class Feed(BaseModel):
     expire = IntegerField(default=0)  # Time to expire posts, 0 = never
     errors = IntegerField(default=0)  # Number of errors seen in feed loading
     inactive = BooleanField(default=False)
-    favicon = CharField(max_length=64)
+    favicon = CharField(max_length=256)
 # Peewee timestamps
     created_at = DateTimeField(default=datetime.now())
     updated_at = DateTimeField(null=True)

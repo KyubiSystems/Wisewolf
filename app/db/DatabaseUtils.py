@@ -6,6 +6,7 @@ Wisewolf RSS Reader
 from models import *
 from urlparse import urlparse
 import urllib2
+from imgcache.Imgcache import getFavicon
 
 import logging
 log = logging.getLogger('wisewolf.log')
@@ -58,10 +59,10 @@ def load_defaults():
         # Get favicon for this Feed
         # returns path to local favicon file, or None
         # write to current feed record
-        favicon = get_favicon(fid)
-        if favicon:
-            f.favicon = favicon
-            f.save()
+        f.favicon = getFavicon(fid)
+
+        # Save entry to feeds table
+        f.save()
 
 
 

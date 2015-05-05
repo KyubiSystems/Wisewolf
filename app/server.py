@@ -5,7 +5,7 @@ Wisewolf RSS Reader
 """
 
 from models import *
-from db_utils import create_db, load_defaults
+from db.DatabaseUtils import *
 import feedparser
 import argparse
 
