@@ -51,8 +51,11 @@ def feed(id=None):
 @app.route('/feed/all/refresh')
 @app.route('/feed/<int:id>/refresh')
 def refresh(id=None):
-    # Manual update of one or all feeds
+    # Update of one or all feeds now
     
+    # Call refresh routine (see server)
+    # TODO: RSS package?
+
     return True
 
 @app.route('/feed/all/markread')
@@ -60,11 +63,28 @@ def refresh(id=None):
 def markread(id=None):
     # Manual markread of one or all feeds
 
+    if id == None:
+        query = Post.update(is_read=True)
+    else:
+        query = Post.update(is_read=True).where(Post.feed_id == id)
+        
+    query.execute()
+
     return True
 
 @app.route('/feed/<int:id>/delete')
 def delete(id=None):
     # Manual deletion of feed from database
+    # TODO: Check and implement cascading delete
+
+    if id == None:
+        return False
+    else:
+        query = Post.delete().where(Post.feed_id == id)
+        query.execute()
+
+        query = Feed.delete().where(Feed.id == id)
+        query.execute()
 
     return True
 
