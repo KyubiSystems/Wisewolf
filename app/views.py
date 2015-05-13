@@ -8,6 +8,8 @@ from models import *
 
 app = Flask(__name__)
 
+# Index route -----------------
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -33,6 +35,19 @@ def index():
 
     # Render main page template
     return render_template("index.html", categories=categories, feeds=feeds, posts=posts)
+
+# Post routes ----------------
+
+@app.route('/post/<int:id>/delete')
+def delete_post(id=None):
+    # Delete post #id from database
+    if id == None:
+        return False
+    else:
+        query = Post.delete().where(Post.id == id)
+        query.execute()
+
+    return True
 
 # Feed routes ----------------
 
@@ -111,7 +126,12 @@ def category(id=None):
 @app.route('/gallery/<int:id>')
 def gallery(id=None):
     # Get gallery images associated with feed #id
-    return render_template("gallery.html")
+    if id == None:
+        images = Image.select()
+    else:
+        images = Image.select().where(Image.feed_id == id)
+
+    return render_template("gallery.html", images=images)
 
 # Management routes ----------
 
