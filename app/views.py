@@ -3,7 +3,7 @@ Wisewolf RSS Reader
 (c) 2014 Kyubi Systems: www.kyubi.co.uk
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from models import *
 
 app = Flask(__name__)
@@ -87,8 +87,14 @@ def markread(id=None):
 
     return True
 
+@app.route('/feed/add', methods=['POST'])
+def add_feed(url=None):
+    # Manual add of feed url using POST method
+
+    return True
+
 @app.route('/feed/<int:id>/delete')
-def delete(id=None):
+def delete_feed(id=None):
     # Manual deletion of feed from database
     # TODO: Check and implement cascading delete
 
