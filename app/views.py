@@ -99,7 +99,7 @@ def feed_update(id=None):
         else:
             query = Post.update(is_read=True).where(Post.feed_id == id)
             
-            query.execute()
+        query.execute()
             
     # return JSON status OK
         resp = jsonify(STATUS_OK)
@@ -113,12 +113,13 @@ def add_feed(url=None):
     
     # Get url and category submitted via AJAX
     url = request.json['url']
-    category = request.json['category']
+    category = request.json['category'] # From dropdown on submit form
 
     # url processing goes here
-    # check content type for RSS
-    # if plain HTML try autodetection
+    # check content type for RSS?
+    # Try autodetection and add to DB if found
 
+    # If not found, return FEED_NOT_FOUND
 
     # return JSON status OK
     resp = jsonify(STATUS_OK)
@@ -168,6 +169,9 @@ def category(id=None):
     # Render category page template
     return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
 
+# Category delete
+# Reassign all feeds in category to 'unsorted'?
+
 # Gallery routes -------------
 
 @app.route('/gallery', methods=['GET'])
@@ -183,14 +187,16 @@ def gallery(id=None):
 
 # Management routes ----------
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET'])
 def settings():
-    return render_template("settings.html", methods=['GET'])
+    return render_template("settings.html")
 
 # Import OPML
-@app.route('/import')
+@app.route('/import', methods=['GET'])
 def opml_import():
-    return render_template("import.html", methods=['GET'])
+    return render_template("import.html")
+
+# route for processing OPML import...
 
 # Websocket testing ----------
 
