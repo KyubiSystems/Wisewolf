@@ -5,13 +5,14 @@ Wisewolf RSS Reader
 
 from flask import Flask, render_template, jsonify
 from models import *
+from messages import *
 
 app = Flask(__name__)
 
 # Index route -----------------
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def index():
     # Load feeds from DB to display
     # List of categories
@@ -38,21 +39,29 @@ def index():
 
 # Post routes ----------------
 
-@app.route('/post/<int:id>/delete')
+@app.route('/post/<int:id>', methods=['DELETE'])
 def delete_post(id=None):
     # Delete post #id from database
     if id == None:
-        return False
+
+        resp = jsonify(POST_NOT_FOUND)
+        resp.status_code = 404
+        return resp
+
     else:
         query = Post.delete().where(Post.id == id)
         query.execute()
 
-    return True
+    # return JSON status OK
+    resp = jsonify(STATUS_OK)
+    resp.status_code = 200
+    return resp
+
 
 # Feed routes ----------------
 
-@app.route('/feed')
-@app.route('/feed/<int:id>')
+@app.route('/feed', methods=['GET'])
+@app.route('/feed/<int:id>', methods=['GET'])
 def feed(id=None):
     # Get feed number <id>
     feed = Feed.get(Feed.id == id)
@@ -60,59 +69,92 @@ def feed(id=None):
     # Get posts in decreasing date order
     posts = Post.select().where(Post.id == id).order_by(Post.published.desc())
 
+    # Select return on requested content-type?
+    # Return JSON here for client-side formatting?
+
     # Render feed page template
     return render_template("feed.html", feed=feed, posts=posts)
 
-@app.route('/feed/all/refresh')
-@app.route('/feed/<int:id>/refresh')
-def refresh(id=None):
-    # Update of one or all feeds now
-    
-    # Call refresh routine (see server)
-    # TODO: RSS package?
+@app.route('/feed/', methods=['POST'])
+@app.route('/feed/<int:id>', methods=['POST'])
+def feed_update(id=None):
 
-    return True
-
-@app.route('/feed/all/markread')
-@app.route('/feed/<int:id>/markread')
-def markread(id=None):
-    # Manual markread of one or all feeds
-
-    if id == None:
-        query = Post.update(is_read=True)
-    else:
-        query = Post.update(is_read=True).where(Post.feed_id == id)
+    # Manual update of one or all feeds now
+    if request.json['action'] == 'refresh':
         
-    query.execute()
+        # Call refresh routine (see server.py)
+        # TODO: RSS package?
+        
+        
+        # return JSON status OK
+        resp = jsonify(STATUS_OK)
+        resp.status_code = 200
+        return resp
 
-    return True
+    # Mark one or all feeds read
+    elif request.json['action'] == 'markread':
 
+        if id == None:
+            query = Post.update(is_read=True)
+        else:
+            query = Post.update(is_read=True).where(Post.feed_id == id)
+            
+            query.execute()
+            
+    # return JSON status OK
+        resp = jsonify(STATUS_OK)
+        resp.status_code = 200
+        return resp
+
+
+# Manual add of feed url
 @app.route('/feed/add', methods=['POST'])
 def add_feed(url=None):
-    # Manual add of feed url using POST method
+    
+    # Get url and category submitted via AJAX
+    url = request.json['url']
+    category = request.json['category']
 
-    return True
+    # url processing goes here
+    # check content type for RSS
+    # if plain HTML try autodetection
 
-@app.route('/feed/<int:id>/delete')
+
+    # return JSON status OK
+    resp = jsonify(STATUS_OK)
+    resp.status_code = 200
+    return resp
+
+@app.route('/feed/<int:id>', methods=['DELETE'])
 def delete_feed(id=None):
     # Manual deletion of feed from database
     # TODO: Check and implement cascading delete
 
     if id == None:
-        return False
+
+        # return feed not found
+        resp = jsonify(FEED_NOT_FOUND)
+        resp.status_code = 404
+        return resp
+
     else:
+
         query = Post.delete().where(Post.feed_id == id)
         query.execute()
 
         query = Feed.delete().where(Feed.id == id)
         query.execute()
 
-    return True
+    # return JSON status OK
+    resp = jsonify(STATUS_OK)
+    resp.status_code = 200
+    return resp
+
 
 # Category routes ------------
 
-@app.route('/category')
-@app.route('/category/<int:id>')
+@app.route('/category', methods=['GET'])
+@app.route('/category/<int:id>', methods=['GET'])
 def category(id=None):
     # Get category number <id>
     categories = Category.get(Category.id == id)
@@ -128,8 +170,8 @@ def category(id=None):
 
 # Gallery routes -------------
 
-@app.route('/gallery')
-@app.route('/gallery/<int:id>')
+@app.route('/gallery', methods=['GET'])
+@app.route('/gallery/<int:id>', methods=['GET'])
 def gallery(id=None):
     # Get gallery images associated with feed #id
     if id == None:
@@ -143,12 +185,12 @@ def gallery(id=None):
 
 @app.route('/settings')
 def settings():
-    return render_template("settings.html")
+    return render_template("settings.html", methods=['GET'])
 
 # Import OPML
 @app.route('/import')
 def opml_import():
-    return render_template("import.html")
+    return render_template("import.html", methods=['GET'])
 
 # Websocket testing ----------
 
