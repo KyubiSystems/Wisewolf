@@ -13,10 +13,10 @@ Route	      | HTTP Query Type | Returns
 /feed	      | GET		| Get posts from all feeds
 /feed/[id]    |			| Get posts from feed [id]
 	      |			|
-/feed	      |	POST		| action='refresh': Get new posts
+/feed	      |	POST		| **action='refresh'**: Get new posts
 /feed/[id]    |			|
 	      |			|
-/feed	      |	POST		| action='markread': Mark posts as read
+/feed	      |	POST		| **action='markread'**: Mark posts as read
 /feed/[id]    |			|
 	      |			|
 /feed/add     |	POST		| Add new feed
@@ -34,7 +34,7 @@ Route	      | HTTP Query Type | Returns
 /import	      | GET		| Form to import OPML
 
 
-*& more to follow...*
+**& more to follow...**
 - get post(!!)
 - delete category
 - get image
