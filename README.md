@@ -23,7 +23,7 @@ Wisewolf requires WSGI-compliant hosting.
 License
 -------
 
-Wisewolf uses the **Creative Commons BY-NC-SA 3.0 license*.
+Wisewolf uses the **Creative Commons BY-NC-SA 3.0 license**.
 
 Roadmap (intended for initial alpha)
 ---------
