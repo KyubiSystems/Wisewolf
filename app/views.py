@@ -39,6 +39,17 @@ def index():
 
 # Post routes ----------------
 
+@app.route('/post/<int:id>', methods=['GET'])
+def get_post(id=None):
+    # Get post #id from database
+    post = Post.select().where(Post.id == id)
+
+    # Return post as JSON
+    resp = jsonify(post)
+    resp.status_code = 200
+    return resp
+
+
 @app.route('/post/<int:id>', methods=['DELETE'])
 def delete_post(id=None):
     # Delete post #id from database
@@ -157,7 +168,7 @@ def delete_feed(id=None):
 @app.route('/category', methods=['GET'])
 @app.route('/category/<int:id>', methods=['GET'])
 def category(id=None):
-    # Get category number <id>
+    # Get category #id
     categories = Category.get(Category.id == id)
 
     # Get feeds in category
@@ -172,6 +183,17 @@ def category(id=None):
 # Category delete
 # Reassign all feeds in category to 'unsorted'?
 
+@app.route('/category/<int:id>', methods=['DELETE'])
+def delete_category(id):
+    # Delete category #id
+    query = Category.delete().where(Category.id == id)
+    query.execute()
+
+    # return JSON status OK
+    resp = jsonify(STATUS_OK)
+    resp.status_code = 200
+    return resp
+
 # Gallery routes -------------
 
 @app.route('/gallery', methods=['GET'])
@@ -185,11 +207,41 @@ def gallery(id=None):
 
     return render_template("gallery.html", images=images)
 
+# Image routes ---------------
+
+@app.route('/image/<int:id>', methods=['GET'])
+def get_image(id):
+    # Get image #id
+    image = Image.select().where(Image.id == id)
+
+    return render_template("image.html", image=image)
+
+@app.route('/image/<int:id>', methods=['DELETE'])
+def delete_image(id):
+    # Get image #id
+    image = Image.select().where(Image.id == id)
+
+    # TODO: Delete image binary file and thumb
+    # Need to check safe path and MIME type first
+
+    # Delete image DB record
+    query = Image.delete().where(Image.id == id)
+    query.execute()
+
+    # return JSON status OK
+    resp = jsonify(STATUS_OK)
+    resp.status_code = 200
+    return resp
+
 # Management routes ----------
 
 @app.route('/settings', methods=['GET'])
 def settings():
+    # Gather settings values and pass to view...
+
     return render_template("settings.html")
+
+# route for processing settings update...
 
 # Import OPML
 @app.route('/import', methods=['GET'])
