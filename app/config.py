@@ -26,8 +26,14 @@ CACHE_PATH = STATIC_PATH + 'cache/'
 # Set path for downloaded images
 IMAGE_PATH = CACHE_PATH + 'images/'
 
+# Set path for thumbnails
+THUMB_PATH = CACHE_PATH + 'thumbs/'
+
+# Set default size for thumbnails
+THUMB_SIZE = (150, 150)
+
 # Set path for downloaded favicons
 ICONS_PATH = CACHE_PATH + 'icons/'
 
 # Set User-Agent string for Wisewolf reader
-USER_AGENT = 'WisewolfRSS/0.0.3 +http://www.wisewolf.co.uk/'
+USER_AGENT = 'WisewolfRSS/0.0.4 +http://www.wisewolf.co.uk/'

@@ -13,6 +13,8 @@ log = logging.getLogger('wisewolf.log')
 from bs4 import BeautifulSoup as BS
 import os
 
+from PIL import Image as Im
+
 # Get favicon file for server and write to cache directory
 # TODO: Delete favicon from cache when corresponding feed deleted from DB.
 
@@ -43,7 +45,7 @@ def getFavicon(feed_id):
 # Get images from post HTML fragment and write to cache directory
 
 
-def getImages(post_id):
+def getImages(post_id, makeThumb=True):
 
     # Image HTTP content types
     extensions = {'image/gif': 'gif', 'image/jpeg': 'jpg', 'image/pjpeg': 'jpg', 'image/png': 'png'}
@@ -70,6 +72,9 @@ def getImages(post_id):
         if content_type not in extensions:
             continue
 
+        # TODO: Check image size, skip below size limit (avoids saving 1x1 pixel bugs)
+        # Reasonable default would be existing thumbnail size
+
         # Check to see if URL already exists in Image table
         url_num = Image.select().where(Image.url == image_url).count()
 
@@ -89,7 +94,7 @@ def getImages(post_id):
             # Use HTTP content-type to decide extension
             # IMAGE_PATH/[feed_id]/[post_id]_[image_number].[ext]
 
-            image_file = '{0}{1}/img_{2}_{3}.{4}'.format(IMAGE_PATH, str(feed), str(img_num), extensions[content_type])
+            image_file = '{0}{1}/img_{2}.{3}'.format(IMAGE_PATH, str(feed), str(img_num), extensions[content_type])
 
             with open(image_file, 'wb') as img:
                 img.write(image_data)
@@ -98,7 +103,17 @@ def getImages(post_id):
             # Add to Image database table
             Image.create(post_id=post_id, feed_id=feed, url=image_url, path=image_file)
 
-            # TODO: Create corresponding thumbnail using Pillow, add to cache
+            if makeThumb == True:
+
+                # Create corresponding thumbnail using Pillow, add to thumbnail cache dir
+                thumb_file = '{0}{1}/thumb_{2}.{3}'.format(THUMB_PATH, str(feed), str(img_num), extensions[content_type])
+
+                try:
+                    thumb = Im.open(image_file)
+                    thumb.thumbnail(THUMB_SIZE)
+                    thumb.save(thumb_file, "JPEG")
+                except IOError:
+                    log.error("Cannot create thumbnail for", image_file)
 
             # increment image counter
             img_num += 1
