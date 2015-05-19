@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
 
 from models import *
@@ -32,7 +32,8 @@ db = SqliteDatabase(DB_FILE, threadlocals=True)
 
 # --------------------------------------------------
 # RSS gevent parallel server process
-def rss_server(tick):
+# Default rss_spawn() will check all feeds in DB
+def rss_spawn(tick=1):
 
     # Connect to database
     db.connect()
@@ -65,11 +66,11 @@ def rss_server_loop():
         # Get tick counter value
         tick = c.get()
 
-        logging.info("Interval tick %d", tick)
+        logging.info("Server loop: Interval tick %d", tick)
 
         # Call RSS server to spawn another query set
         # will pass current tick as parameter
-        rss_server(tick)
+        rss_spawn(tick)
 
         # wait INTERVAL seconds
         gevent.sleep(INTERVAL)
@@ -78,7 +79,7 @@ def rss_server_loop():
         c.increment()
 
 # --------------------------------------------------
-# spawn Worker(feed)
+# RSS Worker(update Feed f)
 def rss_worker(f):
     """RSS gevent worker function"""
     logging.info("Starting reader process for feed %s", f.id)

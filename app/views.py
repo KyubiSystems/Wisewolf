@@ -93,9 +93,14 @@ def feed_update(id=None):
     # Manual update of one or all feeds now
     if request.json['action'] == 'refresh':
         
-        # Call refresh routine (see server.py)
-        # TODO: RSS package?
-        
+        # Call refresh routine
+        # TODO: RSS worker functions in separate package
+        # TODO: Need to capture return status
+        if id == None:
+            rss_spawn() # Update all feeds
+        else:
+            feed = Feed.select().where(Feed.id == id)
+            rss_worker(feed) # Update single feed
         
         # return JSON status OK
         resp = jsonify(STATUS_OK)
