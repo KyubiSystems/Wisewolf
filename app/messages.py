@@ -13,6 +13,16 @@ FEED_NOT_FOUND = {
     'message' : 'Feed not found'
     }
 
+CATEGORY_NOT_FOUND = {
+    'status' : 404,
+    'message' : 'Category not found'
+    }
+
+IMAGE_NOT_FOUND = {
+    'status' : 404,
+    'message' : 'Image not found'
+    }
+
 STATUS_OK = {
     'status' : 200,
     'message' : 'OK'
