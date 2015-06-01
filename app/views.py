@@ -42,7 +42,12 @@ def index():
 @app.route('/post/<int:id>', methods=['GET'])
 def get_post(id=None):
     # Get post #id from database
-    post = Post.select().where(Post.id == id)
+    try:
+        post = Post.get(Post.id == id)
+    except PostDoesNotExist:
+        resp = jsonify(POST_NOT_FOUND)
+        resp.status_code = 404
+        return resp
 
     # Return post as JSON
     resp = jsonify(post)
@@ -53,15 +58,8 @@ def get_post(id=None):
 @app.route('/post/<int:id>', methods=['DELETE'])
 def delete_post(id=None):
     # Delete post #id from database
-    if id == None:
-
-        resp = jsonify(POST_NOT_FOUND)
-        resp.status_code = 404
-        return resp
-
-    else:
-        query = Post.delete().where(Post.id == id)
-        query.execute()
+    query = Post.delete().where(Post.id == id)
+    query.execute()
 
     # return JSON status OK
     resp = jsonify(STATUS_OK)
@@ -75,12 +73,17 @@ def delete_post(id=None):
 @app.route('/feed/<int:id>', methods=['GET'])
 def feed(id=None):
     # Get feed number <id>
-    feed = Feed.get(Feed.id == id)
+    try:
+        feed = Feed.get(Feed.id == id)
+    except FeedDoesNotExist:
+        resp = jsonify(FEED_NOT_FOUND)
+        resp.status_code = 404
+        return resp
 
     # Get posts in decreasing date order
-    posts = Post.select().where(Post.id == id).order_by(Post.published.desc())
+    posts = Post.select().where(Feed.id == id).order_by(Post.published.desc())
 
-    # Select return on requested content-type?
+    # Select return format on requested content-type?
     # Return JSON here for client-side formatting?
 
     # Render feed page template
@@ -99,7 +102,13 @@ def feed_update(id=None):
         if id == None:
             rss_spawn() # Update all feeds
         else:
-            feed = Feed.select().where(Feed.id == id)
+            try:
+                feed = Feed.get(Feed.id == id)
+            except FeedDoesNotExist:
+                resp = jsonify(FEED_NOT_FOUND)
+                resp.status_code = 404
+                return resp
+
             rss_worker(feed) # Update single feed
         
         # return JSON status OK
@@ -111,9 +120,11 @@ def feed_update(id=None):
     elif request.json['action'] == 'markread':
 
         if id == None:
+            # Mark all posts read
             query = Post.update(is_read=True)
         else:
-            query = Post.update(is_read=True).where(Post.feed_id == id)
+            # Mark posts in current feed read
+            query = Post.update(is_read=True).where(Feed.id == id)
             
         query.execute()
             
@@ -146,6 +157,8 @@ def add_feed(url=None):
 def delete_feed(id=None):
     # Manual deletion of feed from database
     # TODO: Check and implement cascading delete
+    # TODO: Some confirmation required?
+
 
     if id == None:
 
@@ -156,7 +169,7 @@ def delete_feed(id=None):
 
     else:
 
-        query = Post.delete().where(Post.feed_id == id)
+        query = Post.delete().where(Feed.id == id)
         query.execute()
 
         query = Feed.delete().where(Feed.id == id)
@@ -174,13 +187,20 @@ def delete_feed(id=None):
 @app.route('/category/<int:id>', methods=['GET'])
 def category(id=None):
     # Get category #id
-    categories = Category.get(Category.id == id)
+    try:
+        categories = Category.get(Category.id == id)
+    except CategoryDoesNotExist:
+        resp = jsonify(CATEGORY_NOT_FOUND)
+        resp.status_code = 404
+        return resp
 
     # Get feeds in category
-    feeds = Feed.select().where(Feed.category == id).annotate(Post)
+    feeds = Feed.select().where(Category.id == id).annotate(Post)
 
     # Get posts in category in decreasing date order
-    posts = Post.select().join(Feed).where(Feed.category == id).order_by(Post.published.desc())
+    posts = Post.select().join(Feed).where(Category.id == id).order_by(Post.published.desc())
+
+    # Return mode dependent on Content-Type?
 
     # Render category page template
     return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
@@ -208,7 +228,7 @@ def gallery(id=None):
     if id == None:
         images = Image.select()
     else:
-        images = Image.select().where(Image.feed_id == id)
+        images = Image.select().where(Feed.id == id)
 
     return render_template("gallery.html", images=images)
 
@@ -217,14 +237,24 @@ def gallery(id=None):
 @app.route('/image/<int:id>', methods=['GET'])
 def get_image(id):
     # Get image #id
-    image = Image.select().where(Image.id == id)
+    try:
+        image = Image.get(Image.id == id)
+    except ImageDoesNotExist:
+        resp = jsonify(IMAGE_NOT_FOUND)
+        resp.status_code = 404
+        return resp
 
     return render_template("image.html", image=image)
 
 @app.route('/image/<int:id>', methods=['DELETE'])
 def delete_image(id):
     # Get image #id
-    image = Image.select().where(Image.id == id)
+    try:
+        image = Image.get(Image.id == id)
+    except ImageDoesNotExist:
+        resp = jsonify(IMAGE_NOT_FOUND)
+        resp.status_code = 404
+        return resp
 
     # TODO: Delete image binary file and thumb
     # Need to check safe path and MIME type first
