@@ -4,26 +4,26 @@ Wisewolf RSS Reader
 """
 
 POST_NOT_FOUND = {
-    'status' : 404,
-    'message' : 'Post not found'
+    'status_code' : 404,
+    'status' : 'Post not found'
     }
 
 FEED_NOT_FOUND = {
-    'status' : 404,
-    'message' : 'Feed not found'
+    'status_code' : 404,
+    'status' : 'Feed not found'
     }
 
 CATEGORY_NOT_FOUND = {
-    'status' : 404,
-    'message' : 'Category not found'
+    'status_code' : 404,
+    'status' : 'Category not found'
     }
 
 IMAGE_NOT_FOUND = {
-    'status' : 404,
-    'message' : 'Image not found'
+    'status_code' : 404,
+    'status' : 'Image not found'
     }
 
 STATUS_OK = {
-    'status' : 200,
-    'message' : 'OK'
+    'status_code' : 200,
+    'status' : 'OK'
     }

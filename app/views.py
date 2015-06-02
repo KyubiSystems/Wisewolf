@@ -45,9 +45,7 @@ def get_post(id=None):
     try:
         post = Post.get(Post.id == id)
     except PostDoesNotExist:
-        resp = jsonify(POST_NOT_FOUND)
-        resp.status_code = 404
-        return resp
+        return jsonify(**POST_NOT_FOUND)
 
     # Return post as JSON
     resp = jsonify(post)
@@ -62,10 +60,7 @@ def delete_post(id=None):
     query.execute()
 
     # return JSON status OK
-    resp = jsonify(STATUS_OK)
-    resp.status_code = 200
-    return resp
-
+    return jsonify(**STATUS_OK)
 
 # Feed routes ----------------
 
@@ -76,9 +71,7 @@ def feed(id=None):
     try:
         feed = Feed.get(Feed.id == id)
     except FeedDoesNotExist:
-        resp = jsonify(FEED_NOT_FOUND)
-        resp.status_code = 404
-        return resp
+        return jsonify(**FEED_NOT_FOUND)
 
     # Get posts in decreasing date order
     posts = Post.select().where(Feed.id == id).order_by(Post.published.desc())
@@ -105,16 +98,12 @@ def feed_update(id=None):
             try:
                 feed = Feed.get(Feed.id == id)
             except FeedDoesNotExist:
-                resp = jsonify(FEED_NOT_FOUND)
-                resp.status_code = 404
-                return resp
+                return jsonify(**FEED_NOT_FOUND)
 
             rss_worker(feed) # Update single feed
         
         # return JSON status OK
-        resp = jsonify(STATUS_OK)
-        resp.status_code = 200
-        return resp
+        return jsonify(**STATUS_OK)
 
     # Mark one or all feeds read
     elif request.json['action'] == 'markread':
@@ -129,9 +118,7 @@ def feed_update(id=None):
         query.execute()
             
     # return JSON status OK
-        resp = jsonify(STATUS_OK)
-        resp.status_code = 200
-        return resp
+        return jsonify(**STATUS_OK)
 
 
 # Manual add of feed url
@@ -149,9 +136,7 @@ def add_feed(url=None):
     # If not found, return FEED_NOT_FOUND
 
     # return JSON status OK
-    resp = jsonify(STATUS_OK)
-    resp.status_code = 200
-    return resp
+    return jsonify(**STATUS_OK)
 
 @app.route('/feed/<int:id>', methods=['DELETE'])
 def delete_feed(id=None):
@@ -163,9 +148,7 @@ def delete_feed(id=None):
     if id == None:
 
         # return feed not found
-        resp = jsonify(FEED_NOT_FOUND)
-        resp.status_code = 404
-        return resp
+        return jsonify(**FEED_NOT_FOUND)
 
     else:
 
@@ -176,9 +159,7 @@ def delete_feed(id=None):
         query.execute()
 
     # return JSON status OK
-    resp = jsonify(STATUS_OK)
-    resp.status_code = 200
-    return resp
+    return jsonify(**STATUS_OK)
 
 
 # Category routes ------------
@@ -190,9 +171,7 @@ def category(id=None):
     try:
         categories = Category.get(Category.id == id)
     except CategoryDoesNotExist:
-        resp = jsonify(CATEGORY_NOT_FOUND)
-        resp.status_code = 404
-        return resp
+        return jsonify(**CATEGORY_NOT_FOUND)
 
     # Get feeds in category
     feeds = Feed.select().where(Category.id == id).annotate(Post)
@@ -215,9 +194,7 @@ def delete_category(id):
     query.execute()
 
     # return JSON status OK
-    resp = jsonify(STATUS_OK)
-    resp.status_code = 200
-    return resp
+    return jsonify(**STATUS_OK)
 
 # Gallery routes -------------
 
@@ -240,9 +217,7 @@ def get_image(id):
     try:
         image = Image.get(Image.id == id)
     except ImageDoesNotExist:
-        resp = jsonify(IMAGE_NOT_FOUND)
-        resp.status_code = 404
-        return resp
+        return jsonify(**IMAGE_NOT_FOUND)
 
     return render_template("image.html", image=image)
 
@@ -252,9 +227,7 @@ def delete_image(id):
     try:
         image = Image.get(Image.id == id)
     except ImageDoesNotExist:
-        resp = jsonify(IMAGE_NOT_FOUND)
-        resp.status_code = 404
-        return resp
+        return jsonify(**IMAGE_NOT_FOUND)
 
     # TODO: Delete image binary file and thumb
     # Need to check safe path and MIME type first
@@ -264,9 +237,7 @@ def delete_image(id):
     query.execute()
 
     # return JSON status OK
-    resp = jsonify(STATUS_OK)
-    resp.status_code = 200
-    return resp
+    return jsonify(**STATUS_OK)
 
 # Management routes ----------
 
