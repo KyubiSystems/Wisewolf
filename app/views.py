@@ -77,10 +77,15 @@ def feed(id=None):
     posts = Post.select().where(Feed.id == id).order_by(Post.published.desc())
 
     # Select return format on requested content-type?
-    # Return JSON here for client-side formatting?
+    if request.json == None:
+        # Render feed page template
+        return render_template("feed.html", feed=feed, posts=posts)
 
-    # Render feed page template
-    return render_template("feed.html", feed=feed, posts=posts)
+    else:
+
+        # Return JSON here for client-side formatting?
+        return jsonify(response=[dict(feed=feed, posts=posts)])
+
 
 @app.route('/feed/', methods=['POST'])
 @app.route('/feed/<int:id>', methods=['POST'])
@@ -141,10 +146,7 @@ def add_feed(url=None):
 @app.route('/feed/<int:id>', methods=['DELETE'])
 def delete_feed(id=None):
     # Manual deletion of feed from database
-    # TODO: Check and implement cascading delete
-    # TODO: Some confirmation required?
-
-
+    # TODO: Some confirmation required? Client JS via modal?
     if id == None:
 
         # return feed not found
@@ -152,9 +154,7 @@ def delete_feed(id=None):
 
     else:
 
-        query = Post.delete().where(Feed.id == id)
-        query.execute()
-
+        # TODO: Test ON DELETE CASCADE to Post table (should work)
         query = Feed.delete().where(Feed.id == id)
         query.execute()
 
@@ -180,16 +180,24 @@ def category(id=None):
     posts = Post.select().join(Feed).where(Category.id == id).order_by(Post.published.desc())
 
     # Return mode dependent on Content-Type?
+    if request.json == None:
 
-    # Render category page template
-    return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
+        # Render category page template
+        return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
+
+    else:
+
+        # Return JSON data structure
+        return jsonify(response = [dict(categories=categories, feeds=feeds, posts=posts)])
 
 # Category delete
-# Reassign all feeds in category to 'unsorted'?
-
 @app.route('/category/<int:id>', methods=['DELETE'])
 def delete_category(id):
     # Delete category #id
+    # Reassign all feeds in category to 'unsorted' id 0?
+    query = Feed.update(Category.id=0).where(Category.id==id) 
+    query.execute()
+
     query = Category.delete().where(Category.id == id)
     query.execute()
 
