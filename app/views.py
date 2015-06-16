@@ -220,7 +220,7 @@ def category(id=None):
 def delete_category(id):
     # Delete category #id
     # Reassign all feeds in category to 'unsorted' id 0?
-    query = Feed.update(Category.id=0).where(Category.id==id) 
+    query = Feed.update(category_id=0).where(Category.id==id) 
     query.execute()
 
     query = Category.delete().where(Category.id == id)
