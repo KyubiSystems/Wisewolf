@@ -8,7 +8,8 @@ Route	      | HTTP Query Type | Returns
 /	      |	GET		| Top-level view
 /index        |                 |
 	      |			|
-/post/[id]    |	DELETE		| Delete post
+/post/[id]    | GET             | Get post [id]
+              |	DELETE		| Delete post [id]
 	      |			|
 /feed	      | GET		| Get posts from all feeds
 /feed/[id]    |			| Get posts from feed [id]
@@ -19,25 +20,24 @@ Route	      | HTTP Query Type | Returns
 /feed	      |	POST		| **action='markread'**: Mark posts as read
 /feed/[id]    |			|
 	      |			|
-/feed/add     |	POST		| Add new feed
+/feed/add     |	POST		| Add new feed (accepts valid URL)
 	      |			|
 /feed/[id]    |	DELETE		| Delete feed
 	      |			|
+/favourite/[id] | GET           | Get favourite status from post [id]
+              | POST            | Toggle favourite status on post [id]
+              |                 | 
 /category     |	GET		| List categories
 /category/[id]|			| Get posts from category [id]
- 	      |			|
+	      |                 |
+/category/[id] | DELETE		| Delete category [id], reassign feeds to 'Unsorted'
+	       |                |
 /gallery      |	GET		| Show all scraped images
 /gallery/[id] |			| Show scraped images for feed [id]		
 	      |			|
-/settings     |	GET		| Display program settings
-	      |			|
-/import	      | GET		| Form to import OPML
-
+/image/[id]   | GET		| Display image [id]
+	      | DELETE		| Delete image [id]
 
 **& more to follow...**
-- get post(!!)
-- delete category
-- get image
-- delete image
 - settings update handler (POST)
 - OPML import handler (POST)
