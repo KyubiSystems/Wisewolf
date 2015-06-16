@@ -3,11 +3,8 @@
 Wisewolf RSS Reader
 (c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
-from models import *
 from urlparse import urlparse
 import urllib2
-from imgcache.Imgcache import getFavicon
-
 import logging
 log = logging.getLogger('wisewolf.log')
 

@@ -4,11 +4,16 @@ Wisewolf RSS Reader
 (c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
 
-from models import *
-from db.DatabaseUtils import *
+# import system libraries
 import feedparser
 import argparse
 import os
+
+# import Wisewolf libraries
+from config import *
+from models import *
+from imgcache.Imgcache import getFavicon
+from db.DatabaseUtils import *
 
 # Set up gevent multithreading
 import gevent

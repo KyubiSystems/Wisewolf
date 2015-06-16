@@ -3,17 +3,15 @@
 Wisewolf RSS Reader
 (c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
-from models import *
-from urlparse import urlparse
+import os
 import urllib2
+from urlparse import urlparse
+from bs4 import BeautifulSoup as BS
+from PIL import Image as Im
 
 import logging
 log = logging.getLogger('wisewolf.log')
 
-from bs4 import BeautifulSoup as BS
-import os
-
-from PIL import Image as Im
 
 # Get favicon file for server and write to cache directory
 # TODO: Delete favicon from cache when corresponding feed deleted from DB.

@@ -6,7 +6,7 @@ Wisewolf RSS Reader
 import os
 
 # set application path
-APP_PATH = os.path.dirname(os.path.realpath(__file__))
+APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Set DEBUG to True for development
 DEBUG = True
