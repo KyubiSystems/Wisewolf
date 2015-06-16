@@ -3,7 +3,7 @@ Wisewolf RSS Reader
 (c) 2014 Kyubi Systems: www.kyubi.co.uk
 """
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, jsonify, render_template, request
 from models import *
 from messages import *
 
@@ -62,6 +62,31 @@ def delete_post(id=None):
     # return JSON status OK
     return jsonify(**STATUS_OK)
 
+@app.route('/favourite/<int:id>', methods=['GET'])
+def get_favourite(id=None):
+    # Get favourite status for post #id
+    try:
+        fav = Post.get(Post.id == id)
+    except PostDoesNotExist:
+        return jsonify(**POST_NOT_FOUND)
+
+    # return post fav status as JSON
+    resp = jsonify(fav.is_favourite)
+    resp.status_code = 200
+    return resp
+
+@app.route('/favourite/<int:id>', methods=['POST'])
+def set_favourite(id=None):
+    # Toggle favourite status for post #id
+    try:
+        query = Post.update(is_favourite = not Post.is_favourite).where(Post.id == id)
+        query.execute()
+    except PostDoesNotExist:
+        return jsonify(**POST_NOT_FOUND)
+
+    # return JSON status OK
+    return jsonify(**STATUS_OK)
+    
 # Feed routes ----------------
 
 @app.route('/feed', methods=['GET'])
