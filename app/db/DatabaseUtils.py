@@ -5,6 +5,11 @@ Wisewolf RSS Reader
 """
 from urlparse import urlparse
 import urllib2
+from ..config import *
+from ..models import *
+from ..imgcache.Imgcache import getFavicon
+
+# Set up logging
 import logging
 log = logging.getLogger('wisewolf.log')
 
@@ -26,7 +31,7 @@ def create_db():
     Image.create_table()
 
     # Create default Unsorted category
-    Category.create(name='Unsorted', comment='Uncategorised feeds', order=0)
+    Category.create(name='Unsorted', comment='Uncategorised feeds', order=1)
 
     logging.info("Database created.")
 
@@ -54,17 +59,19 @@ def load_defaults():
         (name, url, category) = row.split('|')
         category = category.strip()
         # Update Category table
-        c = Category.create(name=category, comment='default category')
+        c = Category.create(name=category, comment='Default category', order=1)
         # Get Category insert id
         cid = c.id
         # Update Feeds table
-        f = Feed.create(name=name, version='', url=url, category=cid, favicon='', comment='default feed')
+        f = Feed.create(name=name, version='', url=url, category=cid, favicon='', comment='Default feed', description='Default feed')
         # Get Feed insert id
         fid = f.id
         # Get favicon for this Feed
         # returns path to local favicon file, or None
         # write to current feed record
+        logging.info("Getting favicon for %s" % f.url)
         f.favicon = getFavicon(fid)
+        logging.info("Got favicon %s" % f.favicon)
 
         # Save entry to feeds table
         f.save()

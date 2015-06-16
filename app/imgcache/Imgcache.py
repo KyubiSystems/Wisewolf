@@ -5,9 +5,13 @@ Wisewolf RSS Reader
 """
 import os
 import urllib2
+
 from urlparse import urlparse
 from bs4 import BeautifulSoup as BS
 from PIL import Image as Im
+
+from ..config import *
+from ..models import *
 
 import logging
 log = logging.getLogger('wisewolf.log')
