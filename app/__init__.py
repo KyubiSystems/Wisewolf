@@ -30,3 +30,10 @@ def after_request(response):
 
 # Import views
 from views import *
+import server
+
+# Initialise: Startup message, DB creation check, load default feeds
+server.initialise()
+
+# Start main RSS server loop
+server.start()

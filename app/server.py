@@ -180,8 +180,8 @@ def rss_worker(f):
 
 
 # --------------------------------------------------
-# Startup message, DB creation check, load default feeds
-def startup():
+# Initialise: Startup message, DB creation check, load default feeds
+def initialise():
 
     logging.info("Starting Wisewolf server version v0.04...")
 
@@ -195,6 +195,12 @@ def startup():
         load_defaults()
 
     return
+
+# --------------------------------------------------
+# Start main RSS server loop
+def start():
+
+    gevent.joinall([gevent.spawn(rss_server_loop)])
 
 # --------------------------------------------------
 # interval counter class
@@ -221,8 +227,11 @@ if __name__ == '__main__':
     parser.add_argument("--nows", help="No websocket output, just update DB")
     args = parser.parse_args()
 
-    # print startup message, create DB if necessary
-    startup()
+    # TODO: Handle 'headless' commandline options
+    # TODO: Print startup messages
+
+    # Log startup message, create DB if necessary
+    initialise()
 
     # Start main RSS server loop
-    gevent.joinall([gevent.spawn(rss_server_loop)])
+    start()
