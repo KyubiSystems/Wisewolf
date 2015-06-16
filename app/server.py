@@ -8,6 +8,7 @@ from models import *
 from db.DatabaseUtils import *
 import feedparser
 import argparse
+import os
 
 # Set up gevent multithreading
 import gevent
@@ -182,24 +183,16 @@ def rss_worker(f):
 # Startup message, DB creation check, load default feeds
 def startup():
 
-    logging.info("Starting Wisewolf server version v0.03...")
+    logging.info("Starting Wisewolf server version v0.04...")
 
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
-        logging.info("SQLite database not found, creating...")
         create_db()
-        logging.info("done.")
 
-    # Checking number of feeds
-    logging.info("Checking number of feeds: ")
-    number_feeds = Feed.select().count()
-    logging.info("%d found", number_feeds)
-
-    # Load defaults in database if blank
-    if number_feeds == 0:
-        logging.info("Loading default entries...")
+    # If feed table is empty, load the default feed set:
+    
+    if Feed.select().count() == 0:
         load_defaults()
-        logging.info("Loading default entries done")
 
     return
 

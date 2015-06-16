@@ -14,6 +14,8 @@ log = logging.getLogger('wisewolf.log')
 # Create SQLite3 tables
 def create_db():
 
+    logging.info("Creating SQLite database %s..." % DB_FILE)
+
     # Define database
     db = SqliteDatabase(DB_FILE, threadlocals=True)
 
@@ -26,11 +28,17 @@ def create_db():
     Post.create_table()
     Image.create_table()
 
+    # Create default Unsorted category
+    Category.create(name='Unsorted', comment='Uncategorised feeds', order=0)
+
+    logging.info("Database created.")
 
 # load default feeds in DB
 # Start with defaults file in PSV
 # Consider moving to OPML later?
 def load_defaults():
+
+    logging.info("Loading default feed entries into database %s..." % DB_FILE)
 
     # Open defaults file
     with open(DEFAULTS_FILE, 'r') as f:
@@ -63,6 +71,8 @@ def load_defaults():
 
         # Save entry to feeds table
         f.save()
+
+    logging.info("Default feeds loaded.")
 
 
 
