@@ -4,7 +4,8 @@ Wisewolf RSS Reader
 (c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
 import os
-import urllib2
+import requests
+import shutil
 
 from urlparse import urlparse
 from bs4 import BeautifulSoup as BS
@@ -32,32 +33,30 @@ def getFavicon(feed_id):
     favicon_url = 'http://' + u.netloc + '/favicon.ico'
     log.info("getFavicon: Looking for favicon at %s" % favicon_url)
     try:
-        f = urllib2.urlopen(favicon_url)
-        http = f.info()
-        content_type = http.type
-    except urllib2.HTTPError:
+        r = requests.get(favicon_url, stream=True)
+        content_type = r.headers.get('content-type')
+        if r.status_code == requests.codes.ok and content_type in favicon_types:
+            log.info("getFavicon: returned from urllib, content-type %s" % content_type)
+        else:
+            return None
+            
+    except:
         return None
 
-    log.info("getFavicon: returned from urllib, content-type %s" % content_type)
+    log.info("Favicon {0} status: {1}".format(str(feed_id), str(r.status_code))) 
 
-    # Check for valid content type
-    if content_type not in favicon_types:
-        return None
-
-    log.info("Favicon {0} status: {1}".format(str(id), str(f.getcode()))) 
-    favicon_data = f.read()
-    favicon_path = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(id))  # Full file path to favicon
-    favicon_file = 'favicon_{1}.ico'.format(str(id)) # favicon filename
+    favicon_path = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(feed_id))  # Full file path to favicon
+    favicon_file = 'favicon_{0}.ico'.format(str(feed_id)) # favicon filename
 
     with open(favicon_path, 'wb') as fav:
-        fav.write(favicon_data)
-    fav.close()
+        shutil.copyfileobj(r.raw, fav)
+    del r
 
     # Return filename of favicon
     return favicon_file
 
-# Get images from post HTML fragment and write to cache directory
 
+# Get images from post HTML fragment and write to cache directory
 
 def getImages(post_id, makeThumb=True):
 

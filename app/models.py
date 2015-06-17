@@ -46,14 +46,14 @@ class Feed(BaseModel):
     last_updated = DateTimeField(default=datetime.now())
     last_modified = CharField(max_length=64, default='')
     etag = CharField(max_length=64, default='')
-    comment = TextField()
-    description = TextField()
+    comment = TextField(null=True)
+    description = TextField(null=True)
     strip_images = BooleanField(default=False)
     refresh = IntegerField(default=1) # Frequency of feed refresh, in units of INTERVAL
     expire = IntegerField(default=0)  # Time to expire posts, 0 = never
     errors = IntegerField(default=0)  # Number of errors seen in feed loading
     inactive = BooleanField(default=False)
-    favicon = CharField(max_length=256)
+    favicon = CharField(max_length=256, null=True)
 # Peewee timestamps
     created_at = DateTimeField(default=datetime.now())
     updated_at = DateTimeField(null=True)
