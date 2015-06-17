@@ -8,6 +8,7 @@ Wisewolf RSS Reader
 import feedparser
 import argparse
 import os
+import datetime
 
 # import Wisewolf libraries
 from config import *
@@ -155,7 +156,7 @@ def rss_worker(f):
                 p = Post()
                 p.title = post.get('title', 'No title')
                 p.description = post.get('description', 'No description')
-                p.published = post.get('published', datetime.datetime.now()) # should use feed updated date?
+                p.published = post.get('published') or datetime.now() # should use feed updated date?
                 p.content = post.get('content', 'No content')
                 p.link = post.get('link', 'No link')
                 p.feed = id

@@ -5,9 +5,9 @@ Wisewolf RSS Reader
 """
 from urlparse import urlparse
 import urllib2
-from ..config import *
-from ..models import *
-from ..imgcache.Imgcache import getFavicon
+from config import *
+from models import *
+from imgcache.Imgcache import getFavicon
 
 # Set up logging
 import logging
