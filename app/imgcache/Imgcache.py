@@ -23,13 +23,25 @@ log = logging.getLogger('wisewolf.log')
 
 def getFavicon(feed_id):
 
+    # Favicon HTTP content types
+    favicon_types = ["image/vnd.microsoft.icon", "image/x-icon"]
+
     feed = Feed.get(Feed.id == feed_id)
     url = feed.url
     u = urlparse(url)
     favicon_url = 'http://' + u.netloc + '/favicon.ico'
+    log.info("getFavicon: Looking for favicon at %s" % favicon_url)
     try:
         f = urllib2.urlopen(favicon_url)
+        http = f.info()
+        content_type = http.type
     except urllib2.HTTPError:
+        return None
+
+    log.info("getFavicon: returned from urllib, content-type %s" % content_type)
+
+    # Check for valid content type
+    if content_type not in favicon_types:
         return None
 
     log.info("Favicon {0} status: {1}".format(str(id), str(f.getcode()))) 
