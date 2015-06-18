@@ -237,7 +237,9 @@ if __name__ == '__main__':
     # TODO: Print startup messages
 
     # Log startup message, create DB if necessary
+    print "Wisewolf RSS server v0.04 initialising... ",
     initialise()
+    print 'OK'
 
     # Start main RSS server loop
     start()
