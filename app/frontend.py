@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2015 Kyubi Systems: www.kyubi.co.uk
 """
 
 import os
@@ -15,6 +16,8 @@ from db.DatabaseUtils import *
 
 # Import configuration
 
-app = Flask(__name__)
+if __name__ == '__main__':
 
-app.run(debug=True)
+    app = Flask(__name__)
+    
+    app.run(debug=True)
