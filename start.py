@@ -17,5 +17,5 @@ print 'OK'
 # Start Wisewolf web frontend
 
 print "Wisewolf frontend v0.04 starting... ",
-subprocess.Popen(["./frontend.py"], cwd=topdir)
+subprocess.Popen(["./frontend.py"], cwd=appdir)
 print 'OK'
