@@ -105,13 +105,11 @@ def rss_worker(f):
     # Check returned HTTP status code
     if d.status < 400:
         # Site appears to be UP
-        logging.info("Site %s is UP, status %s", f.url, str(d.status))
+        logging.info("Feed %s is UP, status %s", f.url, str(d.status))
 
         # Reset error counter
         if f.errors > 0:
             Feed.update(errors=0).where(Feed.id == id)
-
-        prefiltered=False
 
         # Get RSS/ATOM version number
         logging.info("Feed version: %s", d.version)
@@ -125,14 +123,12 @@ def rss_worker(f):
         if hasattr(d, 'etag'):
             logging.info("Etag: %s", d.etag)
             Feed.update(etag=d.etag).where(Feed.id == id)
-            prefiltered=True
 
         # Conditional HTTP
         # Check for Last-Modified in result and write to DB
         if hasattr(d, 'modified'):
             logging.info("Modified %s", d.modified)
             Feed.update(last_modified=d.modified).where(Feed.id == id)
-            prefiltered=True
 
         # Check for feed modification date, write to DB
         if hasattr(d, 'published'):
@@ -141,47 +137,53 @@ def rss_worker(f):
         if hasattr(d, 'updated'):
             logging.info("Updated: %s", d.updated)
 
+        # Check for 'not-modified' status code, skip updates if found
+        if d.status == 304:
+            logging.info("Feed %s -- no updates found, skipping", f.url)
+            return
+
         # If post entries exist, process them
         if d.entries:
-
-            # If we haven't already date filtered, do it now
-            # filter for new items since last check (timedelta)
-            if not prefiltered:
-                pass
 
             # Iterate over posts found
             # Build and add Post object to DB
             # DB write lock needed?
             for post in d.entries:
                 p = Post()
-                p.title = post.get('title', 'No title')
-                p.description = post.get('description', 'No description')
-                p.published = post.get('published') or datetime.now() # should use feed updated date?
-                p.content = post.get('content', 'No content')
-                p.link = post.get('link', 'No link')
+                p.title = post.get('title') or "No title"
+                p.description = post.get('description') or ""
+                p.published = post.get('published') or d.modified # try last-modified date if no publised date
+                p.content = post.get('content') or "No content"
+                p.link = post.get('link') or ""
                 p.feed = id
-                p.save() # Save Post data to DB
+
+                # If published date newer than last feed check date, save new Post data to DB
+                if p.published > f.last_checked:
+                    p.save()
 
             # Filter text for dangerous content (e.g. XSRF?)
             # Feedparser already does this to some extent
-
-            # update Feed last checked date
 
             # Spawn websocket message with new posts for web client
 
     else: 
         # Site appears to be down
-        logging.warning("Site %s is DOWN, status: %d", f.url, d.status)
+        logging.warning("Feed %s is DOWN, status: %d", f.url, d.status)
 
         # Increment error counter
+        # Mark feed inactive if MAX_ERRORS reached
         Feed.update(errors = Feed.errors + 1).where(Feed.id == id)
+        if Feed.errors == MAX_ERRORS:
+            Feed.update(inactive = True).where(Feed.id == id)
         
         # Status 410 Gone Permanently, mark feed inactive
         if d.status == 410:
-            Feed.update(inactive==True).where(Feed.id == id)
+            Feed.update(inactive = True).where(Feed.id == id)
 
         # Spawn websocket message reporting error to web client
 
+    # update Feed last checked date before returning
+    Feed.update(last_checked = datetime.now()).where(Feed.id==id)
     return
 
 

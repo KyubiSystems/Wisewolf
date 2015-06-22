@@ -45,6 +45,7 @@ class Feed(BaseModel):
     version = CharField(max_length=10)
     last_updated = DateTimeField(default=datetime.now())
     last_modified = CharField(max_length=64, default='')
+    last_checked = DateTimeField(default='1999-12-31') # Date in past to ensure all old posts picked up on startup
     etag = CharField(max_length=64, default='')
     comment = TextField(null=True)
     description = TextField(null=True)

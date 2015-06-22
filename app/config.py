@@ -35,5 +35,8 @@ THUMB_SIZE = (150, 150)
 # Set path for downloaded favicons
 ICONS_PATH = CACHE_PATH + 'icons/'
 
+# Maximum consecutive errors before feed marked inactive
+MAX_ERRORS = 32
+
 # Set User-Agent string for Wisewolf reader
 USER_AGENT = 'WisewolfRSS/0.0.4 +http://www.wisewolf.co.uk/'
