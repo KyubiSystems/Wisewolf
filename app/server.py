@@ -8,7 +8,8 @@ Wisewolf RSS Reader
 import feedparser
 import argparse
 import os
-import datetime
+from dateutil.parser import *
+from datetime import *
 
 # import Wisewolf libraries
 from config import *
@@ -92,6 +93,7 @@ def rss_worker(f):
     logging.info("Starting reader process for feed %s", f.id)
 
     id = f.id
+    error_count = f.errors
 
     # Check ETag, Modified: Attempt Conditional HTTP retrieval
     # to reduce excessive polling
@@ -107,28 +109,32 @@ def rss_worker(f):
         # Site appears to be UP
         logging.info("Feed %s is UP, status %s", f.url, str(d.status))
 
-        # Reset error counter
-        if f.errors > 0:
-            Feed.update(errors=0).where(Feed.id == id)
+        # Reset error counter on successful connect
+        if error_count > 0:
+            q = Feed.update(errors=0).where(Feed.id == id)
+            q.execute()
 
         # Get RSS/ATOM version number
         logging.info("Feed version: %s", d.version)
 
         # Catch status 301 Moved Permanently, update feed address
         if d.status == 301:
-            Feed.update(url=d.href).where(Feed.id == id)
+            q = Feed.update(url=d.href).where(Feed.id == id)
+            q.execute()
 
         # Conditional HTTP:
         # Check for Etag in result and write to DB
         if hasattr(d, 'etag'):
             logging.info("Etag: %s", d.etag)
-            Feed.update(etag=d.etag).where(Feed.id == id)
+            q = Feed.update(etag=d.etag).where(Feed.id == id)
+            q.execute()
 
         # Conditional HTTP
         # Check for Last-Modified in result and write to DB
         if hasattr(d, 'modified'):
             logging.info("Modified %s", d.modified)
-            Feed.update(last_modified=d.modified).where(Feed.id == id)
+            q = Feed.update(last_modified=d.modified).where(Feed.id == id)
+            q.execute()
 
         # Check for feed modification date, write to DB
         if hasattr(d, 'published'):
@@ -152,13 +158,15 @@ def rss_worker(f):
                 p = Post()
                 p.title = post.get('title') or "No title"
                 p.description = post.get('description') or ""
-                p.published = post.get('published') or d.modified # try last-modified date if no publised date
+                p.published = post.get('published') or d.modified # try last-modified date if no published date
                 p.content = post.get('content') or "No content"
                 p.link = post.get('link') or ""
                 p.feed = id
 
                 # If published date newer than last feed check date, save new Post data to DB
-                if p.published > f.last_checked:
+                print p.published, type(p.published)
+                print f.last_checked, type(f.last_checked)
+                if parse(p.published) > f.last_checked:
                     p.save()
 
             # Filter text for dangerous content (e.g. XSRF?)
@@ -169,21 +177,25 @@ def rss_worker(f):
     else: 
         # Site appears to be down
         logging.warning("Feed %s is DOWN, status: %d", f.url, d.status)
+        error_count += 1
 
         # Increment error counter
         # Mark feed inactive if MAX_ERRORS reached
-        Feed.update(errors = Feed.errors + 1).where(Feed.id == id)
-        if Feed.errors == MAX_ERRORS:
-            Feed.update(inactive = True).where(Feed.id == id)
+        Feed.update(errors = error_count).where(Feed.id == id)
+        if error_count == MAX_ERRORS:
+            q = Feed.update(inactive = True).where(Feed.id == id)
+            q.execute()
         
         # Status 410 Gone Permanently, mark feed inactive
         if d.status == 410:
-            Feed.update(inactive = True).where(Feed.id == id)
+            q = Feed.update(inactive = True).where(Feed.id == id)
+            q.execute()
 
         # Spawn websocket message reporting error to web client
 
     # update Feed last checked date before returning
-    Feed.update(last_checked = datetime.now()).where(Feed.id==id)
+    q = Feed.update(last_checked = datetime.now()).where(Feed.id==id)
+    q.execute()
     return
 
 
