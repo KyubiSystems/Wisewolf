@@ -32,9 +32,6 @@ logging.basicConfig(level=logging.INFO,
 # Set Feedparser User-Agent string defined in config
 feedparser.USER_AGENT = USER_AGENT
 
-# Set default reload interval to 15 minutes
-INTERVAL = 900
-
 # Define database
 db = SqliteDatabase(DB_FILE, threadlocals=True)
 
@@ -46,8 +43,8 @@ def rss_spawn(tick=1):
     # Connect to database
     db.connect()
     
-    # Set limit of 10 simultaneous RSS requests
-    pool = Pool(10)
+    # Set limit of MAX_REQUESTS simultaneous RSS requests
+    pool = Pool(MAX_REQUESTS)
 
     # Get list of active Feed ids from database
     feed_query = Feed.select().where(Feed.inactive == 0)
@@ -155,24 +152,28 @@ def rss_worker(f):
             # Build and add Post object to DB
             # DB write lock needed?
             for post in d.entries:
-                p = Post()
-                p.title = post.get('title') or "No title"
-                p.description = post.get('description') or ""
-                p.published = post.get('published') or d.modified # try last-modified date if no published date
-                p.content = post.get('content') or "No content"
-                p.link = post.get('link') or ""
-                p.feed = id
+                
+                # Get post date. Try last-modified date if no published date
+                # TODO: Timezone handling
+                published_date = post.get('published') or d.modified 
+                print published_date, type(published_date)
+                print f.last_checked, type(f.last_checked)
 
                 # If published date newer than last feed check date, save new Post data to DB
-                print p.published, type(p.published)
-                print f.last_checked, type(f.last_checked)
-                if parse(p.published) > f.last_checked:
+                if parse(published_date) > f.last_checked:
+                    p = Post()
+                    p.title = post.get('title') or "No title"
+                    p.description = post.get('description') or ""
+                    p.published = published_date
+                    p.content = post.get('content') or "No content"
+                    p.link = post.get('link') or ""
+                    p.feed = id
                     p.save()
 
-            # Filter text for dangerous content (e.g. XSRF?)
+            # TODO: Filter text for dangerous content (e.g. XSRF?)
             # Feedparser already does this to some extent
 
-            # Spawn websocket message with new posts for web client
+            # TODO: Spawn websocket message with new posts for web client
 
     else: 
         # Site appears to be down
@@ -192,10 +193,10 @@ def rss_worker(f):
             q = Feed.update(inactive = True).where(Feed.id == id)
             q.execute()
 
-        # Spawn websocket message reporting error to web client
+        # TODO: Spawn websocket message reporting error to web client
 
     # update Feed last checked date before returning
-    q = Feed.update(last_checked = datetime.now()).where(Feed.id==id)
+    q = Feed.update(last_checked = datetime.now()).where(Feed.id == id)
     q.execute()
     return
 

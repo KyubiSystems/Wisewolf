@@ -38,5 +38,11 @@ ICONS_PATH = CACHE_PATH + 'icons/'
 # Maximum consecutive errors before feed marked inactive
 MAX_ERRORS = 32
 
+# Maximum simultaneous feed requests
+MAX_REQUESTS = 10
+
+# Set default reload interval to 15 minutes
+INTERVAL = 900
+
 # Set User-Agent string for Wisewolf reader
 USER_AGENT = 'WisewolfRSS/0.0.4 +http://www.wisewolf.co.uk/'
