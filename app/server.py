@@ -10,6 +10,7 @@ import argparse
 import os
 from dateutil.parser import *
 from datetime import *
+import pytz
 
 # import Wisewolf libraries
 from config import *
@@ -154,13 +155,19 @@ def rss_worker(f):
             for post in d.entries:
                 
                 # Get post date. Try last-modified date if no published date
-                # TODO: Timezone handling
-                published_date = post.get('published') or d.modified 
+                dt = post.get('published') or d.modified 
+
+                # Correct post published datetime to UTC using pytz
+                try:
+                    published_date = dt.astimezone(pytz.utc) # TZ specified
+                except ValueError: 
+                    published_date = dt.replace(tzinfo=pytz.utc) # Naive, no TZ specified
+
                 print published_date, type(published_date)
                 print f.last_checked, type(f.last_checked)
 
                 # If published date newer than last feed check date, save new Post data to DB
-                if parse(published_date) > f.last_checked:
+                if utc.localize(parse(published_date)) > f.last_checked:
                     p = Post()
                     p.title = post.get('title') or "No title"
                     p.description = post.get('description') or ""
