@@ -154,8 +154,9 @@ def rss_worker(f):
             # DB write lock needed?
             for post in d.entries:
                 
-                # Get post date. Try last-modified date if no published date
-                dt = post.get('published') or d.modified 
+                # Get post date. Fall back to feed publication date :-(
+                dt = post.get('published') or d.feed.published 
+                dt = parse(dt) # convert to datetime
 
                 # Correct post published datetime to UTC using pytz
                 try:
@@ -163,11 +164,20 @@ def rss_worker(f):
                 except ValueError: 
                     published_date = dt.replace(tzinfo=pytz.utc) # Naive, no TZ specified
 
-                print published_date, type(published_date)
-                print f.last_checked, type(f.last_checked)
+                # Correct last-checked date to UTC using pytz
+                lc = f.last_checked
+                try:
+                    last_checked = lc.astimezone(pytz.utc)
+                except ValueError:
+                    last_checked = lc.replace(tzinfo=pytz.utc)
+                    
+                if hasattr(d, 'modified'):
+                    print 'modified', d.modified, type(d.modified)
+                print 'published_date',published_date, type(published_date)
+                print 'last_checked',f.last_checked, type(f.last_checked)
 
                 # If published date newer than last feed check date, save new Post data to DB
-                if utc.localize(parse(published_date)) > f.last_checked:
+                if published_date > last_checked:
                     p = Post()
                     p.title = post.get('title') or "No title"
                     p.description = post.get('description') or ""
@@ -211,8 +221,6 @@ def rss_worker(f):
 # --------------------------------------------------
 # Initialise: Startup message, DB creation check, load default feeds
 def initialise():
-
-    logging.info("Starting Wisewolf server version v0.04...")
 
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
@@ -260,9 +268,10 @@ if __name__ == '__main__':
     # TODO: Print startup messages
 
     # Log startup message, create DB if necessary
-    print "Wisewolf RSS server v0.04 initialising... ",
+    print "Wisewolf RSS server %s (c) Kyubi Systems 2015: initialising..." % SERVER_VERSION,
     initialise()
     print 'OK'
 
     # Start main RSS server loop
+    logging.info("Wisewolf RSS server version %s starting" % SERVER_VERSION)
     start()

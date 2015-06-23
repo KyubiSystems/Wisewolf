@@ -10,12 +10,12 @@ appdir = topdir + '/app'
 
 # Start Wisewolf RSS server backend
 
-print "Wisewolf RSS server v0.04 starting... ",
+print "Wisewolf RSS server starting... ",
 subprocess.Popen(["./server.py"], cwd=appdir)
 print 'OK'
 
 # Start Wisewolf web frontend
 
-print "Wisewolf frontend v0.04 starting... ",
+print "Wisewolf frontend starting... ",
 subprocess.Popen(["./frontend.py"], cwd=appdir)
 print 'OK'
