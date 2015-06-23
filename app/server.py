@@ -181,7 +181,8 @@ def rss_worker(f):
 
         # Increment error counter
         # Mark feed inactive if MAX_ERRORS reached
-        Feed.update(errors = error_count).where(Feed.id == id)
+        q = Feed.update(errors = error_count).where(Feed.id == id)
+        q.execute()
         if error_count == MAX_ERRORS:
             q = Feed.update(inactive = True).where(Feed.id == id)
             q.execute()
