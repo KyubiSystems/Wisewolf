@@ -171,11 +171,6 @@ def rss_worker(f):
                 except ValueError:
                     last_checked = lc.replace(tzinfo=pytz.utc)
                     
-                if hasattr(d, 'modified'):
-                    print 'modified', d.modified, type(d.modified)
-                print 'published_date',published_date, type(published_date)
-                print 'last_checked',f.last_checked, type(f.last_checked)
-
                 # If published date newer than last feed check date, save new Post data to DB
                 if published_date > last_checked:
                     p = Post()
