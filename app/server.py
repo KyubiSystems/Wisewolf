@@ -103,7 +103,7 @@ def rss_worker(f):
         d = feedparser.parse(f.url)
 
     # Check returned HTTP status code
-    if d.status < 400:
+    if hasattr(d, 'status') and d.status < 400:
         # Site appears to be UP
         logging.info("Feed %s is UP, status %s", f.url, str(d.status))
 
@@ -194,21 +194,29 @@ def rss_worker(f):
 
     else: 
         # Site appears to be down
-        logging.warning("Feed %s is DOWN, status: %d", f.url, d.status)
-        error_count += 1
 
         # Increment error counter
         # Mark feed inactive if MAX_ERRORS reached
+        error_count += 1
         q = Feed.update(errors = error_count).where(Feed.id == id)
         q.execute()
         if error_count == MAX_ERRORS:
             q = Feed.update(inactive = True).where(Feed.id == id)
             q.execute()
+            logging.warning("Feed %s is marked INACTIVE, MAX_ERRORS reached", f.url)
         
+        # No valid status, skip feed now
+        if not hasattr(d, 'status'):
+            logging.warning("Feed %s is DOWN, no valid status", f.url)
+            return
+
         # Status 410 Gone Permanently, mark feed inactive
         if d.status == 410:
             q = Feed.update(inactive = True).where(Feed.id == id)
             q.execute()
+            logging.warning("Feed %s is marked INACTIVE, 410 Gone Permanently", f.url)
+
+        logging.warning("Feed %s is DOWN, status: %d", f.url, d.status)
 
         # TODO: Spawn websocket message reporting error to web client
 
