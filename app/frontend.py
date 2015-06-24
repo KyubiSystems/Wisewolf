@@ -10,6 +10,8 @@ import subprocess
 from flask import Flask
 from flask import g
 
+app = Flask(__name__)
+
 from config import *
 from views import *
 from db.DatabaseUtils import *
@@ -17,7 +19,5 @@ from db.DatabaseUtils import *
 # Import configuration
 
 if __name__ == '__main__':
-
-    app = Flask(__name__)
     
     app.run(debug=True)

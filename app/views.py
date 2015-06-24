@@ -7,7 +7,7 @@ from flask import Flask, jsonify, render_template, request
 from models import *
 from messages import *
 
-app = Flask(__name__)
+from frontend import app
 
 # Index route -----------------
 
