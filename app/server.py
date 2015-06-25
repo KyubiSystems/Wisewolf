@@ -177,7 +177,8 @@ def rss_worker(f):
                     p.title = post.get('title') or "No title"
                     p.description = post.get('description') or ""
                     p.published = published_date
-                    p.content = post.get('content') or "No content"
+                    if hasattr(post, 'content'):
+                        p.content = post.content[0].value or ""
                     p.link = post.get('link') or ""
                     p.feed = id
                     p.save()

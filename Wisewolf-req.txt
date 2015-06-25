@@ -6,6 +6,8 @@ Pillow==2.8.1
 Werkzeug==0.9.6
 arrow==0.5.4
 beautifulsoup4==4.3.2
+chardet==2.3.0
+cssselect==0.9.1
 docutils==0.12
 feedparser==5.2.0
 gevent==1.0
@@ -19,6 +21,7 @@ python-daemon==2.0.5
 python-dateutil==2.2
 python-magic==0.4.6
 pytz==2015.4
+readability-lxml==0.5.1
 requests==2.7.0
 six==1.5.2
 tornado==3.1.1

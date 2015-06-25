@@ -73,7 +73,7 @@ class Post(BaseModel):
     title = CharField()
     link = CharField(max_length=512)
     description = TextField()
-    content = TextField()
+    content = TextField(null=True)
     feed = ForeignKeyField(Feed, on_delete='cascade', related_name='posts')
     published = DateTimeField(default=datetime.now())
     is_read = BooleanField(default=False)
