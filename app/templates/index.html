@@ -2,23 +2,23 @@
 {% block content %}
 <div class="row">
     <div class="span3">
-        <table>
+        <div class="categories">
         {% for c in categories %}
-        <tr class="cathead"><td>
+        <div class="category cat-{{c.id}}">
+	  <div class="cathead cath-{{c.id}}">
             <a href="category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
-        </td>
-        <td>
             <a href="category/{{c.id}}/settings"><i class="fa fa-cog"></i></a>
-        </td></tr>
+	  </div>
+	  <div class="catbody catb-{{c.id}}">
             {% for f in feeds[c.id] %}
-            <tr><td>
+	    <div class="catentry cate-{{c.id}} feed-{{f.id}}">
                 -&nbsp;<a href="feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
-            </td>
-            <td></td>
-            </tr>
+	    </div>
             {% endfor %}
+	  </div>
+	</div>
         {% endfor %}
-        </table>
+        </div>
     </div>
     <div class="span9">
         {% for p in posts %}

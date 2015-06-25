@@ -1,8 +1,18 @@
 .cathead { 
 	 background: #33c;
 	 color: white;
+	 font-weight: bold;
 	 padding: 5px;
+	 padding-left: 10px;
 	 border-radius: 8px;
+}
+
+.cathead a {
+  color:white;
+}
+
+.cathead i {
+	 float: right;
 }
 
 .post {
@@ -11,4 +21,6 @@
 
 .postheader {
 	    border: 1px solid black;
+	    padding: 5px;
+	    padding-left: 10px;
 	    }
