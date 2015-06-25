@@ -1,0 +1,14 @@
+.cathead { 
+	 background: #33c;
+	 color: white;
+	 padding: 5px;
+	 border-radius: 8px;
+}
+
+.post {
+      overflow: hidden;
+}
+
+.postheader {
+	    border: 1px solid black;
+	    }

@@ -21,18 +21,17 @@
         </table>
     </div>
     <div class="span9">
-        <table>
         {% for p in posts %}
-        <tr><td>
-            <b><a href="post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ p.published }}
-        </td></tr>
-        <tr><td>
+	    <div class="post">
+            <div class="postheader"><b><a href="post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ p.published }}</div>
+	    <div class="postbody">
             <i>{{p.description}}</i>
             {% if p.content %}
             <br/>{{p.content}}
             {% endif %}
-	<br/><br/>
-        </td></tr>
+	    </div>
+	    </div>
+	    <br/>
         {% endfor %}
         </table>
     </div>
