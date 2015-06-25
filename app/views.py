@@ -98,13 +98,23 @@ def feed(id=None):
     except FeedDoesNotExist:
         return jsonify(**FEED_NOT_FOUND)
 
+    # Get categories, number of posts by category
+    # TODO: Move this to function?
+    categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
+
+    # Loop over categories
+    for c in categories:
+        # Get feeds by category
+        f = Feed.select().where(Feed.category == c.id).annotate(Post)
+        feeds[c.id] = f
+
     # Get posts in decreasing date order
     posts = Post.select().where(Feed.id == id).order_by(Post.published.desc())
 
     # Select return format on requested content-type?
     if request.json == None:
         # Render feed page template
-        return render_template("feed.html", feed=feed, posts=posts)
+        return render_template("feed.html", feeds=feeds, feed=feed, posts=posts)
 
     else:
 
