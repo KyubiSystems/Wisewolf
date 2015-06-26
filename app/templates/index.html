@@ -27,7 +27,7 @@
 	    <div class="postbody">
             <i>{{p.description}}</i>
             {% if p.content %}
-            <br/>{{p.content}}
+            <br/>{{p.content|safe}}
             {% endif %}
 	    </div>
 	    </div>

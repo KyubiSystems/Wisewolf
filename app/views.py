@@ -98,6 +98,9 @@ def feed(id=None):
     except FeedDoesNotExist:
         return jsonify(**FEED_NOT_FOUND)
 
+    # Declare empty dict of feeds (emulate sparse list)
+    feeds = {}
+
     # Get categories, number of posts by category
     # TODO: Move this to function?
     categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
@@ -117,7 +120,6 @@ def feed(id=None):
         return render_template("feed.html", feeds=feeds, feed=feed, posts=posts)
 
     else:
-
         # Return JSON here for client-side formatting?
         return jsonify(response=[dict(feed=feed, posts=posts)])
 
