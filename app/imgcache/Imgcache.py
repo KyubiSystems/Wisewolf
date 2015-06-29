@@ -33,7 +33,7 @@ def getFavicon(feed_id):
     favicon_url = 'http://' + u.netloc + '/favicon.ico'
     log.info("getFavicon: Looking for favicon at %s" % favicon_url)
     try:
-        r = requests.get(favicon_url, stream=True)
+        r = requests.get(favicon_url, stream=True, timeout=5)
         content_type = r.headers.get('content-type')
         if r.status_code == requests.codes.ok and content_type in favicon_types:
             log.info("getFavicon: returned from urllib, content-type %s" % content_type)

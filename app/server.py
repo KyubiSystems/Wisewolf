@@ -8,9 +8,7 @@ Wisewolf RSS Reader
 import feedparser
 import argparse
 import os
-from dateutil.parser import *
-from datetime import *
-import pytz
+import arrow
 
 # import Wisewolf libraries
 from config import *
@@ -154,29 +152,20 @@ def rss_worker(f):
             # DB write lock needed?
             for post in d.entries:
                 
-                # Get post date. Fall back to feed publication date :-(
-                dt = post.get('published') or d.feed.published 
-                dt = parse(dt) # convert to datetime
+                # Get post date tuple for Arrow. Fall back to feed publication date :-(
+                dt = post.get('published_parsed') or d.feed.published_parsed
+                published_date = arrow.get(dt)
 
-                # Correct post published datetime to UTC using pytz
-                try:
-                    published_date = dt.astimezone(pytz.utc) # TZ specified
-                except ValueError: 
-                    published_date = dt.replace(tzinfo=pytz.utc) # Naive, no TZ specified
-
-                # Correct last-checked date to UTC using pytz
+                # Get last_checked datetime
                 lc = f.last_checked
-                try:
-                    last_checked = lc.astimezone(pytz.utc)
-                except ValueError:
-                    last_checked = lc.replace(tzinfo=pytz.utc)
+                last_checked = arrow.get(lc)
                     
                 # If published date newer than last feed check date, save new Post data to DB
                 if published_date > last_checked:
                     p = Post()
                     p.title = post.get('title') or "No title"
                     p.description = post.get('description') or ""
-                    p.published = published_date
+                    p.published = published_date.datetime
                     if hasattr(post, 'content'):
                         p.content = post.content[0].value or ""
                     p.link = post.get('link') or ""
@@ -217,7 +206,8 @@ def rss_worker(f):
         # TODO: Spawn websocket message reporting error to web client
 
     # update Feed last checked date before returning
-    q = Feed.update(last_checked = datetime.now()).where(Feed.id == id)
+    a = arrow.utcnow()
+    q = Feed.update(last_checked = a.datetime).where(Feed.id == id)
     q.execute()
     return
 
