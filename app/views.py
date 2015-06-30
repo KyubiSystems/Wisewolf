@@ -6,6 +6,7 @@ Wisewolf RSS Reader
 from flask import Flask, jsonify, render_template, request
 from models import *
 from messages import *
+import arrow
 
 from frontend import app
 
@@ -25,8 +26,15 @@ def index():
     # Get posts in decreasing date order
     posts = Post.select().order_by(Post.published.desc())
 
+    # Create human-readable datestamps for posts
+    datestamps = loadDates(posts)
+
     # Render main page template
-    return render_template("index.html", categories=categories, feeds=feeds, posts=posts)
+    return render_template("index.html", 
+                           categories=categories, 
+                           feeds=feeds, 
+                           posts=posts,
+                           datestamps=datestamps)
 
 # Post routes ----------------
 
@@ -98,7 +106,11 @@ def feed(id=None):
     # Select return format on requested content-type?
     if request.json == None:
         # Render feed page template
-        return render_template("feed.html", categories=categories, feeds=feeds, feed=feed, posts=posts)
+        return render_template("feed.html", 
+                               categories=categories, 
+                               feeds=feeds, 
+                               feed=feed, 
+                               posts=posts)
 
     else:
         # Return JSON here for client-side formatting?
@@ -201,7 +213,10 @@ def category(id=None):
     if request.json == None:
 
         # Render category page template
-        return render_template("category.html", category=category, feeds=feeds, posts=posts)
+        return render_template("category.html", 
+                               category=category, 
+                               feeds=feeds, 
+                               posts=posts)
 
     else:
 
@@ -233,7 +248,8 @@ def gallery(id=None):
     else:
         images = Image.select().where(Feed.id == id)
 
-    return render_template("gallery.html", images=images)
+    return render_template("gallery.html", 
+                           images=images)
 
 # Image routes ---------------
 
@@ -320,3 +336,24 @@ def loadTree():
         feeds[c.id] = f
 
     return (categories, feeds)
+
+# Create human-readable datestamps for posts ------------
+
+def loadDates(posts):
+
+    datestamps = {}
+
+    # Set reference timestamp to one week ago
+    weekago = arrow.utcnow().replace(days=-7)
+
+    # Loop over posts
+    for p in posts:
+        published_date = arrow.get(p.published)
+
+        # if post newer than one week, print date in human format
+        if published_date > weekago:
+            datestamps[p.id] = published_date.humanize()
+        else:
+            datestamps[p.id] = published_date.format('YYYY-MM-DD HH:mm')
+
+    return datestamps

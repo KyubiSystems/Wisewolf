@@ -26,7 +26,7 @@
     <div class="span9 content">
         {% for p in posts %}
 	    <div class="post">
-            <div class="postheader">{{ favicon( p.feed.id ) }}&nbsp;<b><a href="post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ p.published }}</div>
+            <div class="postheader">{{ favicon( p.feed.id ) }}&nbsp;<b><a href="post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}</div>
 	    <div class="postbody">
             <i>{{p.description}}</i>
             {% if p.content %}
