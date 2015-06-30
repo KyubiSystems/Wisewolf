@@ -15,21 +15,12 @@ from frontend import app
 @app.route('/index', methods=['GET'])
 def index():
     # Load feeds from DB to display
-    # List of categories
-    # List of feeds by category
-    # List of posts in order of publication date
+    # - List of categories
+    # - List of feeds by category
+    # - List of posts in order of publication date
 
-    # Declare empty dict of feeds (emulate sparse list)
-    feeds = {}
-
-    # Get categories, number of posts by category
-    categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
-
-    # Loop over categories
-    for c in categories:
-        # Get feeds by category
-        f = Feed.select().where(Feed.category == c.id).annotate(Post)
-        feeds[c.id] = f
+    # Populate Category tree
+    (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
     posts = Post.select().order_by(Post.published.desc())
@@ -98,18 +89,8 @@ def feed(id=None):
     except FeedDoesNotExist:
         return jsonify(**FEED_NOT_FOUND)
 
-    # Declare empty dict of feeds (emulate sparse list)
-    feeds = {}
-
-    # Get categories, number of posts by category
-    # TODO: Move this to function?
-    categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
-
-    # Loop over categories
-    for c in categories:
-        # Get feeds by category
-        f = Feed.select().where(Feed.category == c.id).annotate(Post)
-        feeds[c.id] = f
+    # populate Category tree
+    (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
     posts = Post.select().where(Feed.id == id).order_by(Post.published.desc())
@@ -117,7 +98,7 @@ def feed(id=None):
     # Select return format on requested content-type?
     if request.json == None:
         # Render feed page template
-        return render_template("feed.html", feeds=feeds, feed=feed, posts=posts)
+        return render_template("feed.html", categories=categories, feeds=feeds, feed=feed, posts=posts)
 
     else:
         # Return JSON here for client-side formatting?
@@ -206,7 +187,7 @@ def delete_feed(id=None):
 def category(id=None):
     # Get category #id
     try:
-        categories = Category.get(Category.id == id)
+        category = Category.get(Category.id == id)
     except CategoryDoesNotExist:
         return jsonify(**CATEGORY_NOT_FOUND)
 
@@ -220,7 +201,7 @@ def category(id=None):
     if request.json == None:
 
         # Render category page template
-        return render_template("category.html", categories=categories, feeds=feeds, posts=posts)
+        return render_template("category.html", category=category, feeds=feeds, posts=posts)
 
     else:
 
@@ -321,3 +302,21 @@ def internal_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template("500.html", error=error), 500
+
+# Populate Category tree -------------------------------
+
+def loadTree():
+
+    # Declare empty dict of feeds (emulate sparse list)
+    feeds = {}
+
+    # Get categories, number of posts by category
+    categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
+
+    # Loop over categories
+    for c in categories:
+        # Get feeds by category
+        f = Feed.select().where(Feed.category == c.id).annotate(Post)
+        feeds[c.id] = f
+
+    return (categories, feeds)

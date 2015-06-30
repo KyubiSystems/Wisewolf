@@ -2,35 +2,38 @@
 {% block content %}
 <h1><i>Wisewolf</i> RSS Aggregator</h1>
 <div class="row">
-    <div class="span4">
-        <table>
-            <tr><th>{{categories.name}}</th>
-            <th>
-                <a href="category/{{categories.id}}/settings"><i class="fa fa-cog"></i></a>
-            </th>
-            </tr>
-            {% for f in feeds %}
-            <tr><td>
+    <div class="span3 sidebar">
+        <div class="categories">
+        {% for c in categories %}
+        <div class="category cat-{{c.id}}">
+	  <div class="cathead cath-{{c.id}}">
+            <a href="category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
+            <a href="category/{{c.id}}/settings"><i class="fa fa-cog"></i></a>
+	  </div>
+	  <div class="catbody catb-{{c.id}}">
+            {% for f in feeds[c.id] %}
+	    <div class="catentry cate-{{c.id}} feed-{{f.id}}">
                 -&nbsp;<a href="feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
-            </td></tr>
+	    </div>
             {% endfor %}
-        </table>
-    </div>
-    <div class="span8">
-        <table>
-        <tr><th>Posts:</th></tr>
-        {% for p in posts %}
-        <tr><td>
-            <a href="post/{{p.id}}">{{p.title}}</a>
-        </td></tr>
-        <tr><td>
-            {{p.description}}
-            {% if p.content != "No content" %}
-            <br/>{{p.content}}
-            {% endif %}
-        </td></tr>
+	  </div>
+	</div>
         {% endfor %}
-        </table>
+        </div>
+    </div>
+    <div class="span9 content">
+        {% for p in posts %}
+	    <div class="post">
+            <div class="postheader"><b><a href="post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ p.published }}</div>
+	    <div class="postbody">
+            <i>{{p.description}}</i>
+            {% if p.content %}
+            <br/>{{p.content|safe}}
+            {% endif %}
+	    </div>
+	    </div>
+	    <br/>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
