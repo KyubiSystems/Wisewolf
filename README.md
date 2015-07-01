@@ -61,4 +61,4 @@ Screenshot
 
 A screenshot, because you asked. The front-end will change a great deal over coming versions.
 
-(https://github.com/KyubiSystems/Wisewolf/blob/master/screenshots/wisewolf-alpha0.04.2.jpg)
+!(https://github.com/KyubiSystems/Wisewolf/raw/master/screenshots/wisewolf-alpha0.04.2.jpg)
