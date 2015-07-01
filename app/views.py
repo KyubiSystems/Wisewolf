@@ -101,7 +101,10 @@ def feed(id=None):
     (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
-    posts = Post.select().where(Feed.id == id).order_by(Post.published.desc())
+    posts = Post.select().join(Feed).where(Feed.id == id).order_by(Post.published.desc())
+
+    # Create human-readable datestamps for posts
+    datestamps = loadDates(posts)
 
     # Select return format on requested content-type?
     if request.json == None:
@@ -110,7 +113,8 @@ def feed(id=None):
                                categories=categories, 
                                feeds=feeds, 
                                feed=feed, 
-                               posts=posts)
+                               posts=posts,
+                               datestamps=datestamps)
 
     else:
         # Return JSON here for client-side formatting?

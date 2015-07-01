@@ -16,7 +16,7 @@ greenlet==0.4.2
 itsdangerous==0.24
 lockfile==0.10.2
 lxml==3.3.5
-peewee==2.6.0
+peewee==2.6.1
 python-daemon==2.0.5
 python-dateutil==2.2
 python-magic==0.4.6
