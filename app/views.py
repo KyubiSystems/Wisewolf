@@ -211,7 +211,7 @@ def category(id=None):
     feeds = Feed.select().where(Category.id == id).annotate(Post)
 
     # Get posts in category in decreasing date order
-    posts = Post.select().join(Feed).where(Category.id == id).order_by(Post.published.desc())
+    posts = Post.select().join(Feed).join(Category).where(Category.id == id).order_by(Post.published.desc())
 
     # Return mode dependent on Content-Type?
     if request.json == None:
