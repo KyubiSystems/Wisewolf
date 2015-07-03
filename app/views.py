@@ -207,11 +207,14 @@ def category(id=None):
     except CategoryDoesNotExist:
         return jsonify(**CATEGORY_NOT_FOUND)
 
-    # Get feeds in category
-    feeds = Feed.select().where(Category.id == id).annotate(Post)
+    # Populate Category tree
+    (categories, feeds) = loadTree()
 
     # Get posts in category in decreasing date order
     posts = Post.select().join(Feed).join(Category).where(Category.id == id).order_by(Post.published.desc())
+
+    # Create human-readable datestamps for posts
+    datestamps = loadDates(posts)
 
     # Return mode dependent on Content-Type?
     if request.json == None:
@@ -219,8 +222,10 @@ def category(id=None):
         # Render category page template
         return render_template("category.html", 
                                category=category, 
+                               categories=categories,
                                feeds=feeds, 
-                               posts=posts)
+                               posts=posts,
+                               datestamps=datestamps)
 
     else:
 
