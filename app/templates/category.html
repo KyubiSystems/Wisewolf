@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="col-md-9 content">
-      <h2>Category: {{category.name}}</h2>
+      <h2><i class="fa fa-rss fa-lg"></i>&nbsp;Category: {{category.name}}</h2>
         {% for p in posts %}
 	    <div class="post">
             <div class="postheader">{{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}</div>

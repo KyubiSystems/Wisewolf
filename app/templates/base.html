@@ -5,7 +5,7 @@
 <!-- Twitter Bootstrap CDN -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <!-- FontAwesome CDN -->
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <!-- Wisewolf CSS -->
 <link href="{{ url_for('static', filename='wisewolf.css') }}" rel="stylesheet">
 <!-- end CSS -->
@@ -36,7 +36,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars fa-lg"></i>&nbsp;Manage <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/feed/add">Add Feed</a></li>
             <li><a href="/feed">Manage Feeds</a></li>
@@ -46,15 +46,15 @@
           </ul>
         </li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gallery <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-picture-o fa-lg"></i>&nbsp;Gallery <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/gallery">View</a></li>
             <li><a href="/gallery/add">Add Gallery</a></li>
             <li><a href="/gallery/manage">Manage Galleries</a></li>
           </ul>
         </li>
-        <li><a href="/opml">OPML</a></li>
-        <li><a href="/settings">Settings</a></li>
+        <li><a href="/opml"><i class="fa fa-file-text fa-lg"></i>&nbsp;OPML</a></li>
+        <li><a href="/settings"><i class="fa fa-cogs fa-lg"></i>&nbsp;Settings</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -63,7 +63,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/refresh/all">Refresh</a></li>
+        <li><a href="/refresh/all"><i class="fa fa-refresh fa-lg"></i>&nbsp;Refresh</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
