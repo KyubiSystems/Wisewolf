@@ -4,7 +4,7 @@
 {%- endmacro %}
 {% block content %}
 <div class="row">
-    <div class="span3 sidebar">
+    <div class="col-md-3 sidebar">
         <div class="categories">
         {% for c in categories %}
         <div class="category cat-{{c.id}}">
@@ -23,7 +23,7 @@
         {% endfor %}
         </div>
     </div>
-    <div class="span9 content">
+    <div class="col-md-9 content">
       <h2>Category: {{category.name}}</h2>
         {% for p in posts %}
 	    <div class="post">

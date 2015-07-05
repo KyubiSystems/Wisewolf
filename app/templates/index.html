@@ -4,7 +4,7 @@
 {%- endmacro %}
 {% block content %}
 <div class="row">
-    <div class="span3 sidebar">
+    <div class="col-md-3 sidebar">
         <div class="categories">
         {% for c in categories %}
         <div class="category cat-{{c.id}}">
@@ -23,7 +23,7 @@
         {% endfor %}
         </div>
     </div>
-    <div class="span9 content">
+    <div class="col-md-9 content">
         {% for p in posts %}
 	    <div class="post">
             <div class="postheader">{{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}</div>

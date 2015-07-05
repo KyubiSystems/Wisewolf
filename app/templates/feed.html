@@ -4,7 +4,7 @@
 {%- endmacro %}
 {% block content %}
 <div class="row">
-    <div class="span3">
+    <div class="col-md-3 sidebar">
         <div class="categories">
         {% for c in categories %}
         <div class="category cat-{{c.id}}">
@@ -15,7 +15,7 @@
 	  <div class="catbody catb-{{c.id}}">
             {% for f in feeds[c.id] %}
 	    <div class="catentry cate-{{c.id}} feed-{{f.id}}">
-                -&nbsp;<a href="/feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
+                -&nbsp;{{ favicon(f.id) }}&nbsp;<a href="/feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
 	    </div>
             {% endfor %}
 	  </div>
@@ -23,7 +23,7 @@
         {% endfor %}
         </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9 content">
       <h2>{{feed.name}}</h2>
         {% for p in posts %}
 	    <div class="post">
