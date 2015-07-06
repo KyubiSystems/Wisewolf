@@ -43,13 +43,28 @@ def get_post(id=None):
     # Get post #id from database
     try:
         post = Post.get(Post.id == id)
-    except PostDoesNotExist:
+    except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)
 
-    # Return post as JSON
-    resp = jsonify(post)
-    resp.status_code = 200
-    return resp
+    if request.json == None:
+
+        # populate Category tree
+        (categories, feeds) = loadTree()
+
+        # TODO: optional retrieve full article
+
+        # render post HTML template
+        return render_template("post.html",
+                               categories=categories,
+                               feeds=feeds,
+                               post=post)
+
+    else:
+
+        # Return post as JSON
+        resp = jsonify(post)
+        resp.status_code = 200
+        return resp
 
 
 @app.route('/post/<int:id>', methods=['DELETE'])
@@ -66,7 +81,7 @@ def get_favourite(id=None):
     # Get favourite status for post #id
     try:
         fav = Post.get(Post.id == id)
-    except PostDoesNotExist:
+    except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)
 
     # return post fav status as JSON
@@ -80,7 +95,7 @@ def set_favourite(id=None):
     try:
         query = Post.update(is_favourite = not Post.is_favourite).where(Post.id == id)
         query.execute()
-    except PostDoesNotExist:
+    except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)
 
     # return JSON status OK
@@ -94,7 +109,7 @@ def feed(id=None):
     # Get feed number <id>
     try:
         feed = Feed.get(Feed.id == id)
-    except FeedDoesNotExist:
+    except Feed.DoesNotExist:
         return jsonify(**FEED_NOT_FOUND)
 
     # populate Category tree
@@ -136,7 +151,7 @@ def feed_update(id=None):
         else:
             try:
                 feed = Feed.get(Feed.id == id)
-            except FeedDoesNotExist:
+            except Feed.DoesNotExist:
                 return jsonify(**FEED_NOT_FOUND)
 
             rss_worker(feed) # Update single feed
@@ -204,7 +219,7 @@ def category(id=None):
     # Get category #id
     try:
         category = Category.get(Category.id == id)
-    except CategoryDoesNotExist:
+    except Category.DoesNotExist:
         return jsonify(**CATEGORY_NOT_FOUND)
 
     # Populate Category tree
@@ -267,7 +282,7 @@ def get_image(id):
     # Get image #id
     try:
         image = Image.get(Image.id == id)
-    except ImageDoesNotExist:
+    except Image.DoesNotExist:
         return jsonify(**IMAGE_NOT_FOUND)
 
     return render_template("image.html", image=image)
@@ -277,7 +292,7 @@ def delete_image(id):
     # Get image #id
     try:
         image = Image.get(Image.id == id)
-    except ImageDoesNotExist:
+    except Image.DoesNotExist:
         return jsonify(**IMAGE_NOT_FOUND)
 
     # TODO: Delete image binary file and thumb

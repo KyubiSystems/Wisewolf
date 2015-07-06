@@ -9,7 +9,7 @@
         {% for c in categories %}
         <div class="category cat-{{c.id}}">
 	  <div class="cathead cath-{{c.id}}">
-            <i class="fa fa-caret-square-o-down fa-lg"></i>&nbsp;<a href="/category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
+            <i class="fa fa-folder-open"></i>&nbsp;<a href="/category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
 	  </div>
 	  <div class="catbody catb-{{c.id}}">
             {% for f in feeds[c.id] %}

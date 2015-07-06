@@ -9,13 +9,12 @@
         {% for c in categories %}
         <div class="category cat-{{c.id}}">
 	  <div class="cathead cath-{{c.id}}">
-            <a href="/category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
-            <a href="/category/{{c.id}}/settings"><i class="fa fa-cog"></i></a>
+            <i class="fa fa-folder-open"></i>&nbsp;<a href="/category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
 	  </div>
 	  <div class="catbody catb-{{c.id}}">
             {% for f in feeds[c.id] %}
 	    <div class="catentry cate-{{c.id}} feed-{{f.id}}">
-                -&nbsp;{{ favicon( f.id ) }}&nbsp;<a href="/feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
+                <i class="fa fa-caret-right"></i>&nbsp;{{ favicon( f.id ) }}&nbsp;<a href="/feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
 	    </div>
             {% endfor %}
 	  </div>
