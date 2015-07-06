@@ -2,21 +2,18 @@
 	 border-left: 1px solid black;
 }	 
 
+.categories {
+	    border-bottom: 1px solid black;
+}
+
 .cathead { 
-	 background: #33c;
-	 color: white;
+	 font-size: 120%;
 	 font-weight: bold;
 	 padding: 5px;
-	 padding-left: 10px;
-	 border-radius: 8px;
 }
 
-.cathead a {
-  color:white;
-}
-
-.cathead i {
-	 float: right;
+.catentry {
+  padding-left: 12px;
 }
 
 .post {
