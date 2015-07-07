@@ -24,8 +24,10 @@
     </div>
     <div class="col-md-9 content">
         {% for p in posts %}
-	    <div class="post">
-            <div class="postheader">{{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}</div>
+	    <div class="post post-{{ p.id }}">
+            <div class="postheader">
+	      {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{p.id}})"></i>
+	    </div>
 	    <div class="postbody">
             <i>{{p.description}}</i>
             {% if p.content %}
