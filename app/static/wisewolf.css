@@ -31,3 +31,7 @@
 	    float: right;
 	    padding-top: 3px;
 	    }
+
+.postdelete:hover {
+		  color: red;
+		  }
