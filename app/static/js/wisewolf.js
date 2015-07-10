@@ -24,3 +24,12 @@ function deletePost(id) {
     $( postId ).fadeOut("slow");
 
 }
+
+// deleteFeed: remove feed #id from list
+// TODO: AJAX delete against REST service
+function deleteFeed(id) {
+
+    var feedId = ".feed-" + id;
+    $( feedId ).fadeOut("slow");
+
+}
