@@ -103,7 +103,17 @@ def set_favourite(id=None):
     
 # Feed routes ----------------
 
+# Manage installed feeds
 @app.route('/feed', methods=['GET'])
+def managefeeds():
+
+    # Get feeds from database along with post numbers
+    feedlist = Feed.select().order_by('name').annotate(Post)
+
+    return render_template("manage_feeds",
+                           feedlist=feedlist)
+
+
 @app.route('/feed/<int:id>', methods=['GET'])
 def feed(id=None):
     # Get feed number <id>
