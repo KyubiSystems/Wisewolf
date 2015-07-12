@@ -32,7 +32,11 @@
 	    padding-top: 3px;
 	    }
 
-.postdelete:hover {
+.feeddelete {
+	    padding-top: 3px;
+}
+
+.postdelete:hover .feeddelete:hover {
 		  color: red;
 		  cursor: pointer;
 		  }

@@ -24,7 +24,7 @@ def index():
     (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
-    posts = Post.select().order_by(Post.published.desc())
+    posts = Post.select().order_by(Post.published.desc()).paginate(1,50)
 
     # Create human-readable datestamps for posts
     datestamps = loadDates(posts)
@@ -110,7 +110,7 @@ def managefeeds():
     # Get feeds from database along with post numbers
     feedlist = Feed.select().order_by('name').annotate(Post)
 
-    return render_template("manage_feeds",
+    return render_template("managefeeds.html",
                            feedlist=feedlist)
 
 
@@ -126,7 +126,7 @@ def feed(id=None):
     (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
-    posts = Post.select().join(Feed).where(Feed.id == id).order_by(Post.published.desc())
+    posts = Post.select().join(Feed).where(Feed.id == id).order_by(Post.published.desc()).paginate(1,50)
 
     # Create human-readable datestamps for posts
     datestamps = loadDates(posts)
@@ -236,7 +236,7 @@ def category(id=None):
     (categories, feeds) = loadTree()
 
     # Get posts in category in decreasing date order
-    posts = Post.select().join(Feed).join(Category).where(Category.id == id).order_by(Post.published.desc())
+    posts = Post.select().join(Feed).join(Category).where(Category.id == id).order_by(Post.published.desc()).paginate(1,50)
 
     # Create human-readable datestamps for posts
     datestamps = loadDates(posts)
@@ -280,7 +280,7 @@ def gallery(id=None):
     if id == None:
         images = Image.select()
     else:
-        images = Image.select().where(Feed.id == id)
+        images = Image.select().where(Feed.id == id).paginate(1,50)
 
     return render_template("gallery.html", 
                            images=images)

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% macro favicon(id) -%}
+<img src="/static/cache/icons/favicon_{{ id }}.ico" onError="this.onerror=null;this.src='/static/favicon.ico';">
+{%- endmacro %}
+{% block content %}
+<div class="col-md-12">
+<h2><i class="fa fa-rss fa-lg"></i>&nbsp;Manage Feeds</h2>
+<table class="feedlist">
+<tr>
+<th>Id</th><th>Name</th><th>Category</th><th>URL</th><th>Posts</th><th>Last updated</th><th>Ops</th>
+</tr>
+{% for f in feedlist %}
+<tr class="feed-{{ f.id }}">
+<td>{{ f.id }}</td>
+<td>{{ favicon( f.id ) }}&nbsp;{{ f.name }}</td>
+<td>{{ f.url }}</td>
+<td>{{ f.count }}</td>
+<td>{{ f.last_updated }}</td>
+<td><i class="fa fa-times fa-lg feeddelete" onclick="deleteFeed({{f.id}})"></td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}
+
