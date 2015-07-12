@@ -17,9 +17,17 @@
   padding-left: 12px;
 }
 
+.fa-rss {
+	color: blue;
+	}
+
 .post {
       overflow: hidden;
 }
+
+.feedlistposts {
+	       text-align: right;
+	       }
 
 .postheader {
 	    border: 1px solid black;
@@ -36,6 +44,10 @@
 	    padding-top: 3px;
 }
 
+.feededit {
+	  color: black;
+	  }
+
 .postdelete:hover {
 		  color: red;
 		  cursor: pointer;
@@ -45,3 +57,13 @@
 		  color: red;
 		  cursor: pointer;
 }		 
+
+.feededit:hover {
+		color: blue;
+		cursor: pointer;
+		}
+
+.feedrefresh:hover {
+		   color: green;
+		   cursor: pointer;
+		   }

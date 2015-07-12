@@ -5,18 +5,19 @@
 {% block content %}
 <div class="col-md-12">
 <h2><i class="fa fa-rss fa-lg"></i>&nbsp;Manage Feeds</h2>
-<table class="feedlist">
+<table class="table table-striped feedlist">
 <tr>
-<th>Id</th><th>Name</th><th>Category</th><th>URL</th><th>Posts</th><th>Last updated</th><th>Ops</th>
+<th>#</th><th>Name</th><th>Category</th><th>URL</th><th>Posts</th><th>Last updated</th><th>&nbsp;</th>
 </tr>
 {% for f in feedlist %}
 <tr class="feed-{{ f.id }}">
 <td>{{ f.id }}</td>
-<td>{{ favicon( f.id ) }}&nbsp;{{ f.name }}</td>
-<td>{{ f.url }}</td>
-<td>{{ f.count }}</td>
+<td>{{ favicon( f.id ) }}&nbsp;<a href="/feed/{{ f.id }}">{{ f.name }}</a></td>
+<td>{{ f.category.name }}</td>
+<td><a href="{{ f.url }}">{{ f.url[:30] + '...' }}</a></td>
+<td class="feedlistposts">{{ f.count }}</td>
 <td>{{ f.last_updated }}</td>
-<td><i class="fa fa-times fa-lg feeddelete" onclick="deleteFeed({{f.id}})"></td>
+<td class="feedops"><i class="fa fa-refresh fa-lg feedrefresh" onclick="refreshFeed({{ f.id }})"></i>&nbsp;<a href="/feed/edit/{{ f.id }}"><i class="fa fa-pencil fa-lg feededit"></i></a>&nbsp;<i class="fa fa-times fa-lg feeddelete" onclick="deleteFeed({{f.id}})"></i></td>
 </tr>
 {% endfor %}
 </table>
