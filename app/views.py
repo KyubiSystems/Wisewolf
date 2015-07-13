@@ -93,7 +93,8 @@ def get_favourite(id=None):
 def set_favourite(id=None):
     # Toggle favourite status for post #id
     try:
-        query = Post.update(is_favourite = not Post.is_favourite).where(Post.id == id)
+        is_favourite = Post.get(Post.id == id).is_favourite
+        query = Post.update(is_favourite = not is_favourite).where(Post.id == id)
         query.execute()
     except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)

@@ -2,6 +2,13 @@
 {% macro favicon(id) -%}
 <img src="/static/cache/icons/favicon_{{ id }}.ico" onError="this.onerror=null;this.src='/static/favicon.ico';">
 {%- endmacro %}
+{% macro favourite(f, id) -%}
+{% if f %}
+<i class="fa fa-star fa-lg fav fav-{{ id }}" onclick="favouritePost({{ id }})"></i>
+{% else %}
+<i class="fa fa-star-o fa-lg fav fav-{{ id }}" onclick="favouritePost({{ id }})"></i>
+{% endif %}
+{%- endmacro %}
 {% block content %}
 <div class="row">
     <div class="col-md-3 sidebar">
@@ -27,7 +34,7 @@
         {% for p in posts %}
 	    <div class="post post-{{ p.id }}">
             <div class="postheader">
-	      {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}&nbsp;<i class="fa fa-star-o fa-lg fav-{{ p.id }}" onclick="favouritePost({{ p.id }})"></i><i class="fa fa-times fa-lg postdelete" onclick="deletePost({{ p.id }})"></i>
+	      {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}&nbsp;{{ favourite( p.is_favourite, p.id ) }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{ p.id }})"></i>
 	    </div>
 	    <div class="postbody">
             <i>{{p.description}}</i>

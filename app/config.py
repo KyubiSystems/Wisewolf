@@ -6,7 +6,7 @@ Wisewolf RSS Reader
 import os
 
 # set version string
-SERVER_VERSION = "v0.04"
+SERVER_VERSION = "0.0.5"
 
 # set application path
 APP_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -48,4 +48,4 @@ MAX_REQUESTS = 10
 INTERVAL = 900
 
 # Set User-Agent string for Wisewolf reader
-USER_AGENT = 'WisewolfRSS/0.0.4 +http://www.wisewolf.co.uk/'
+USER_AGENT = 'WisewolfRSS/0.0.5 +http://www.wisewolf.co.uk/'

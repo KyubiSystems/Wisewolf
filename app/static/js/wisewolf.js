@@ -75,3 +75,19 @@ function deleteImage(id) {
 	});
 
 }
+
+// favouritePost: toggle is_favourite on post #id
+function favouritePost(id) {
+
+    var url = "/favourite/" + id;
+    $.post( url, function(data) {
+
+	    if (data.status_code == 200) {
+		var favId = ".fav-" + id;
+		$( favId ).toggleClass("fa-star fa-star-o");
+	    }
+
+	});
+
+}
+

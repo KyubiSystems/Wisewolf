@@ -5,7 +5,7 @@ Wisewolf
 
 The intent is to make Wisewolf an alternative to Tiny Tiny RSS: http://tt-rss.org/redmine/projects/tt-rss/wiki
 
-**Current status: version 0.04 (pre-alpha)**
+**Current status: version 0.0.5 (pre-alpha)**
 
 API
 ---
@@ -37,24 +37,25 @@ For v0.1 initial alpha:
 - [ ] OPML import
 - [x] Asynchronous client updates
 - [x] Refresh feeds automatically (update frequency selectable per feed) or manually.
+- [x] Favourite posts
 
 For v0.2
 
 - [ ] Optionally strip embedded/linked images to associated local galleries (see Yomiko). Useful for art sites and webcomics
 - [ ] Media support for HTML5 audio/video, MediaRSS ingest
 - [ ] Hotkey support
+- [ ] Mobile support. Swipe between articles, feeds.
 
 For v0.3
 
 - [ ] Move from category to tag system?  
-- [ ] Favourite posts
-- [ ] Social sharing for feed items
-- [ ] mobile support (target Mobile Safari on iPad and iPhone). Swipe between articles, feeds.
+- [ ] Optional social sharing for feed items (off by default)
+- [ ] Text indexing, fulltext searching via Whoosh?
 
 Possible subsequent additions
 
 * PubSubHubBub support
-* Text indexing, fulltext searching
+
 
 Screenshot
 ----------

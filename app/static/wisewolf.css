@@ -21,6 +21,10 @@
 	color: blue;
 	}
 
+.fa-star {
+	 color: #c9c955;
+	 }
+
 .post {
       overflow: hidden;
 }
@@ -67,3 +71,7 @@
 		   color: green;
 		   cursor: pointer;
 		   }
+
+.fav:hover {
+	   cursor: pointer;
+	   }
