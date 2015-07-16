@@ -111,7 +111,22 @@ def managefeeds():
     # Get feeds from database along with post numbers
     feedlist = Feed.select().order_by('name').annotate(Post)
 
+    datestamps = {}
+
+    # Set reference timestamp to one week ago
+    weekago = arrow.utcnow().replace(days=-7)
+
+    for f in feedlist:
+        updated = arrow.get(f.last_checked)
+
+        # if feed newer than one week, print date in human format
+        if updated > weekago:
+            datestamps[f.id] = updated.humanize()
+        else:
+            datestamps[f.id] = updated.format('YYYY-MM-DD HH:mm')
+
     return render_template("managefeeds.html",
+                           datestamps=datestamps,
                            feedlist=feedlist)
 
 
