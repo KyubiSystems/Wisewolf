@@ -9,20 +9,44 @@ Usage:
 TBD. Modify for internal unit testing?
 """
 
+import sys
 import autodiscovery
-import urllib
 import requests
 
+# Declare valid RSS and ATOM feed types for autodetection
+
+FEED_TYPES = ('application/rss+xml',
+              'text/xml',
+              'application/atom+xml',
+              'application/x.atom+xml',
+              'application/x-atom+xml')
+
 url = 'http://www.slashdot.org'
+
+# Retrieve target URL
 r = requests.get(url)
 
-print r.headers['content-type']
+if (r.status_code != requests.codes.ok):
+    print 'Request error'
+    sys.exit(1)
 
-p = autodiscovery.Discover()
+# Get Content-Type
+contenttype = r.headers['content-type']
+print contenttype
 
-f = urllib.urlopen(url)
-html = f.read()
-p.feed(html)
+# If Content-Type is RSS feed, return
+if (contenttype in FEED_TYPES):
+    print 'RSS feed detected ' + url
+    sys.exit(0)
 
-print p.feeds
-p.close()
+# If Content-Type is HTML, pass to autodiscovery
+if (contenttype == 'text/html'):
+
+    p = autodiscovery.Discover()
+
+    p.feed(r.text)
+
+    print p.feeds
+    p.close()
+    
+    sys.exit(0)

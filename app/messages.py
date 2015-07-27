@@ -23,6 +23,21 @@ IMAGE_NOT_FOUND = {
     'status' : 'Image not found'
     }
 
+URL_NOT_FOUND = {
+    'status_code' : 404,
+    'status' : 'URL not found'
+    }
+
+FEED_INVALID = {
+    'status_code' : 503,
+    'status' : 'Not a valid RSS feed'
+    }
+
+DUPLICATE_FEED = {
+    'status_code' : 503,
+    'status' : 'Feed already exists in database'
+}
+
 STATUS_OK = {
     'status_code' : 200,
     'status' : 'OK'
