@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 Wisewolf RSS Reader
 (c) 2014 Kyubi Systems: www.kyubi.co.uk
@@ -11,10 +11,16 @@ TBD. Modify for internal unit testing?
 
 import autodiscovery
 import urllib
+import requests
+
+url = 'http://www.slashdot.org'
+r = requests.get(url)
+
+print r.headers['content-type']
 
 p = autodiscovery.Discover()
 
-f = urllib.urlopen("http://www.slashdot.org")
+f = urllib.urlopen(url)
 html = f.read()
 p.feed(html)
 

@@ -44,7 +44,7 @@ class Discover(HTMLParser):
         link = attributes['href']
         fulluri = self.makeFullURI(link)
 
-        self.feeds.append((title, fulluri))
+        self.feeds.append({ 'title' : title, 'fulluri' : fulluri })
 
     # Convert partial to full URIs
 
