@@ -222,7 +222,10 @@ def add_feed(url=None):
         return jsonify(**DUPLICATE_FEED)
 
     # Attempt to retrieve URL
-    r = requests.get(url)
+    try:
+        r = requests.get(url, timeout=5)
+    except requests.exceptions.Timeout:
+        return jsonify(**FEED_NOT_FOUND)
 
     # check request status code
     if (r.status_code != requests.codes.ok):
@@ -233,7 +236,7 @@ def add_feed(url=None):
 
     # If Content-type is RSS, add it directly
     if (contenttype in FEED_TYPES):
-        #TODO: add_this(url)
+        feed = Feed.create(url=url)
         return jsonify(**STATUS_OK)
     
     # If Content-type is HTML, pass to autodiscovery
@@ -242,10 +245,14 @@ def add_feed(url=None):
         p = autodiscovery.Discover()
         p.feed(r.text)
 
-        #TODO: check result in case of no feeds found
-        fulluri = p.feeds[0]['fulluri']
-        #TODO: add_this(fulluri)
-        return jsonify(**STATUS_OK)
+        # check result in case of no feeds found
+        if len(p.feeds) == 0:
+            return jsonify(**FEED_NOT_FOUND)
+        else:
+            # TODO: Could loop over all available feeds found?
+            fulluri = p.feeds[0]['fulluri'] # just adds first feed found
+            feed = Feed.create(url=fulluri)
+            return jsonify(**STATUS_OK)
 
     # dropped through to here, feed must be invalid
     return jsonify(**FEED_INVALID)
