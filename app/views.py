@@ -7,6 +7,8 @@ from flask import Flask, jsonify, render_template, request
 from models import *
 from messages import *
 import arrow
+import autodiscovery
+import requests
 
 from frontend import app
 
@@ -205,18 +207,48 @@ def feed_update(id=None):
 @app.route('/feed/add', methods=['POST'])
 def add_feed(url=None):
     
-    # Get url and category submitted via AJAX
+    # Get url submitted via AJAX
     url = request.json['url']
-    category = request.json['category'] # From dropdown on submit form
 
-    # url processing goes here
-    # check content type for RSS?
-    # Try autodetection and add to DB if found
+    FEED_TYPES = ('application/rss+xml',
+                  'text/xml',
+                  'application/atom+xml',
+                  'application/x.atom+xml',
+                  'application/x-atom+xml')
 
-    # If not found, return FEED_NOT_FOUND
+    # Check if url already exists in feed DB
+    dupe = Feed.select().where(Feed.url == url).count()
+    if dupe > 0:
+        return jsonify(**DUPLICATE_FEED)
 
-    # return JSON status OK
-    return jsonify(**STATUS_OK)
+    # Attempt to retrieve URL
+    r = requests.get(url)
+
+    # check request status code
+    if (r.status_code != requests.codes.ok):
+        return jsonify(**FEED_NOT_FOUND)
+
+    # Get Content-Type
+    contenttype = r.headers['content-type']
+
+    # If Content-type is RSS, add it directly
+    if (contenttype in FEED_TYPES):
+        #TODO: add_this(url)
+        return jsonify(**STATUS_OK)
+    
+    # If Content-type is HTML, pass to autodiscovery
+    if (contenttype == 'text/html'):
+
+        p = autodiscovery.Discover()
+        p.feed(r.text)
+
+        #TODO: check result in case of no feeds found
+        fulluri = p.feeds[0]['fulluri']
+        #TODO: add_this(fulluri)
+        return jsonify(**STATUS_OK)
+
+    # dropped through to here, feed must be invalid
+    return jsonify(**FEED_INVALID)
 
 @app.route('/feed/<int:id>', methods=['DELETE'])
 def delete_feed(id=None):
