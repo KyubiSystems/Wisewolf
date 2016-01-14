@@ -2,8 +2,11 @@
 
 from readability.readability import Document
 import urllib
+import sys
 
-url = "http://hosted2.ap.org/APDEFAULT/cae69a7523db45408eeb2b3a98c0c9c5/Article_2015-06-25-ML-Islamic-State/id-c6a64e8323414ec1bc9c7a95a2a31455"
+url = sys.argv[1]
+
+#url = "http://www.space.com/29740-mice-of-mars-rodents-pave-way-to-red-planet.html"
 
 html = urllib.urlopen(url).read()
 readable_article = Document(html).summary()
@@ -11,4 +14,5 @@ readable_title = Document(html).short_title()
 
 print readable_title
 
-print readable_article
+print readable_article.encode('utf-8').strip()
+
