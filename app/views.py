@@ -386,6 +386,9 @@ def opml_import():
     return render_template("import.html")
 
 # route for processing OPML import...
+@app.route('/import/parse', methods=['POST'])
+def opml_parse():
+    return render_template("import_done.html")
 
 # Websocket testing ----------
 
