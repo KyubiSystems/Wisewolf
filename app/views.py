@@ -3,12 +3,15 @@ Wisewolf RSS Reader
 (c) 2014 Kyubi Systems: www.kyubi.co.uk
 """
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, redirect, url_for, send_from_directory, jsonify, render_template, request
 from models import *
 from messages import *
 import arrow
 import autodiscovery
 import requests
+import os
+import magic
+from werkzeug import secure_filename
 
 from frontend import app
 
@@ -388,7 +391,20 @@ def opml_import():
 # route for processing OPML import...
 @app.route('/import/parse', methods=['POST'])
 def opml_parse():
-    return render_template("import_done.html")
+
+    UPLOAD_FOLDER = os.path.realpath('.') + '/static/uploads'
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        return redirect(url_for('static', 'uploads/' + filename)) # Test redirect to uploaded file
+    
+    return "<h1>Oops, something went wrong here...</h1>file extension is " +  os.path.splitext(file.filename)[1]
+
+# Check for allowed file extensions
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['.xml', '.opml'])
+    return '.' in filename and os.path.splitext(filename)[1] in ALLOWED_EXTENSIONS
 
 # Websocket testing ----------
 

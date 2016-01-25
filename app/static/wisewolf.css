@@ -84,3 +84,9 @@
 	       margin: 0;
 	       overflow: hidden;
 }
+
+.dropzone {
+    width: 400px;
+    height: 200px;
+    border: 2px dashed black;
+}
