@@ -397,7 +397,7 @@ def opml_parse():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(UPLOAD_FOLDER, filename))
-        return redirect(url_for('static', 'uploads/' + filename)) # Test redirect to uploaded file
+        return redirect(url_for('static', filename='uploads/' + filename)) # Test redirect to uploaded file
     
     return "<h1>Oops, something went wrong here...</h1>file extension is " +  os.path.splitext(file.filename)[1]
 
