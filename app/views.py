@@ -6,13 +6,13 @@ Wisewolf RSS Reader
 from flask import Flask, redirect, url_for, send_from_directory, jsonify, render_template, request
 from models import *
 from messages import *
+from opml import Opml
 import arrow
 import autodiscovery
 import requests
 import os
 import magic
 import uuid
-from werkzeug import secure_filename
 
 from frontend import app
 
@@ -402,6 +402,50 @@ def opml_parse():
         file.save(opml_path)
 
         print 'OPML uploaded OK!'
+
+        # run Opml parser on uploaded file
+        o = Opml.OpmlReader(opml_path)
+        o.parseOpml()
+
+        print 'OPML parsed OK!'
+        
+        # Save categories to DB, skip invalid or duplicate feeds
+        for c in o.categories:
+            cat = Category.create(name=c)
+            try:
+                cat.save()
+            except IntegrityError:
+                pass
+            
+        print 'Categories added to DB!'
+
+        # Iterate over feeds found
+        for f in o.feeds:
+
+            print '------------'
+            print f
+            
+            # Get corresponding Category id
+            cat_id = Category.get(Category.name == f['category']).id
+            
+            if o.version == "1.0":
+                # Add feed from OPML version 1.0
+                feed = Feed.create(name=f['text'], category=cat_id, version=f['type'], url=f['url'])
+            elif o.version == "1.1" or o.version == "2.0":
+                # Add feed from OPML version 1.1
+                feed = Feed.create(name=f['title'], category=cat_id, version=f['type'], comment=f['text'],
+                                   description=f['description'], url=f['xmlUrl'])
+            else:
+                continue
+            
+            # Add feed to DB, skip invalid or duplicate feeds
+            try:
+                feed.save()
+            except IntegrityError:
+                pass
+                                                        
+
+        print 'Feeds added to DB!'
         
         # return send_from_directory(UPLOAD_FOLDER, opml_filename) # Test returning uploaded OPML file
         return redirect(url_for('index'), code=302)
