@@ -11,6 +11,7 @@ import autodiscovery
 import requests
 import os
 import magic
+import uuid
 from werkzeug import secure_filename
 
 from frontend import app
@@ -395,9 +396,15 @@ def opml_parse():
     UPLOAD_FOLDER = os.path.realpath('.') + '/static/uploads'
     file = request.files['file']
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
-        return redirect(url_for('static', filename='uploads/' + filename)) # Test redirect to uploaded file
+        opml_filename = str(uuid.uuid4()) + '.xml' # use UUID as unique uploaded filename root
+        opml_path = os.path.join(UPLOAD_FOLDER, opml_filename)
+        
+        file.save(opml_path)
+
+        print 'OPML uploaded OK!'
+        
+        # return send_from_directory(UPLOAD_FOLDER, opml_filename) # Test returning uploaded OPML file
+        return redirect(url_for('index'), code=302)
     
     return "<h1>Oops, something went wrong here...</h1>file extension is " +  os.path.splitext(file.filename)[1]
 

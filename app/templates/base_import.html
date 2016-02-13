@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<!-- begin CSS -->
+<!-- Twitter Bootstrap CDN -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!-- FontAwesome CDN -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<!-- Wisewolf CSS -->
+<link href="{{ url_for('static', filename='wisewolf.css') }}" rel="stylesheet">
+<!-- Dropzone CSS -->
+<link href="{{ url_for('static', filename='dropzone.css') }}" rel="stylesheet">
+<!-- end CSS -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% if title %}
+<title>{{title}} - Wisewolf</title>
+{% else %}
+<title>Wisewolf</title>
+{% endif %}
+</head>
+<body>
+
+<!-- begin navbar -->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Wisewolf</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars fa-lg"></i>&nbsp;Manage <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/feed/add">Add Feed</a></li>
+            <li><a href="/feed">Manage Feeds</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/category/add">Add Category</a></li>
+            <li><a href="/category">Manage Categories</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-picture-o fa-lg"></i>&nbsp;Gallery <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/gallery">View</a></li>
+            <li><a href="/gallery/add">Add Gallery</a></li>
+            <li><a href="/gallery/manage">Manage Galleries</a></li>
+          </ul>
+        </li>
+        <li><a href="/import"><i class="fa fa-file-text fa-lg"></i>&nbsp;OPML</a></li>
+        <li><a href="/settings"><i class="fa fa-cogs fa-lg"></i>&nbsp;Settings</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" action="/feed/add" id="add-rss-url">
+        <div class="form-group">
+          <input type="text" class="form-control" name="a" size="40" placeholder="Add webpage or RSS URL">
+        </div>
+        <button type="submit" class="btn btn-default hidden-submit" tabindex="-1">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/refresh/all"><i class="fa fa-refresh fa-lg"></i>&nbsp;Refresh</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!-- end navbar -->
+<!-- begin main body text -->
+<div class="container">
+<div class="row">
+{% block content %}{% endblock %}
+</div>
+</div>
+<!-- end main body text -->
+<!-- begin Javascript -->
+<!-- jQuery CDN -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<!-- Bootstrap CDN -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- Dropzone CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/dropzone.js"></script>
+<script>
+  Dropzone.options.drop1 = {
+  init: function() {
+  this.on("queuecomplete", function (file) {
+  alert("All files have uploaded ");
+  });
+  }
+  };
+</script>
+<!-- local JS -->
+<script src="/static/js/wisewolf.js"></script>
+<!-- end Javascript -->
+</body>
+</html>
+
