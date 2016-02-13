@@ -87,6 +87,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/dropzone.js"></script>
 <script>
   Dropzone.options.drop1 = {
+  maxFilesize: 10, 
   init: function() {
   this.on("queuecomplete", function (file) {
   alert("All files have uploaded ");
