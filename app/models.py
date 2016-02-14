@@ -21,13 +21,12 @@ class BaseModel(Model):
 
 class Category(BaseModel):
     name = CharField(unique=True)
-    comment = TextField()
-    order = IntegerField() # display order index of categories
+    comment = TextField(null=True)
+    order = IntegerField(default=0) # display order index of categories
 # Peewee timestamps
     created_at = DateTimeField(default=datetime.now())
     updated_at = DateTimeField(null=True)
     deleted_at = DateTimeField(null=True)
-
 
     class Meta:
         order_by = ('order',)
@@ -38,6 +37,7 @@ class Category(BaseModel):
     def __str__(self):
         return self.__unicode__()
 
+    
 class Feed(BaseModel):
     name = CharField()
     url = CharField(max_length=512)
@@ -69,10 +69,11 @@ class Feed(BaseModel):
     def __str__(self):
         return self.__unicode__()
 
+    
 class Post(BaseModel):
     title = CharField()
     link = CharField(max_length=512)
-    description = TextField()
+    description = TextField(null=True)
     content = TextField(null=True)
     feed = ForeignKeyField(Feed, on_delete='cascade', related_name='posts')
     published = DateTimeField(default=datetime.now())
