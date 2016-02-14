@@ -21,10 +21,10 @@ class OpmlReader:
     def __unicode__(self):
         return "<OpmlReader object: %s>" % self.attribs['title']
 
-    def __init__(self, filename, check=True, verbose=True):
+    def __init__(self, filename, check=True, verbose=False):
         self.filename = filename
         self.attribs = {}
-        self.categories = []
+        self.categories = ['Unsorted'] # Add default 'Unsorted' category
         self.feeds = []
         self.check = check
         self.version = None  # OPML version number
