@@ -67,8 +67,14 @@ class OpmlReader:
                 for (key, value) in child.attrib.iteritems():
                     log.info(key+": "+value)
                     feed[key] = value
-                    feed['category'] = self.categories[-1]
 
+                # If categories defined, allocate last category found to feed
+                # TODO: Do this consistently via tree parent
+                if self.categories[-1]:
+                    feed['category'] = self.categories[-1]
+                else:
+                    feed['category'] = 'Unsorted'
+                        
                 # Check if feed url exists, get HTTP response code              
                 if self.check:
                     try:

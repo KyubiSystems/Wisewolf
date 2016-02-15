@@ -411,9 +411,10 @@ def opml_parse():
         
         # Save categories to DB, skip invalid or duplicate feeds
         for c in o.categories:
-            cat = Category.create(name=c)
             try:
+                cat = Category.create(name=c)
                 cat.save()
+
             except IntegrityError:
                 pass
             
@@ -430,9 +431,11 @@ def opml_parse():
             
             if o.version == "1.0":
                 # Add feed from OPML version 1.0
+                # TODO: Exception handling
                 feed = Feed.create(name=f['text'], category=cat_id, version=f['type'], url=f['url'])
             elif o.version == "1.1" or o.version == "2.0":
                 # Add feed from OPML version 1.1
+                # TODO: Exception handling
                 feed = Feed.create(name=f['title'], category=cat_id, version=f['type'], comment=f['text'],
                                    description=f['description'], url=f['xmlUrl'])
             else:
