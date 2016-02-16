@@ -34,13 +34,17 @@ Roadmap for alpha release
 For v0.1 initial alpha:
 
 - [x] Feed aggregation
-- [ ] OPML import
+- [ ] Post display
+- [x] OPML import
 - [x] Asynchronous client updates
 - [x] Refresh feeds automatically (update frequency selectable per feed) or manually.
 - [x] Favourite posts
 
 For v0.2
 
+- [ ] Strip web-bug images
+- [ ] Post formatting via Readability
+- [ ] Live update of feed display via websockets
 - [ ] Optionally strip embedded/linked images to associated local galleries (see Yomiko). Useful for art sites and webcomics
 - [ ] Media support for HTML5 audio/video, MediaRSS ingest
 - [ ] Hotkey support
@@ -48,9 +52,16 @@ For v0.2
 
 For v0.3
 
-- [ ] Move from category to tag system?  
-- [ ] Optional social sharing for feed items (off by default)
 - [ ] Text indexing, fulltext searching via Whoosh?
+- [ ] Move from category to tag system?
+- [ ] Docker packaging
+
+
+For v1.0
+
+- [ ] Multi-user support
+- [ ] Optional social sharing for feed items (off by default)
+
 
 Possible subsequent additions
 
