@@ -9,6 +9,7 @@ import feedparser
 import argparse
 import os
 import arrow
+import hashlib
 
 # import Wisewolf libraries
 from config import *
@@ -145,33 +146,32 @@ def rss_worker(f):
             return
 
         # If post entries exist, process them
-        if d.entries:
-
-            # Iterate over posts found
-            # Build and add Post object to DB
-            # DB write lock needed?
-            for post in d.entries:
+        for post in d.entries:
+            
+            post_content = ""
+            post_title = post.get('title') or "No title"
+            post_description = post.get('description') or ""
+            post_published = arrow.get(post.get('published_parsed')) or arrow.now()
+            if hasattr(post, 'content'):
+                post_content = post.content[0].value
+            post_link = post.get('link') or ""
                 
-                # Get post date tuple for Arrow. Fall back to feed publication date :-(
-                dt = post.get('published_parsed') or d.feed.published_parsed
-                published_date = arrow.get(dt)
-
-                # Get last_checked datetime
-                lc = f.last_checked
-                last_checked = arrow.get(lc)
-                    
-                # If published date newer than last feed check date, save new Post data to DB
-                if published_date > last_checked:
-                    p = Post()
-                    p.title = post.get('title') or "No title"
-                    p.description = post.get('description') or ""
-                    p.published = published_date.datetime
-                    if hasattr(post, 'content'):
-                        p.content = post.content[0].value or ""
-                    p.link = post.get('link') or ""
-                    p.feed = id
-                    p.save()
-
+            # Get post checksum (title + description + link url)
+            check_string = post_title + post_description + post_link
+            post_checksum = hashlib.sha224(check_string).hexdigest()
+            
+            # If post checksum not found in DB, add post
+            if Post.select().where(Post.md5 == post_checksum).count() == 0:
+                p = Post()
+                p.title = post_title
+                p.description = post_description
+                p.published = post_published
+                p.content = post_content
+                p.link = post_link
+                p.feed = id
+                p.md5 = post_checksum
+                p.save()
+                
             # TODO: Filter text for dangerous content (e.g. XSRF?)
             # Feedparser already does this to some extent
 

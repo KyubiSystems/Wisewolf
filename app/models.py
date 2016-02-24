@@ -77,6 +77,7 @@ class Post(BaseModel):
     content = TextField(null=True)
     feed = ForeignKeyField(Feed, on_delete='cascade', related_name='posts')
     published = DateTimeField(default=datetime.now())
+    md5 = CharField(max_length=128, unique=True) ### hash check for uniqueness
     is_read = BooleanField(default=False)
     is_favourite = BooleanField(default=False)
 # Peewee timestamps
