@@ -157,7 +157,7 @@ def rss_worker(f):
             post_link = post.get('link') or ""
                 
             # Get post checksum (title + description + link url)
-            check_string = post_title + post_description + post_link
+            check_string = (post_title + post_description + post_link).encode('utf8')
             post_checksum = hashlib.sha224(check_string).hexdigest()
             
             # If post checksum not found in DB, add post
@@ -165,7 +165,7 @@ def rss_worker(f):
                 p = Post()
                 p.title = post_title
                 p.description = post_description
-                p.published = post_published
+                p.published = post_published.datetime  # convert from Arrow to datetime for DB
                 p.content = post_content
                 p.link = post_link
                 p.feed = id
