@@ -94,15 +94,15 @@ def rss_worker(f):
 
     # Check ETag, Modified: Attempt Conditional HTTP retrieval
     # to reduce excessive polling
-    if hasattr(f, 'etag'):
+    if 'etag' in f:
         d = feedparser.parse(f.url, etag=f.etag)
-    elif hasattr(f, 'last_modified'):
+    elif 'last_modified' in f:
         d = feedparser.parse(f.url, modified=f.last_modified)
     else:
         d = feedparser.parse(f.url)
 
     # Check returned HTTP status code
-    if hasattr(d, 'status') and d.status < 400:
+    if 'status' in d and d.status < 400:
         # Site appears to be UP
         logging.info("Feed %s is UP, status %s", f.url, str(d.status))
 
@@ -121,23 +121,23 @@ def rss_worker(f):
 
         # Conditional HTTP:
         # Check for Etag in result and write to DB
-        if hasattr(d, 'etag'):
+        if 'etag' in d:
             logging.info("Etag: %s", d.etag)
             q = Feed.update(etag=d.etag).where(Feed.id == id)
             q.execute()
 
         # Conditional HTTP
         # Check for Last-Modified in result and write to DB
-        if hasattr(d, 'modified'):
+        if 'modified' in d:
             logging.info("Modified %s", d.modified)
             q = Feed.update(last_modified=d.modified).where(Feed.id == id)
             q.execute()
 
         # Check for feed modification date, write to DB
-        if hasattr(d, 'published'):
+        if 'published' in d:
             logging.info("Published: %s", d.published)
 
-        if hasattr(d, 'updated'):
+        if 'updated' in d:
             logging.info("Updated: %s", d.updated)
 
         # Check for 'not-modified' status code, skip updates if found
@@ -149,12 +149,12 @@ def rss_worker(f):
         for post in d.entries:
             
             post_content = ""
-            post_title = post.get('title') or "No title"
-            post_description = post.get('description') or ""
+            post_title = post.get('title', 'No title')
+            post_description = post.get('description', '')
             post_published = arrow.get(post.get('published_parsed')) or arrow.now()
-            if hasattr(post, 'content'):
+            if 'content' in post:
                 post_content = post.content[0].value
-            post_link = post.get('link') or ""
+            post_link = post.get('link', '')
                 
             # Get post checksum (title + description + link url)
             check_string = (post_title + post_description + post_link).encode('utf8')
@@ -191,7 +191,7 @@ def rss_worker(f):
             logging.warning("Feed %s is marked INACTIVE, MAX_ERRORS reached", f.url)
         
         # No valid status, skip feed now
-        if not hasattr(d, 'status'):
+        if not 'status' in d:
             logging.warning("Feed %s is DOWN, no valid status", f.url)
             return
 
