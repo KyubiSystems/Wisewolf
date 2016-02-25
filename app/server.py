@@ -10,6 +10,8 @@ import argparse
 import os
 import arrow
 import hashlib
+import re
+import HTMLParser
 
 # import Wisewolf libraries
 from config import *
@@ -150,7 +152,12 @@ def rss_worker(f):
             
             post_content = ""
             post_title = post.get('title', 'No title')
-            post_description = post.get('description', '')
+
+            h = HTMLParser.HTMLParser()
+            desc = post.get('description', '')
+            desc = h.unescape(desc) # unescape HTML entities
+            post_description = re.sub(r'<[^>]*?>', '', desc) # crudely strip HTML tags in description
+            
             post_published = arrow.get(post.get('published_parsed')) or arrow.now()
             if 'content' in post:
                 post_content = post.content[0].value
