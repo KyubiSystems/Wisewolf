@@ -33,7 +33,7 @@
         {% for p in posts %}
 	    <div class="post post-{{ p.id }}">
             <div class="postheader">
-	      {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}}&nbsp;{{ favourite( p.is_favourite, p.id ) }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{p.id}})"></i>
+	      {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}&nbsp;{{ favourite( p.is_favourite, p.id ) }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{p.id}})"></i>
 	    </div>
 	    <div class="postbody">
             <i>{{p.description}}</i>

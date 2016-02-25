@@ -96,9 +96,9 @@ def rss_worker(f):
 
     # Check ETag, Modified: Attempt Conditional HTTP retrieval
     # to reduce excessive polling
-    if 'etag' in f:
+    if f.etag:
         d = feedparser.parse(f.url, etag=f.etag)
-    elif 'last_modified' in f:
+    elif f.last_modified:
         d = feedparser.parse(f.url, modified=f.last_modified)
     else:
         d = feedparser.parse(f.url)
