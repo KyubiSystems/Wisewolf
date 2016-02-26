@@ -1,12 +1,12 @@
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2016 Kyubi Systems: www.kyubi.co.uk
 """
 
 import os
 
 # set version string
-SERVER_VERSION = "0.0.5"
+SERVER_VERSION = "0.1-alpha"
 
 # set application path
 APP_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -48,4 +48,4 @@ MAX_REQUESTS = 10
 INTERVAL = 900
 
 # Set User-Agent string for Wisewolf reader
-USER_AGENT = 'WisewolfRSS/0.0.5 +http://www.wisewolf.co.uk/'
+USER_AGENT = 'WisewolfRSS/' + SERVER_VERSION + ' +http://www.wisewolf.co.uk/'

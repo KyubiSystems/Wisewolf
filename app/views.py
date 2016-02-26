@@ -1,6 +1,6 @@
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2016 Kyubi Systems: www.kyubi.co.uk
 """
 
 from flask import Flask, redirect, url_for, send_from_directory, jsonify, render_template, request
@@ -54,13 +54,18 @@ def get_post(id=None):
     except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)
 
+    # Create human-readable datestamps for posts
+    datestamp = loadDates([post,])
+    
     # optional retrieve full article
     if not post.content:
         if post.link:
             rawhtml = urllib.urlopen(post.link).read()
             rawarticle = Document(rawhtml).summary()
-            post.content = rawarticle.encode('utf-8').strip()
-    
+            post.content = rawarticle.strip()
+
+            print '>>>DEBUG: ' + post.content
+            
     if request.json == None:
 
         # populate Category tree
@@ -70,7 +75,8 @@ def get_post(id=None):
         return render_template("post.html",
                                categories=categories,
                                feeds=feeds,
-                               p=post)
+                               p=post,
+                               datestamp=datestamp)
 
     else:
 

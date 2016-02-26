@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2015 Kyubi Systems: www.kyubi.co.uk
+(c) 2016 Kyubi Systems: www.kyubi.co.uk
 """
 
 # import system libraries
@@ -269,7 +269,7 @@ if __name__ == '__main__':
     # TODO: Print startup messages
 
     # Log startup message, create DB if necessary
-    print "Wisewolf RSS server %s (c) Kyubi Systems 2015: initialising..." % SERVER_VERSION,
+    print "Wisewolf RSS server %s (c)2016 Kyubi Systems: initialising..." % SERVER_VERSION,
     initialise()
     print 'OK'
 
