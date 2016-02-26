@@ -7,12 +7,14 @@ from flask import Flask, redirect, url_for, send_from_directory, jsonify, render
 from models import *
 from messages import *
 from opml import Opml
+from readability.readability import Document
 import arrow
 import autodiscovery
 import requests
 import os
 import magic
 import uuid
+import urllib
 
 from frontend import app
 
@@ -52,18 +54,23 @@ def get_post(id=None):
     except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)
 
+    # optional retrieve full article
+    if not post.content:
+        if post.link:
+            rawhtml = urllib.urlopen(post.link).read()
+            rawarticle = Document(rawhtml).summary()
+            post.content = rawarticle.encode('utf-8').strip()
+    
     if request.json == None:
 
         # populate Category tree
         (categories, feeds) = loadTree()
 
-        # TODO: optional retrieve full article
-
         # render post HTML template
         return render_template("post.html",
                                categories=categories,
                                feeds=feeds,
-                               post=post)
+                               p=post)
 
     else:
 

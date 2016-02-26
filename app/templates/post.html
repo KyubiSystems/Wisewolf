@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% macro favicon(id) -%}
+<img src="/static/cache/icons/favicon_{{ id }}.ico" onError="this.onerror=null;this.src='/static/favicon.ico';">
+{%- endmacro %}
+{% macro favourite(f, id) -%}
+{% if f %}
+<i class="fa fa-star fa-lg fav fav-{{ id }}" onclick="favouritePost({{ id }})"></i>
+{% else %}
+<i class="fa fa-star-o fa-lg fav fav-{{ id }}" onclick="favouritePost({{ id }})"></i>
+{% endif %}
+{%- endmacro %}
+{% block content %}
+<div class="row">
+    <div class="col-md-3 sidebar">
+        <div class="categories">
+        {% for c in categories %}
+        <div class="category cat-{{c.id}}">
+	  <div class="cathead cath-{{c.id}}">
+            <i class="fa fa-folder-open"></i>&nbsp;<a href="/category/{{c.id}}">{{c.name}}</a>&nbsp;({{c.count}})
+	  </div>
+	  <div class="catbody catb-{{c.id}}">
+            {% for f in feeds[c.id] %}
+	    <div class="catentry cate-{{c.id}} feed-{{f.id}}">
+                <i class="fa fa-caret-right"></i>&nbsp;{{ favicon( f.id ) }}&nbsp;<a href="/feed/{{f.id}}">{{f.name}}</a>&nbsp;({{f.count}})
+	    </div>
+            {% endfor %}
+	  </div>
+	</div>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-9 content">
+      <div class="post post-{{ p.id }}">
+        <div class="postheader">
+	  {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamps[p.id] }}&nbsp;{{ favourite( p.is_favourite, p.id ) }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{p.id}})"></i>
+	</div>
+	<div class="postbody">
+          <i>{{p.description}}</i>
+          {% if p.content %}
+          <br/>{{p.content|safe}}
+          {% endif %}
+	</div>
+      </div>
+      <br/>
+    </div>
+</div>
+{% endblock %}
