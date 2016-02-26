@@ -5,7 +5,7 @@ Wisewolf
 
 The intent is to make Wisewolf an alternative to Tiny Tiny RSS: http://tt-rss.org/redmine/projects/tt-rss/wiki
 
-**Current status: version 0.0.5 (pre-alpha)**
+**Current status: version 0.1-alpha**
 
 API
 ---
@@ -18,7 +18,7 @@ Requirements
 * Use of a Python *virtualenv* environment is recommended.
 * See Wisewolf-req.txt pip requirements file for Python prerequisites. 
 * Relies on __Flask__ microframework and __Gevent/Greenlet__ for asynchronous communications. 
-* A database. Will be SQLite3 by default, look at supporting other DBMS (MySQL, Postgres).
+* A database. SQLite3 by default, look at supporting other DBMS (MySQL, Postgres).
 * Pillow (Python Imaging Library fork) with libjpeg support for thumbnail generation.
 
 Wisewolf requires WSGI-compliant hosting.
@@ -31,10 +31,10 @@ Wisewolf uses the **Creative Commons BY-NC-SA 3.0 license**.
 Roadmap for alpha release
 ---------
 
-For v0.1 initial alpha:
+For v0.1-alpha:
 
 - [x] Feed aggregation
-- [ ] Post display
+- [x] Post display
 - [x] OPML import
 - [x] Asynchronous client updates
 - [x] Refresh feeds automatically (update frequency selectable per feed) or manually.
@@ -42,8 +42,8 @@ For v0.1 initial alpha:
 
 For v0.2
 
-- [ ] Strip web-bug images
-- [ ] Post formatting via Readability
+- [x] Strip web-bug images
+- [x] Post formatting via Readability
 - [ ] Live update of feed display via websockets
 - [ ] Optionally strip embedded/linked images to associated local galleries (see Yomiko). Useful for art sites and webcomics
 - [ ] Media support for HTML5 audio/video, MediaRSS ingest
