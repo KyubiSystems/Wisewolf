@@ -11,6 +11,7 @@ feedparser==5.2.1
 Flask==0.11.1
 Flask-Login==0.3.2
 Flask-Sijax==0.4.1
+Flask-SocketIO==2.7.1
 future==0.15.2
 gevent==1.1.2
 gevent-websocket==0.9.5
@@ -24,7 +25,9 @@ peewee==2.8.3
 Pillow==3.3.1
 python-daemon==2.1.1
 python-dateutil==2.5.3
+python-engineio==1.0.2
 python-magic==0.4.12
+python-socketio==1.5.1
 pytz==2016.6.1
 readability-lxml==0.6.2
 requests==2.11.1
