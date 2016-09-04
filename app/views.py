@@ -7,7 +7,7 @@ from flask import Flask, redirect, url_for, send_from_directory, jsonify, render
 from models import *
 from messages import *
 from opml import Opml
-from readability.readability import Document
+from readability.readability import Document,Unparseable
 import arrow
 import autodiscovery
 import requests
@@ -61,7 +61,10 @@ def get_post(id=None):
     if not post.content:
         if post.link:
             rawhtml = urllib.urlopen(post.link).read()
-            rawarticle = Document(rawhtml).summary()
+            try:
+                rawarticle = Document(rawhtml).summary()
+            except Unparseable:
+                rawarticle = 'Unable to parse article'
             post.content = rawarticle.strip()
 
 #            print '>>>DEBUG: ' + post.content

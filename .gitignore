@@ -8,6 +8,7 @@ app/db/Wisewolf.db
 app/static/cache/icons/*.ico
 app/static/cache/images/*
 app/static/uploads/*
-wisewolf.log
+app/access.log
+app/wisewolf.log
 
 
