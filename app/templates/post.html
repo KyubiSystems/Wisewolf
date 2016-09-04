@@ -32,13 +32,14 @@
     <div class="col-md-9 content">
       <div class="post post-{{ p.id }}">
         <div class="postheader">
-	  {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> [<a href="{{p.link}}">Link</a>]&nbsp;{{ datestamp[p.id] }}&nbsp;{{ favourite( p.is_favourite, p.id ) }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{p.id}})"></i>
+	  {{ favicon( p.feed.id ) }}&nbsp;<b><a href="/post/{{p.id}}">{{p.title}}</a></b> <a href="{{p.link}}"><i class="fa fa-link"></i></a>&nbsp;{{ datestamp[p.id] }}&nbsp;{{ favourite( p.is_favourite, p.id ) }}<i class="fa fa-times fa-lg postdelete" onclick="deletePost({{p.id}})"></i>
 	</div>
 	<div class="postbody">
           <i>{{p.description}}</i>
 	  <hr noshade>
           {% if p.content %}
-          <br/>{{p.content|safe}}
+	  <h2>Article text <a href="{{p.link}}"><i class="fa fa-link"></i></a></h2>
+	  {{p.content|safe}}
           {% endif %}
 	</div>
       </div>

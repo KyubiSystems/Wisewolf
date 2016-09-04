@@ -64,7 +64,7 @@ def get_post(id=None):
             rawarticle = Document(rawhtml).summary()
             post.content = rawarticle.strip()
 
-            print '>>>DEBUG: ' + post.content
+#            print '>>>DEBUG: ' + post.content
             
     if request.json == None:
 
