@@ -3,7 +3,7 @@ Wisewolf RSS Reader
 (c) 2016 Kyubi Systems: www.kyubi.co.uk
 """
 
-from flask import Flask, redirect, url_for, send_from_directory, jsonify, render_template, request
+from flask import Flask, Response, redirect, url_for, send_from_directory, jsonify, render_template, request
 from models import *
 from messages import *
 from opml import Opml
@@ -16,6 +16,7 @@ import os
 import magic
 import uuid
 import urllib
+import json
 
 from frontend import app
 
@@ -531,13 +532,18 @@ def loadJsonTree():
     categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
 
     # Loop over categories
+    all_feeds = []
     for c in categories:
-        # Get feeds by category
-        catfeeds = Feed.select().where(Feed.category == c.id).annotate(Post)
-        for f in catfeeds:
-            feeds[c.id].append(f.name)
 
-    return feeds
+        feeds[c.id] = { 'name': c.name, 'id' : c.id, 'count': c.count, 'children' : [] }
+        # Get feeds by category
+        category_feeds = Feed.select().where(Feed.category == c.id).annotate(Post)
+        for f in category_feeds:
+            feeds[c.id]['children'].append({'id': f.id, 'name': f.name, 'count' : f.count, 'url': f.url})
+
+        all_feeds.append(feeds[c.id])
+        
+    return Response(json.dumps(all_feeds), mimetype='application/json')
   
 
 # Create human-readable datestamps for posts ------------
