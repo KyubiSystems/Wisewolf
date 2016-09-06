@@ -8,6 +8,7 @@ from models import *
 from messages import *
 from opml import Opml
 from readability.readability import Document,Unparseable
+from collections import defaultdict
 import arrow
 import autodiscovery
 import requests
@@ -486,6 +487,12 @@ def wstest():
 def wstest2():
     return render_template("ws_jsontime_client.html")
 
+# JSON tree testing ----------
+
+@app.route('/test/jsontree')
+def jsontree():
+    return loadJsonTree()
+
 # Error handling -------------
 
 @app.errorhandler(404)
@@ -514,6 +521,24 @@ def loadTree():
         feeds[c.id] = f
 
     return (categories, feeds)
+
+def loadJsonTree():
+
+    # Use collection to build nested list for tree
+    feeds = defaultdict(list)
+
+    # Get categories, number of posts by category
+    categories = Category.select(Category, fn.Count(Post.id).alias('count')).join(Feed).join(Post).group_by(Category)
+
+    # Loop over categories
+    for c in categories:
+        # Get feeds by category
+        catfeeds = Feed.select().where(Feed.category == c.id).annotate(Post)
+        for f in catfeeds:
+            feeds[c.id].append(f.name)
+
+    return feeds
+  
 
 # Create human-readable datestamps for posts ------------
 
