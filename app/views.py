@@ -494,6 +494,10 @@ def wstest2():
 def jsontree():
     return loadJsonTree()
 
+@app.route('/test/jsonmenu')
+def jsontest():
+    return render_template("jsonmenu.html")
+
 # Error handling -------------
 
 @app.errorhandler(404)

@@ -1,4 +1,4 @@
-<!DOCTYPE html>>
+<!DOCTYPE html>
 <html>
   <head>
     <!-- begin CSS -->
@@ -25,7 +25,13 @@
          '/test/jsontree',
          function(data) {
             $('#tree1').tree({
-               data: data
+            data: data,
+            autoOpen: 1,
+            onCreateLi: function(node, $li) {
+               // Attempt to create link for node element
+               $li.find('.jqtree-title').before('<a href="' + node.url + '">');
+               $li.find('.jqtree-title').append('</a> <b>(' + node.count + ')</b>');
+            }
             });
          }
       );
