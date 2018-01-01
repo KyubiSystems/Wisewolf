@@ -1,4 +1,5 @@
 Flask
+feedparser
 arrow
 peewee
 gevent

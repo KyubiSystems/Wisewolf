@@ -9,6 +9,7 @@ certifi==2017.11.5        # via requests
 chardet==3.0.4            # via readability-lxml, requests
 click==6.7                # via flask
 cssselect==1.0.1          # via readability-lxml
+feedparser==5.2.1
 flask==0.12.2
 gevent==1.2.2
 greenlet==0.4.12          # via gevent
