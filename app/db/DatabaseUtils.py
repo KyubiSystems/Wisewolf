@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2015 Kyubi Systems: www.kyubi.co.uk
+(c) 2017 Kyubi Systems: www.kyubi.co.uk
 """
-from urlparse import urlparse
-import urllib2
-from config import *
-from models import *
+
+import logging
+from config import DB_FILE, DEFAULTS_FILE
+from models import Category, Feed, Post, Image, SqliteDatabase
 from imgcache.Imgcache import getFavicon
 
 # Set up logging
-import logging
 log = logging.getLogger('wisewolf.log')
 
 # Create SQLite3 tables

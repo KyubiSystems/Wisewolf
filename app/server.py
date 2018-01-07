@@ -14,8 +14,8 @@ import re
 import HTMLParser
 
 # import Wisewolf libraries
-from config import *
-from models import *
+from config import DB_FILE, INTERVAL, MAX_ERRORS, MAX_REQUESTS, USER_AGENT
+from models import Feed, Post
 from imgcache.Imgcache import getFavicon
 from db.DatabaseUtils import *
 

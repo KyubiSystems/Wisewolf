@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2015 Kyubi Systems: www.kyubi.co.uk
+(c) 2017 Kyubi Systems: www.kyubi.co.uk
 """
 import os
-import requests
 import shutil
-
+import logging
+import urllib2
 from urlparse import urlparse
+import requests
+
 from bs4 import BeautifulSoup as BS
 from PIL import Image as Im
 
-from config import *
-from models import *
+from config import ICONS_PATH, IMAGE_PATH, THUMB_PATH, THUMB_SIZE
+from models import Feed, Post, Image
 
-import logging
 log = logging.getLogger('wisewolf.log')
 
 
@@ -35,12 +36,12 @@ def getFavicon(feed_id):
     try:
         r = requests.get(favicon_url, stream=True, timeout=5)
         content_type = r.headers.get('content-type')
-        if r.status_code == requests.codes.ok and content_type in favicon_types:
+        if r.status_code == requests.codes.ok and content_type in favicon_types: # pylint: disable=maybe-no-member
             log.info("getFavicon: returned from urllib, content-type %s" % content_type)
         else:
             return None
             
-    except:
+    except Exception:
         return None
 
     log.info("Favicon {0} status: {1}".format(str(feed_id), str(r.status_code))) 
@@ -61,6 +62,7 @@ def getFavicon(feed_id):
 def getImages(post_id, makeThumb=True):
 
     # Image HTTP content types
+    # TODO: Add others -- this should be a standard function
     extensions = {'image/gif': 'gif', 'image/jpeg': 'jpg', 'image/pjpeg': 'jpg', 'image/png': 'png'}
 
     post = Post.get(Post.id == post_id)
@@ -75,7 +77,7 @@ def getImages(post_id, makeThumb=True):
     for tag in soup.find_all('img'):
         image_url = tag['src']
         try:
-            f = urllib2.urlopen(image_url)
+            f = urllib2.urlopen(image_url) # TODO: Replace with Request
             http = f.info()
             content_type = http.type  # Get HTTP Content-Type to determine file extension
         except urllib2.HTTPError:
@@ -94,7 +96,7 @@ def getImages(post_id, makeThumb=True):
         # If not found, add to cache
         if url_num == 0:
 
-            log.info("Found image {0}, writing to cache", image_url)
+            log.info("Found image %s, writing to cache" % image_url)
 
             # Read image data from url
             image_data = f.read()
@@ -126,7 +128,7 @@ def getImages(post_id, makeThumb=True):
                     thumb.thumbnail(THUMB_SIZE)
                     thumb.save(thumb_file, "JPEG")
                 except IOError:
-                    log.error("Cannot create thumbnail for", image_file)
+                    log.error("Cannot create thumbnail for %s" % image_file)
 
             # increment image counter
             img_num += 1
