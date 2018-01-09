@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-from readability.readability import Document
 import urllib
 import sys
+
+from readability.readability import Document
 
 url = sys.argv[1]
 
@@ -15,4 +16,3 @@ readable_title = Document(html).short_title()
 print readable_title
 
 print readable_article.encode('utf-8').strip()
-

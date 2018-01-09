@@ -5,19 +5,20 @@ Wisewolf RSS Reader
 """
 
 # import system libraries
-import feedparser
+import logging
 import argparse
 import os
-import arrow
 import hashlib
 import re
 import HTMLParser
 
+import feedparser
+import arrow
+
 # import Wisewolf libraries
-from config import DB_FILE, INTERVAL, MAX_ERRORS, MAX_REQUESTS, USER_AGENT
-from models import Feed, Post
-from imgcache.Imgcache import getFavicon
-from db.DatabaseUtils import *
+from config import DB_FILE, INTERVAL, MAX_ERRORS, MAX_REQUESTS, USER_AGENT, SERVER_VERSION
+from models import Feed, Post, SqliteDatabase
+from db.DatabaseUtils import create_db, load_defaults
 
 # Set up gevent multithreading
 import gevent
@@ -26,10 +27,9 @@ gevent.monkey.patch_all()
 from gevent.pool import Pool
 
 # Set up server logging
-import logging
 logging.basicConfig(level=logging.INFO,
-                   filename='wisewolf.log', # log to this file
-                   format='%(asctime)s %(levelname)s: %(message)s') # include timestamp, level
+                    filename='wisewolf.log', # log to this file
+                    format='%(asctime)s %(levelname)s: %(message)s') # include timestamp, level
 
 # Set Feedparser User-Agent string defined in config
 feedparser.USER_AGENT = USER_AGENT
@@ -44,7 +44,7 @@ def rss_spawn(tick=1):
 
     # Connect to database
     db.connect()
-    
+
     # Set limit of MAX_REQUESTS simultaneous RSS requests
     pool = Pool(MAX_REQUESTS)
 
@@ -190,21 +190,21 @@ def rss_worker(f):
         # Increment error counter
         # Mark feed inactive if MAX_ERRORS reached
         error_count += 1
-        q = Feed.update(errors = error_count).where(Feed.id == id)
+        q = Feed.update(errors=error_count).where(Feed.id == id)
         q.execute()
         if error_count == MAX_ERRORS:
-            q = Feed.update(inactive = True).where(Feed.id == id)
+            q = Feed.update(inactive=True).where(Feed.id == id)
             q.execute()
             logging.warning("Feed %s is marked INACTIVE, MAX_ERRORS reached", f.url)
         
         # No valid status, skip feed now
-        if not 'status' in d:
+        if 'status' not in d:
             logging.warning("Feed %s is DOWN, no valid status", f.url)
             return
 
         # Status 410 Gone Permanently, mark feed inactive
         if d.status == 410:
-            q = Feed.update(inactive = True).where(Feed.id == id)
+            q = Feed.update(inactive=True).where(Feed.id == id)
             q.execute()
             logging.warning("Feed %s is marked INACTIVE, 410 Gone Permanently", f.url)
 
@@ -214,7 +214,7 @@ def rss_worker(f):
 
     # update Feed last checked date before returning
     a = arrow.utcnow()
-    q = Feed.update(last_checked = a.datetime).where(Feed.id == id)
+    q = Feed.update(last_checked=a.datetime).where(Feed.id == id)
     q.execute()
     return
 
@@ -223,16 +223,15 @@ def rss_worker(f):
 # Initialise: Startup message, DB creation check, load default feeds
 def initialise():
 
+    print "initialising...",
+
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
         create_db()
 
     # If feed table is empty, load the default feed set:
-    
     if Feed.select().count() == 0:
         load_defaults()
-
-    return
 
 # --------------------------------------------------
 # Start main RSS server loop
@@ -244,7 +243,7 @@ def start():
 # interval counter class
 # rolls over at 96
 
-class Count:
+class Count(object):
     def __init__(self):
         self.counter = 0
     def get(self):
@@ -261,15 +260,13 @@ if __name__ == '__main__':
     # Server startup options
     # --nows: no websocket output, just update DB
 
+    # TODO: Handle 'headless' commandline options
     parser = argparse.ArgumentParser(description="Wisewolf RSS server process")
     parser.add_argument("--nows", help="No websocket output, just update DB")
     args = parser.parse_args()
 
-    # TODO: Handle 'headless' commandline options
-    # TODO: Print startup messages
-
     # Log startup message, create DB if necessary
-    print "Wisewolf RSS server %s (c)2016 Kyubi Systems: initialising..." % SERVER_VERSION,
+    print "Wisewolf RSS server %s (c)2017 Kyubi Systems: " % SERVER_VERSION,
     initialise()
     print 'OK'
 

@@ -4,10 +4,9 @@ Testing OPML import
 (c) 2015 KyubiSystems: www.kyubi.co.uk
 """
 from opml import Opml
-from models import *
+from models import Category, Feed, IntegrityError
 
 o = Opml.OpmlReader('./opml/testing.xml')
-# o = Opml.OpmlReader('./opml/opml-example.xml')
 
 o.parseOpml()
 

@@ -31,10 +31,15 @@ class Discover(HTMLParser):
     # Search for <LINK> tag in header
 
     def handle_starttag(self, tag, attr):
-        if tag != 'link': return
+        if tag != 'link':
+            return
+
         attributes = dict(attr) # convert name-value tuples to dict
-        if 'type' not in attributes: return
-        if attributes['type'] not in FEED_TYPES: return
+        if 'type' not in attributes:
+            return
+        
+        if attributes['type'] not in FEED_TYPES:
+            return
 
         if 'title' in attributes:
             title = attributes['title']
@@ -44,7 +49,7 @@ class Discover(HTMLParser):
         link = attributes['href']
         fulluri = self.makeFullURI(link)
 
-        self.feeds.append({ 'title' : title, 'fulluri' : fulluri })
+        self.feeds.append({'title' : title, 'fulluri' : fulluri})
 
     # Convert partial to full URIs
 
