@@ -32,19 +32,19 @@ def getFavicon(feed_id):
     url = feed.url
     u = urlparse(url)
     favicon_url = 'http://' + u.netloc + '/favicon.ico'
-    log.info("getFavicon: Looking for favicon at %s" % favicon_url)
+    log.info("getFavicon: Looking for favicon at %s", favicon_url)
     try:
         r = requests.get(favicon_url, stream=True, timeout=5)
         content_type = r.headers.get('content-type')
         if r.status_code == requests.codes.ok and content_type in favicon_types: # pylint: disable=maybe-no-member
-            log.info("getFavicon: returned from urllib, content-type %s" % content_type)
+            log.info("getFavicon: returned from urllib, content-type %s", content_type)
         else:
             return None
-            
+
     except Exception:
         return None
 
-    log.info("Favicon {0} status: {1}".format(str(feed_id), str(r.status_code))) 
+    log.info("Favicon %s status: %s", str(feed_id), str(r.status_code))
 
     favicon_path = '{0}favicon_{1}.ico'.format(ICONS_PATH, str(feed_id))  # Full file path to favicon
     favicon_file = 'favicon_{0}.ico'.format(str(feed_id)) # favicon filename
@@ -96,7 +96,7 @@ def getImages(post_id, makeThumb=True):
         # If not found, add to cache
         if url_num == 0:
 
-            log.info("Found image %s, writing to cache" % image_url)
+            log.info("Found image %s, writing to cache", image_url)
 
             # Read image data from url
             image_data = f.read()
@@ -118,7 +118,7 @@ def getImages(post_id, makeThumb=True):
             # Add to Image database table
             Image.create(post_id=post_id, feed_id=feed, url=image_url, path=image_file)
 
-            if makeThumb == True:
+            if makeThumb:
 
                 # Create corresponding thumbnail using Pillow, add to thumbnail cache dir
                 thumb_file = '{0}{1}/thumb_{2}.{3}'.format(THUMB_PATH, str(feed), str(img_num), extensions[content_type])
@@ -128,8 +128,7 @@ def getImages(post_id, makeThumb=True):
                     thumb.thumbnail(THUMB_SIZE)
                     thumb.save(thumb_file, "JPEG")
                 except IOError:
-                    log.error("Cannot create thumbnail for %s" % image_file)
+                    log.error("Cannot create thumbnail for %s", image_file)
 
             # increment image counter
             img_num += 1
-

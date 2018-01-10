@@ -149,7 +149,7 @@ def rss_worker(f):
 
         # If post entries exist, process them
         for post in d.entries:
-            
+
             post_content = ""
             post_title = post.get('title', 'No title')
 
@@ -157,16 +157,16 @@ def rss_worker(f):
             desc = post.get('description', '')
             desc = h.unescape(desc) # unescape HTML entities
             post_description = re.sub(r'<[^>]*?>', '', desc) # crudely strip HTML tags in description
-            
+
             post_published = arrow.get(post.get('published_parsed')) or arrow.now()
             if 'content' in post:
                 post_content = post.content[0].value
             post_link = post.get('link', '')
-                
+
             # Get post checksum (title + description + link url)
             check_string = (post_title + post_description + post_link).encode('utf8')
             post_checksum = hashlib.sha224(check_string).hexdigest()
-            
+
             # If post checksum not found in DB, add post
             if Post.select().where(Post.md5 == post_checksum).count() == 0:
                 p = Post()
@@ -178,13 +178,13 @@ def rss_worker(f):
                 p.feed = id
                 p.md5 = post_checksum
                 p.save()
-                
+
             # TODO: Filter text for dangerous content (e.g. XSRF?)
             # Feedparser already does this to some extent
 
             # TODO: Spawn websocket message with new posts for web client
 
-    else: 
+    else:
         # Site appears to be down
 
         # Increment error counter
@@ -196,7 +196,7 @@ def rss_worker(f):
             q = Feed.update(inactive=True).where(Feed.id == id)
             q.execute()
             logging.warning("Feed %s is marked INACTIVE, MAX_ERRORS reached", f.url)
-        
+
         # No valid status, skip feed now
         if 'status' not in d:
             logging.warning("Feed %s is DOWN, no valid status", f.url)
@@ -271,5 +271,5 @@ if __name__ == '__main__':
     print 'OK'
 
     # Start main RSS server loop
-    logging.info("Wisewolf RSS server version %s starting" % SERVER_VERSION)
+    logging.info("Wisewolf RSS server version %s starting", SERVER_VERSION)
     start()
