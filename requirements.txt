@@ -4,34 +4,30 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-arrow==0.10.0
-astroid==1.6.0            # via pylint
-backports.functools-lru-cache==1.4  # via astroid, pylint
-certifi==2017.11.5        # via requests
+arrow==0.12.1
+astroid==2.0.1            # via pylint
+certifi==2018.4.16        # via requests
 chardet==3.0.4            # via readability-lxml, requests
 click==6.7                # via flask
-configparser==3.5.0       # via pylint
-cssselect==1.0.1          # via readability-lxml
-enum34==1.1.6             # via astroid
+cssselect==1.0.3          # via readability-lxml
 feedparser==5.2.1
-flask==0.12.2
-gevent==1.2.2
-greenlet==0.4.12          # via gevent
-idna==2.6                 # via requests
-isort==4.2.15             # via pylint
+flask==1.0.2
+gevent==1.3.5
+greenlet==0.4.14          # via gevent
+idna==2.7                 # via requests
+isort==4.3.4              # via pylint
 itsdangerous==0.24        # via flask
-jinja2==2.9.6             # via flask
+jinja2==2.10              # via flask
 lazy-object-proxy==1.3.1  # via astroid
-lxml==3.8.0               # via readability-lxml
+lxml==4.2.3               # via readability-lxml
 markupsafe==1.0           # via jinja2
 mccabe==0.6.1             # via pylint
-peewee==2.10.1
-pylint==1.8.1
-python-dateutil==2.6.0    # via arrow
-readability-lxml==0.6.2
-requests==2.18.4
-singledispatch==3.4.0.3   # via astroid, pylint
-six==1.10.0               # via astroid, pylint, python-dateutil, singledispatch
-urllib3==1.22             # via requests
-werkzeug==0.12.2          # via flask
+peewee==3.6.4
+pylint==2.0.1
+python-dateutil==2.7.3    # via arrow
+readability-lxml==0.7
+requests==2.19.1
+six==1.11.0               # via astroid, python-dateutil
+urllib3==1.23             # via requests
+werkzeug==0.14.1          # via flask
 wrapt==1.10.11            # via astroid
