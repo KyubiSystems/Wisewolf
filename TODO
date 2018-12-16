@@ -1,3 +1,9 @@
+Time Handling:
+--------------
+
+Move from Arrow to Pendulum for date/time handling
+https://pendulum.eustace.io/docs/#installation
+
 Interface: 
 ----------
 
