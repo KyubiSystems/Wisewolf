@@ -2,6 +2,7 @@ Flask
 feedparser
 arrow
 peewee
+Pillow
 pylint
 gevent
 readability-lxml
