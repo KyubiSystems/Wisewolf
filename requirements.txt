@@ -6,6 +6,7 @@
 #
 arrow==0.12.1
 astroid==2.1.0            # via pylint
+beautifulsoup4==4.6.3
 certifi==2018.10.15       # via requests
 chardet==3.0.4            # via readability-lxml, requests
 click==7.0                # via flask
@@ -28,7 +29,7 @@ pylint==2.2.2
 python-dateutil==2.7.5    # via arrow
 readability-lxml==0.7
 requests==2.20.0
-six==1.11.0               # via astroid, pylint, python-dateutil
+six==1.11.0               # via astroid, python-dateutil
 urllib3==1.24             # via requests
 werkzeug==0.14.1          # via flask
 wrapt==1.10.11            # via astroid

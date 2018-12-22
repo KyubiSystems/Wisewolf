@@ -1,9 +1,10 @@
+beautifulsoup4
 Flask
 feedparser
 arrow
 peewee
 Pillow
-pylint
+pylint==2.2.2
 gevent
 readability-lxml
 requests
