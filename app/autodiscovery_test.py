@@ -27,16 +27,16 @@ url = 'http://www.slashdot.org'
 r = requests.get(url)
 
 if (r.status_code != requests.codes.ok):
-    print 'Request error'
+    print('Request error')
     sys.exit(1)
 
 # Get Content-Type
 contenttype = r.headers['content-type']
-print contenttype
+print(contenttype)
 
 # If Content-Type is RSS feed, return
 if (contenttype in FEED_TYPES):
-    print 'RSS feed detected ' + url
+    print('RSS feed detected ' + url)
     sys.exit(0)
 
 # If Content-Type is HTML, pass to autodiscovery
@@ -46,7 +46,7 @@ if (contenttype == 'text/html'):
 
     p.feed(r.text)
 
-    print p.feeds
+    print(p.feeds)
     p.close()
     
     sys.exit(0)

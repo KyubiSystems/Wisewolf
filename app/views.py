@@ -15,7 +15,7 @@ import requests
 import os
 import magic
 import uuid
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import json
 
 from frontend import app
@@ -62,7 +62,7 @@ def get_post(id=None):
     # optional retrieve full article
     if not post.content:
         if post.link:
-            rawhtml = urllib.urlopen(post.link).read()
+            rawhtml = urllib.request.urlopen(post.link).read()
             try:
                 rawarticle = Document(rawhtml).summary()
             except Unparseable:
@@ -419,13 +419,13 @@ def opml_parse():
         
         file.save(opml_path)
 
-        print 'OPML uploaded OK!'
+        print('OPML uploaded OK!')
 
         # run Opml parser on uploaded file
         o = Opml.OpmlReader(opml_path)
         o.parseOpml()
 
-        print 'OPML parsed OK!'
+        print('OPML parsed OK!')
         
         # Save categories to DB, skip invalid or duplicate feeds
         for c in o.categories:
@@ -436,13 +436,13 @@ def opml_parse():
             except IntegrityError:
                 pass
             
-        print 'Categories added to DB!'
+        print('Categories added to DB!')
 
         # Iterate over feeds found
         for f in o.feeds:
 
-            print '------------'
-            print f
+            print('------------')
+            print(f)
             
             # Get corresponding Category id
             cat_id = Category.get(Category.name == f['category']).id
@@ -466,7 +466,7 @@ def opml_parse():
                 pass
                                                         
 
-        print 'Feeds added to DB!'
+        print('Feeds added to DB!')
         
         # return send_from_directory(UPLOAD_FOLDER, opml_filename) # Test returning uploaded OPML file
         return redirect(url_for('index'), code=302)

@@ -10,7 +10,7 @@ import argparse
 import os
 import hashlib
 import re
-import HTMLParser
+import html.parser
 
 import feedparser
 import arrow
@@ -153,7 +153,7 @@ def rss_worker(f):
             post_content = ""
             post_title = post.get('title', 'No title')
 
-            h = HTMLParser.HTMLParser()
+            h = html.parser.HTMLParser()
             desc = post.get('description', '')
             desc = h.unescape(desc) # unescape HTML entities
             post_description = re.sub(r'<[^>]*?>', '', desc) # crudely strip HTML tags in description
@@ -223,7 +223,7 @@ def rss_worker(f):
 # Initialise: Startup message, DB creation check, load default feeds
 def initialise():
 
-    print "initialising...",
+    print("initialising...", end=' ')
 
     # Check for existence of SQLite3 database, creating if necessary
     if not os.path.exists(DB_FILE):
@@ -266,9 +266,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Log startup message, create DB if necessary
-    print "Wisewolf RSS server %s (c)2017 Kyubi Systems: " % SERVER_VERSION,
+    print("Wisewolf RSS server %s (c)2017 Kyubi Systems: " % SERVER_VERSION, end=' ')
     initialise()
-    print 'OK'
+    print('OK')
 
     # Start main RSS server loop
     logging.info("Wisewolf RSS server version %s starting", SERVER_VERSION)

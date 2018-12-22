@@ -9,7 +9,7 @@ feed(uri) - returns feed found for a URI
 """
 
 try:
-    from HTMLParser import HTMLParser
+    from html.parser import HTMLParser
 except ImportError:
     from html.parser import HTMLParser
 

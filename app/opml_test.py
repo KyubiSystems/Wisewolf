@@ -11,7 +11,7 @@ o = Opml.OpmlReader('./opml/testing.xml')
 o.parseOpml()
 
 # Show retrieved data structures
-print o.version
+print(o.version)
 
 # Save categories to DB, skip invalid or duplicate feeds
 for c in o.categories:
@@ -24,8 +24,8 @@ for c in o.categories:
 # Iterate over feeds found
 for f in o.feeds:
 
-    print '------------'
-    print f
+    print('------------')
+    print(f)
 
     # Get corresponding Category id
     cat_id = Category.get(Category.name == f['category']).id    

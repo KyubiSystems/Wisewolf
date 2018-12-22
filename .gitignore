@@ -5,7 +5,6 @@
 .idea/
 .vscode/
 venv.ww
-venv3.ww
 app/db/Wisewolf.db
 app/static/cache/icons/*.ico
 app/static/cache/images/*
