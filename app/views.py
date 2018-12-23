@@ -4,10 +4,10 @@ Wisewolf RSS Reader
 """
 
 from flask import Flask, Response, redirect, url_for, send_from_directory, jsonify, render_template, request
-from models import *
-from messages import *
+from models import Feed, Post, Category, Image
+from messages import CATEGORY_NOT_FOUND, DUPLICATE_FEED, FEED_NOT_FOUND, FEED_INVALID, POST_NOT_FOUND, STATUS_OK
 from opml import Opml
-from readability.readability import Document,Unparseable
+from readability.readability import Document, Unparseable
 from collections import defaultdict
 import arrow
 import autodiscovery
@@ -15,7 +15,9 @@ import requests
 import os
 import magic
 import uuid
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import json
 
 from frontend import app
@@ -34,7 +36,7 @@ def index():
     (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
-    posts = Post.select().order_by(Post.published.desc()).paginate(1,50)
+    posts = Post.select().order_by(Post.published.desc()).paginate(1, 50)
 
     # Create human-readable datestamps for posts
     datestamps = loadDates(posts)
@@ -71,7 +73,7 @@ def get_post(id=None):
 
 #            print '>>>DEBUG: ' + post.content
             
-    if request.json == None:
+    if request.json is None:
 
         # populate Category tree
         (categories, feeds) = loadTree()
@@ -118,7 +120,7 @@ def set_favourite(id=None):
     # Toggle favourite status for post #id
     try:
         is_favourite = Post.get(Post.id == id).is_favourite
-        query = Post.update(is_favourite = not is_favourite).where(Post.id == id)
+        query = Post.update(is_favourite=not is_favourite).where(Post.id == id)
         query.execute()
     except Post.DoesNotExist:
         return jsonify(**POST_NOT_FOUND)
@@ -166,13 +168,13 @@ def feed(id=None):
     (categories, feeds) = loadTree()
 
     # Get posts in decreasing date order
-    posts = Post.select().join(Feed).where(Feed.id == id).order_by(Post.published.desc()).paginate(1,50)
+    posts = Post.select().join(Feed).where(Feed.id == id).order_by(Post.published.desc()).paginate(1, 50)
 
     # Create human-readable datestamps for posts
     datestamps = loadDates(posts)
 
     # Select return format on requested content-type?
-    if request.json == None:
+    if request.json is None:
         # Render feed page template
         return render_template("feed.html", 
                                categories=categories, 
@@ -196,7 +198,7 @@ def feed_update(id=None):
         # Call refresh routine
         # TODO: RSS worker functions in separate package
         # TODO: Need to capture return status
-        if id == None:
+        if id is None:
             rss_spawn() # Update all feeds
         else:
             try:
@@ -212,7 +214,7 @@ def feed_update(id=None):
     # Mark one or all feeds read
     elif request.json['action'] == 'markread':
 
-        if id == None:
+        if id is None:
             # Mark all posts read
             query = Post.update(is_read=True)
         else:
@@ -228,7 +230,7 @@ def feed_update(id=None):
 # Manual add of feed url
 @app.route('/feed/add', methods=['POST'])
 def add_feed(url=None):
-    
+  
     # Get url submitted via AJAX
     url = request.json['url']
 
@@ -250,19 +252,19 @@ def add_feed(url=None):
         return jsonify(**FEED_NOT_FOUND)
 
     # check request status code
-    if (r.status_code != requests.codes.ok):
+    if r.status_code != requests.codes.ok:
         return jsonify(**FEED_NOT_FOUND)
 
     # Get Content-Type
     contenttype = r.headers['content-type']
 
     # If Content-type is RSS, add it directly
-    if (contenttype in FEED_TYPES):
+    if contenttype in FEED_TYPES:
         feed = Feed.create(url=url)
         return jsonify(**STATUS_OK)
     
     # If Content-type is HTML, pass to autodiscovery
-    if (contenttype == 'text/html'):
+    if contenttype == 'text/html':
 
         p = autodiscovery.Discover()
         p.feed(r.text)
@@ -283,7 +285,7 @@ def add_feed(url=None):
 def delete_feed(id=None):
     # Manual deletion of feed from database
     # TODO: Some confirmation required? Client JS via modal?
-    if id == None:
+    if id is None:
 
         # return feed not found
         return jsonify(**FEED_NOT_FOUND)
@@ -313,13 +315,13 @@ def category(id=None):
     (categories, feeds) = loadTree()
 
     # Get posts in category in decreasing date order
-    posts = Post.select().join(Feed).join(Category).where(Category.id == id).order_by(Post.published.desc()).paginate(1,50)
+    posts = Post.select().join(Feed).join(Category).where(Category.id == id).order_by(Post.published.desc()).paginate(1, 50)
 
     # Create human-readable datestamps for posts
     datestamps = loadDates(posts)
 
     # Return mode dependent on Content-Type?
-    if request.json == None:
+    if request.json is None:
 
         # Render category page template
         return render_template("category.html", 
@@ -332,14 +334,14 @@ def category(id=None):
     else:
 
         # Return JSON data structure
-        return jsonify(response = [dict(categories=categories, feeds=feeds, posts=posts)])
+        return jsonify(response=[dict(categories=categories, feeds=feeds, posts=posts)])
 
 # Category delete
 @app.route('/category/<int:id>', methods=['DELETE'])
 def delete_category(id):
     # Delete category #id
     # Reassign all feeds in category to 'unsorted' id 0?
-    query = Feed.update(category_id=0).where(Category.id==id) 
+    query = Feed.update(category_id=0).where(Category.id == id) 
     query.execute()
 
     query = Category.delete().where(Category.id == id)
@@ -354,12 +356,12 @@ def delete_category(id):
 @app.route('/gallery/<int:id>', methods=['GET'])
 def gallery(id=None):
     # Get gallery images associated with feed #id
-    if id == None:
+    if id is None:
         images = Image.select()
     else:
-        images = Image.select().where(Feed.id == id).paginate(1,50)
+        images = Image.select().where(Feed.id == id).paginate(1, 50)
 
-    return render_template("gallery.html", 
+    return render_template("gallery.html",
                            images=images)
 
 # Image routes ---------------
@@ -416,7 +418,7 @@ def opml_parse():
     if file and allowed_file(file.filename):
         opml_filename = str(uuid.uuid4()) + '.xml' # use UUID as unique uploaded filename root
         opml_path = os.path.join(UPLOAD_FOLDER, opml_filename)
-        
+     
         file.save(opml_path)
 
         print('OPML uploaded OK!')
@@ -426,7 +428,7 @@ def opml_parse():
         o.parseOpml()
 
         print('OPML parsed OK!')
-        
+  
         # Save categories to DB, skip invalid or duplicate feeds
         for c in o.categories:
             try:
@@ -435,7 +437,7 @@ def opml_parse():
 
             except IntegrityError:
                 pass
-            
+   
         print('Categories added to DB!')
 
         # Iterate over feeds found
@@ -443,10 +445,10 @@ def opml_parse():
 
             print('------------')
             print(f)
-            
+
             # Get corresponding Category id
             cat_id = Category.get(Category.name == f['category']).id
-            
+
             if o.version == "1.0":
                 # Add feed from OPML version 1.0
                 # TODO: Exception handling
@@ -458,13 +460,12 @@ def opml_parse():
                                    description=f['description'], url=f['xmlUrl'])
             else:
                 continue
-            
+        
             # Add feed to DB, skip invalid or duplicate feeds
             try:
                 feed.save()
             except IntegrityError:
                 pass
-                                                        
 
         print('Feeds added to DB!')
         
@@ -539,14 +540,14 @@ def loadJsonTree():
     all_feeds = []
     for c in categories:
 
-        feeds[c.id] = { 'name': c.name, 'id' : c.id, 'count': c.count, 'children' : [] }
+        feeds[c.id] = {'name': c.name, 'id' : c.id, 'count': c.count, 'children' : []}
         # Get feeds by category
         category_feeds = Feed.select().where(Feed.category == c.id).annotate(Post)
         for f in category_feeds:
             feeds[c.id]['children'].append({'id': f.id, 'name': f.name, 'count' : f.count, 'url': f.url})
 
         all_feeds.append(feeds[c.id])
-        
+   
     return Response(json.dumps(all_feeds), mimetype='application/json')
   
 
