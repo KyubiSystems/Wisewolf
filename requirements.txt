@@ -27,6 +27,7 @@ peewee==3.7.1
 pillow==5.3.0
 pylint==2.2.2
 python-dateutil==2.7.5    # via arrow
+python-magic==0.4.15
 readability-lxml==0.7
 requests==2.20.0
 six==1.11.0               # via astroid, python-dateutil

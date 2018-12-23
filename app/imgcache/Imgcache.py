@@ -6,8 +6,8 @@ Wisewolf RSS Reader
 import os
 import shutil
 import logging
-import urllib2
-from urlparse import urlparse
+import urllib.request, urllib.error, urllib.parse
+from urllib.parse import urlparse
 import requests
 
 from bs4 import BeautifulSoup as BS
@@ -77,10 +77,10 @@ def getImages(post_id, makeThumb=True):
     for tag in soup.find_all('img'):
         image_url = tag['src']
         try:
-            f = urllib2.urlopen(image_url) # TODO: Replace with Request
+            f = urllib.request.urlopen(image_url) # TODO: Replace with Request
             http = f.info()
             content_type = http.type  # Get HTTP Content-Type to determine file extension
-        except urllib2.HTTPError:
+        except urllib.error.HTTPError:
             continue
 
         # If unrecognised content-type, skip this URL
