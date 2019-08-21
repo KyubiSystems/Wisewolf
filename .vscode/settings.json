@@ -1,4 +1,4 @@
 {
     "python.linting.pylintPath": "${workspaceFolder}/venv.ww/bin/pylint",
-    "python.pythonPath": "/usr/local/bin/python3"
+    "python.pythonPath": "venv.ww/bin/python"
 }
