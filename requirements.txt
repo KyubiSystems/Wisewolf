@@ -24,7 +24,7 @@ lxml==4.4.1               # via readability-lxml
 markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via pylint
 peewee==3.10.0
-pillow==6.1.0
+pillow==6.2.0
 pylint==2.2.2
 python-dateutil==2.8.0    # via arrow
 python-magic==0.4.15
