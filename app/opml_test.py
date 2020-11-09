@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Testing OPML import
-(c) 2015 KyubiSystems: www.kyubi.co.uk
+(c) 2015-2020 KyubiSystems: www.kyubi.co.uk
 """
 from opml import Opml
 from models import Category, Feed, IntegrityError
@@ -28,7 +28,7 @@ for f in o.feeds:
     print(f)
 
     # Get corresponding Category id
-    cat_id = Category.get(Category.name == f['category']).id    
+    cat_id = Category.get(Category.name == f['category']).id
 
     if o.version == "1.0":
         # Add feed from OPML version 1.0

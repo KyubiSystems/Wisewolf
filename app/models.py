@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2014-2020 Kyubi Systems: www.kyubi.co.uk
 """
 
-from config import *
-from peewee import *
 from datetime import datetime
+from config import DB_FILE
+from peewee import SqliteDatabase, Model, CharField, TextField, DateTimeField, IntegerField, \
+    BooleanField, ForeignKeyField, IntegrityError
+
 
 # define database
 db = SqliteDatabase(DB_FILE, threadlocals=True)
 
 # create base model class that application models will extend
-
 
 class BaseModel(Model):
     class Meta:
@@ -37,7 +38,7 @@ class Category(BaseModel):
     def __str__(self):
         return self.__unicode__()
 
-    
+
 class Feed(BaseModel):
     name = CharField()
     url = CharField(max_length=512)
@@ -45,7 +46,8 @@ class Feed(BaseModel):
     version = CharField(max_length=10)
     last_updated = DateTimeField(default=datetime.now())
     last_modified = CharField(max_length=64, default='')
-    last_checked = DateTimeField(default='1999-12-31') # Date in past to ensure all old posts picked up on startup
+    # Date in past to ensure all old posts picked up on startup
+    last_checked = DateTimeField(default='1999-12-31')
     etag = CharField(max_length=64, default='')
     comment = TextField(null=True)
     description = TextField(null=True)
@@ -55,7 +57,7 @@ class Feed(BaseModel):
     errors = IntegerField(default=0)  # Number of errors seen in feed loading
     inactive = BooleanField(default=False)
     favicon = CharField(max_length=256, null=True)
-# Peewee timestamps
+    # Peewee timestamps
     created_at = DateTimeField(default=datetime.now())
     updated_at = DateTimeField(null=True)
     deleted_at = DateTimeField(null=True)
@@ -69,7 +71,7 @@ class Feed(BaseModel):
     def __str__(self):
         return self.__unicode__()
 
-    
+
 class Post(BaseModel):
     title = CharField()
     link = CharField(max_length=512)
@@ -113,4 +115,3 @@ class Image(BaseModel):
 
     def __str__(self):
         return self.__unicode__()
-

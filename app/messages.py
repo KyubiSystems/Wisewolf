@@ -1,6 +1,6 @@
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2014-2020 Kyubi Systems: www.kyubi.co.uk
 """
 
 POST_NOT_FOUND = {

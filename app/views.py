@@ -3,9 +3,11 @@ Wisewolf RSS Reader
 (c) 2016 Kyubi Systems: www.kyubi.co.uk
 """
 
-from flask import Flask, Response, redirect, url_for, send_from_directory, jsonify, render_template, request
+from flask import Flask, Response, redirect, url_for, send_from_directory, jsonify, \
+    render_template, request
 from models import Feed, Post, Category, Image
-from messages import CATEGORY_NOT_FOUND, DUPLICATE_FEED, FEED_NOT_FOUND, FEED_INVALID, POST_NOT_FOUND, STATUS_OK
+from messages import CATEGORY_NOT_FOUND, DUPLICATE_FEED, FEED_NOT_FOUND, FEED_INVALID, \
+    POST_NOT_FOUND, STATUS_OK
 from opml import Opml
 from readability.readability import Document, Unparseable
 from collections import defaultdict
@@ -42,9 +44,9 @@ def index():
     datestamps = loadDates(posts)
 
     # Render main page template
-    return render_template("index.html", 
-                           categories=categories, 
-                           feeds=feeds, 
+    return render_template("index.html",
+                           categories=categories,
+                           feeds=feeds,
                            posts=posts,
                            datestamps=datestamps)
 
@@ -60,7 +62,7 @@ def get_post(id=None):
 
     # Create human-readable datestamps for posts
     datestamp = loadDates([post,])
-    
+
     # optional retrieve full article
     if not post.content:
         if post.link:
@@ -72,7 +74,6 @@ def get_post(id=None):
             post.content = rawarticle.strip()
 
 #            print '>>>DEBUG: ' + post.content
-            
     if request.json is None:
 
         # populate Category tree
@@ -127,7 +128,7 @@ def set_favourite(id=None):
 
     # return JSON status OK
     return jsonify(**STATUS_OK)
-    
+
 # Feed routes ----------------
 
 # Manage installed feeds
@@ -176,10 +177,10 @@ def feed(id=None):
     # Select return format on requested content-type?
     if request.json is None:
         # Render feed page template
-        return render_template("feed.html", 
-                               categories=categories, 
-                               feeds=feeds, 
-                               feed=feed, 
+        return render_template("feed.html",
+                               categories=categories,
+                               feeds=feeds,
+                               feed=feed,
                                posts=posts,
                                datestamps=datestamps)
 
@@ -194,7 +195,7 @@ def feed_update(id=None):
 
     # Manual update of one or all feeds now
     if request.json['action'] == 'refresh':
-        
+
         # Call refresh routine
         # TODO: RSS worker functions in separate package
         # TODO: Need to capture return status
@@ -207,7 +208,7 @@ def feed_update(id=None):
                 return jsonify(**FEED_NOT_FOUND)
 
             rss_worker(feed) # Update single feed
-        
+
         # return JSON status OK
         return jsonify(**STATUS_OK)
 
@@ -220,9 +221,9 @@ def feed_update(id=None):
         else:
             # Mark posts in current feed read
             query = Post.update(is_read=True).where(Feed.id == id)
-            
+
         query.execute()
-            
+
     # return JSON status OK
         return jsonify(**STATUS_OK)
 
@@ -230,7 +231,7 @@ def feed_update(id=None):
 # Manual add of feed url
 @app.route('/feed/add', methods=['POST'])
 def add_feed(url=None):
-  
+
     # Get url submitted via AJAX
     url = request.json['url']
 
@@ -262,7 +263,7 @@ def add_feed(url=None):
     if contenttype in FEED_TYPES:
         feed = Feed.create(url=url)
         return jsonify(**STATUS_OK)
-    
+
     # If Content-type is HTML, pass to autodiscovery
     if contenttype == 'text/html':
 
@@ -324,10 +325,10 @@ def category(id=None):
     if request.json is None:
 
         # Render category page template
-        return render_template("category.html", 
-                               category=category, 
+        return render_template("category.html",
+                               category=category,
                                categories=categories,
-                               feeds=feeds, 
+                               feeds=feeds,
                                posts=posts,
                                datestamps=datestamps)
 
@@ -341,7 +342,7 @@ def category(id=None):
 def delete_category(id):
     # Delete category #id
     # Reassign all feeds in category to 'unsorted' id 0?
-    query = Feed.update(category_id=0).where(Category.id == id) 
+    query = Feed.update(category_id=0).where(Category.id == id)
     query.execute()
 
     query = Category.delete().where(Category.id == id)
@@ -418,7 +419,7 @@ def opml_parse():
     if file and allowed_file(file.filename):
         opml_filename = str(uuid.uuid4()) + '.xml' # use UUID as unique uploaded filename root
         opml_path = os.path.join(UPLOAD_FOLDER, opml_filename)
-     
+
         file.save(opml_path)
 
         print('OPML uploaded OK!')
@@ -428,7 +429,7 @@ def opml_parse():
         o.parseOpml()
 
         print('OPML parsed OK!')
-  
+
         # Save categories to DB, skip invalid or duplicate feeds
         for c in o.categories:
             try:
@@ -437,7 +438,7 @@ def opml_parse():
 
             except IntegrityError:
                 pass
-   
+
         print('Categories added to DB!')
 
         # Iterate over feeds found
@@ -456,11 +457,11 @@ def opml_parse():
             elif o.version == "1.1" or o.version == "2.0":
                 # Add feed from OPML version 1.1
                 # TODO: Exception handling
-                feed = Feed.create(name=f['title'], category=cat_id, version=f['type'], comment=f['text'],
-                                   description=f['description'], url=f['xmlUrl'])
+                feed = Feed.create(name=f['title'], category=cat_id, version=f['type'],
+                                   comment=f['text'], description=f['description'], url=f['xmlUrl'])
             else:
                 continue
-        
+
             # Add feed to DB, skip invalid or duplicate feeds
             try:
                 feed.save()
@@ -468,10 +469,11 @@ def opml_parse():
                 pass
 
         print('Feeds added to DB!')
-        
-        # return send_from_directory(UPLOAD_FOLDER, opml_filename) # Test returning uploaded OPML file
+
+        # return send_from_directory(UPLOAD_FOLDER, opml_filename)
+        # Test returning uploaded OPML file
         return redirect(url_for('index'), code=302)
-    
+
     return "<h1>Oops, something went wrong here...</h1>file extension is " +  os.path.splitext(file.filename)[1]
 
 # Check for allowed file extensions
@@ -547,9 +549,9 @@ def loadJsonTree():
             feeds[c.id]['children'].append({'id': f.id, 'name': f.name, 'count' : f.count, 'url': f.url})
 
         all_feeds.append(feeds[c.id])
-   
+
     return Response(json.dumps(all_feeds), mimetype='application/json')
-  
+
 
 # Create human-readable datestamps for posts ------------
 

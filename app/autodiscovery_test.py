@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Wisewolf RSS Reader
-(c) 2014 Kyubi Systems: www.kyubi.co.uk
+(c) 2014-2020 Kyubi Systems: www.kyubi.co.uk
 ---
 feedtest: Test lightweight feed autodiscovery
 
@@ -26,7 +26,7 @@ url = 'http://www.slashdot.org'
 # Retrieve target URL
 r = requests.get(url)
 
-if (r.status_code != requests.codes.ok):
+if r.status_code != requests.codes.ok:
     print('Request error')
     sys.exit(1)
 
@@ -35,12 +35,12 @@ contenttype = r.headers['content-type']
 print(contenttype)
 
 # If Content-Type is RSS feed, return
-if (contenttype in FEED_TYPES):
+if contenttype in FEED_TYPES:
     print('RSS feed detected ' + url)
     sys.exit(0)
 
 # If Content-Type is HTML, pass to autodiscovery
-if (contenttype == 'text/html'):
+if contenttype == 'text/html':
 
     p = autodiscovery.Discover()
 
@@ -48,5 +48,5 @@ if (contenttype == 'text/html'):
 
     print(p.feeds)
     p.close()
-    
+
     sys.exit(0)

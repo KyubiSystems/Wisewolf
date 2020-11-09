@@ -37,7 +37,7 @@ class Discover(HTMLParser):
         attributes = dict(attr) # convert name-value tuples to dict
         if 'type' not in attributes:
             return
-        
+
         if attributes['type'] not in FEED_TYPES:
             return
 
