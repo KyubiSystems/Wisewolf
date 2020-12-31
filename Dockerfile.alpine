@@ -7,8 +7,9 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev
-RUN apk add --no-cache --virtual libxml-dev libxslt-dev zlib-dev py3-libxml2 freetype-dev jpeg-dev libpng-dev
-RUN apk add --no-cache --virtual cython
+RUN apk add --no-cache --virtual libxml-dev libxslt-dev zlib-dev py3-libxml2 freetype-dev jpeg-dev libpng-dev libffi-dev
+RUN apk add --no-cache --virtual cython file
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apk del .build-deps gcc musl-dev
 
