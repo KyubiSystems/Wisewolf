@@ -5,7 +5,7 @@ Wisewolf
 
 The intent is to make Wisewolf an alternative to Tiny Tiny RSS: http://tt-rss.org/redmine/projects/tt-rss/wiki
 
-**Current status: version 0.1-alpha**
+**Current status: version 0.1.1 (alpha)**
 
 API
 ---
@@ -26,7 +26,7 @@ Wisewolf requires WSGI-compliant hosting.
 License
 -------
 
-Wisewolf uses the **Creative Commons BY-NC-SA 4.0 license**.
+Wisewolf uses the **GPL Version 3 license**.
 
 Roadmap for alpha release
 ---------
