@@ -18,7 +18,7 @@ lxml==4.6.2
 MarkupSafe==1.1.1
 mccabe==0.6.1
 peewee==3.14.0
-Pillow==8.0.1
+Pillow==8.1.1
 pylint==2.6.0
 python-dateutil==2.8.1
 python-magic==0.4.18
