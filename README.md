@@ -54,7 +54,7 @@ For v0.3
 
 - [ ] Text indexing, fulltext searching via Whoosh?
 - [ ] Move from category to tag system?
-- [ ] Docker packaging
+- [x] Docker packaging
 
 
 For v1.0
