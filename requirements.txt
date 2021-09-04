@@ -8,6 +8,7 @@ cssselect==1.1.0
 feedparser==6.0.2
 Flask==1.1.2
 gevent==1.4.0
+gevent-websocket==0.10.1
 greenlet==0.4.15
 idna==2.10
 isort==5.7.0
