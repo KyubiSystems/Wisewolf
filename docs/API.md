@@ -3,16 +3,16 @@ Wisewolf API
 
 Wisewolf uses a "REST-like" API for routine operations, returning JSON formatted responses.
 
-Route       | HTTP Query Type | Returns
---------------|-----------------|------------------------------
-/         | GET  | Top-level view
-/index    |                 |
-
-/post/[id]    | GET             | Get post [id]
-| DELETE  | Delete post [id]
-
-/feed       | GET  | Get posts from all feeds
-/feed/[id]    |   | Get posts from feed [id]
+|Route       | HTTP Query Type | Returns                      |
+|------------|-----------------|------------------------------|
+|/           | GET             | Top-level view               |
+|/index      |                 |                              |
+|            |                 |                              |
+|/post/[id]  | GET             | Get post [id]                |
+|            | DELETE          | Delete post [id]             |
+|            |                 |                              |
+|/feed       | GET             | Get posts from all feeds     |
+|/feed/[id]  |                 | Get posts from feed [id]     |
 
 /feed       | POST  | **action='refresh'**: Get new posts
 /feed/[id]    |   |
