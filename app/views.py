@@ -1,13 +1,13 @@
 """
 Wisewolf RSS Reader
-(c) 2016 Kyubi Systems: www.kyubi.co.uk
+(c) 2021 Kyubi Systems: www.kyubi.co.uk
 """
 
 from flask import Flask, Response, redirect, url_for, send_from_directory, jsonify, \
     render_template, request
-from models import Feed, Post, Category, Image
+from models import Feed, Post, Category, Image, IntegrityError
 from messages import CATEGORY_NOT_FOUND, DUPLICATE_FEED, FEED_NOT_FOUND, FEED_INVALID, \
-    POST_NOT_FOUND, STATUS_OK
+    POST_NOT_FOUND, IMAGE_NOT_FOUND, STATUS_OK
 from opml import Opml
 from readability.readability import Document, Unparseable
 from collections import defaultdict
