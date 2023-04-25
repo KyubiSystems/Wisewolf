@@ -20,7 +20,6 @@ MarkupSafe==2.1.2
 mccabe==0.7.0
 peewee==3.16.2
 Pillow==9.5.0
-Pillow>=9.5.0
 pylint==2.17.3
 python-dateutil==2.8.2
 python-magic==0.4.27
